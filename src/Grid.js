@@ -6,84 +6,93 @@ const GridSquare = styled.div`
   width: 20px;
   height: 20px;
   border: 1px solid #ccc;
+  font-size: 10px;
+  display: grid;
+
 `;
 
-const chunkLength = 3
+const GridContainer = styled.div`
+    display: grid;
+    grid-template-columns: repeat(96, 20px); /* 96 columns, each with a width of 20px */
+    grid-template-rows: repeat(16, 20px); /* 16 rows, each with a height of 20px */
+    grid-gap: 1px; /* Gap between each grid square */
+    grid-auto-flow: column; /* Automatically flow the grid items into columns */
+    `
 
-const LED_WIDTH = 16
-// const getChunkByIndex = (index, binaryString) => {
-
-//     const startIndex = index * 3;
-//     return binaryString.substring(startIndex, startIndex + 3);
-// }
-
-const getPixelByIndex = (index, chunkArray) => {
-    const x = index % LED_WIDTH;
-    const y = Math.floor(index / LED_WIDTH);
-
-    // todo: or flip this?
-    const pixelIndex = x + (y * LED_WIDTH);
-
-    return chunkArray[pixelIndex]; 
-
-}
-
-// Function to split the binary string into 3-character chunks
-
-function chunkBinaryString(binaryString) {
+    // Each column is represent by 16bits
+const CHUNK_SIZE = 16;
+const separateIntoColumns = (binaryString) => {
     const chunks = [];
-    for (let i = 0; i < binaryString.length; i += chunkLength) {
-        chunks.push(binaryString.slice(i, i + chunkLength));
+    for (let i = 0; i < binaryString.length; i += CHUNK_SIZE) {
+        chunks.push(binaryString.substring(i, i + CHUNK_SIZE));
     }
     return chunks;
 }
 
-function getColorFromChunk(chunk) {
-    const colors = [
-        '#000000', // Black
-        '#00FF00', // Green
-        '#FF0000', // Red   
-        '#0000FF', // Color 4
-        '#FFFF00', // Color 5
-        '#FF00FF', // Color 6
-        '#00FFFF', // Color 7
-        '#FFFFFF', // Color 8
-    ];
+// The first 3rd of the data represents whether Red is on or off
+// The second 3rd of the data represents whether Green is on or off
+// The last 3rd of the data represents whether Blue is on or off
+const divideColumnsIntoRGBGroups = (chunks) => {
+    const totalChunks = chunks.length;
+    const oneThird = totalChunks / 3;
 
-    // Convert the chunk to a decimal number (base 2) to get the index for the color
-    const colorIndex = parseInt(chunk, 2);
+    const redChunks = chunks.slice(0, oneThird);
+    const greenChunks = chunks.slice(oneThird, 2 * oneThird);
+    const blueChunks = chunks.slice(2 * oneThird);
 
-    // Return the color based on the index
-    return colors[colorIndex % colors.length];
+    return { redChunks, greenChunks, blueChunks };
 }
 
-const rotatedChunkArray = (chunkArray) => {
-    const rotatedArray = []
-    for (let i = 0; i < chunkArray.length; i++) {
-        const newPixel = getPixelByIndex(i, chunkArray)
-        rotatedArray.push(newPixel)
+
+const GRID_HEIGHT = 16
+const GRID_WIDTH = 96
+
+const buildLedArray = (colorChunks) => {
+    // const totalChunks = colorChunks.redChunks.length;
+    const ledArray = [];
+
+    for (let i = 0; i < GRID_WIDTH; i++) {
+        // TODO: move to a new function
+        const columnRed = colorChunks.redChunks[i];
+        const columnGreen = colorChunks.greenChunks[i];
+        const columnBlue = colorChunks.blueChunks[i];
+        for (let j = 0; j < GRID_HEIGHT; j++) {
+            const isRedOn = columnRed[j] === '1';
+            const isGreenOn = columnGreen[j] === '1';
+            const isBlueOn = columnBlue[j] === '1';
+            const pixel = { r: isRedOn, g: isGreenOn, b: isBlueOn };
+            ledArray.push(pixel);
+        }
+
     }
 
-    return rotatedArray
-
+    return ledArray;
 }
 
 
 // Component for rendering the grid
 const Grid = ({ binaryString }) => {
-    // Split the binary string into 3-character chunks
-    const chunks = chunkBinaryString(binaryString);
-    /// const rotatedChunks = rotatedChunkArray(chunks)
+    const columns = separateIntoColumns(binaryString);
+    const colorArrays = divideColumnsIntoRGBGroups(columns);
+    const ledArray = buildLedArray(colorArrays)
 
     return (
-        <div style={{ display: 'grid', gridTemplateColumns: `repeat(96, 20px)`, gridGap: '1px' }}>
-            {chunks.map((chunk, index) => (
-                <GridSquare key={index} style={{ backgroundColor: getColorFromChunk(chunk) }} />
+        <GridContainer>
+            {ledArray.map((pixel, index) => (
+                <GridSquare key={index} style={{ backgroundColor: getColorFromChunk(pixel) }}>{index}</GridSquare>
             ))}
-        </div>
+        </GridContainer>
     );
 };
 
-// Function to map each 3-character chunk to a color
+
+function getColorFromChunk(pixel) {
+    const { r, g, b } = pixel;
+    const redValue = r ? 'FF' : '00';
+    const greenValue = g ? 'FF' : '00';
+    const blueValue = b ? 'FF' : '00';
+
+    return `#${redValue}${greenValue}${blueValue}`
+}
 
 export default Grid;
