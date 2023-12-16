@@ -1,4 +1,4 @@
-import welcome from '../sample/welcome_to_chaos_corner.json';
+// import welcome from '../sample/welcome_to_chaos_corner.json';
 // import greenTopRight from '../sample/green_top_right.json';
 
 function convertToBinary(num) {
@@ -10,8 +10,9 @@ function convertToBinary(num) {
 }
 
 
-export const parseData = () => {
-    const graffitiData = welcome[0].data.graffitiData;
+export const parseData = (content) => {
+    const parsedJson = JSON.parse(content);
+    const graffitiData = parsedJson[0].data.graffitiData;
 
     // combine into one string
     const binaryString = graffitiData.reduce(function (result, currentNum) {

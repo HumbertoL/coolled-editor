@@ -86,6 +86,8 @@ const buildLedArray = (colorChunks) => {
 
 // Component for rendering the grid
 const Grid = ({ binaryString }) => {
+    if (!binaryString) return <div>Please upload a file</div>;
+
     const columns = separateIntoColumns(binaryString);
     const colorArrays = divideColumnsIntoRGBGroups(columns);
     const ledArray = buildLedArray(colorArrays)
@@ -93,7 +95,9 @@ const Grid = ({ binaryString }) => {
     return (
         <GridContainer>
             {ledArray.map((pixel, index) => (
-                <GridSquare key={index} style={{ backgroundColor: getColorFromChunk(pixel) }}>{index}</GridSquare>
+                <GridSquare key={index} style={{ backgroundColor: getColorFromChunk(pixel) }}>
+                    {/* {index} */}
+                </GridSquare>
             ))}
         </GridContainer>
     );
