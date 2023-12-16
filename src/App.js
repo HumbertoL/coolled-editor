@@ -5,6 +5,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 
 import welcome from './sample/welcome_to_chaos_corner.json';
+import ColorPicker from './ColorPicker';
 
 
 const FileUpload = styled.input`
@@ -13,6 +14,7 @@ const FileUpload = styled.input`
 
 function App() {
   const [pixelArray, setPixelArray] = useState(() => parseData(JSON.stringify(welcome)));
+  const [selectedColor, setSelectedColor] = useState( "#FFFFFF");
 
   const readFile = (file) => {
     const reader = new FileReader();
@@ -40,6 +42,7 @@ function App() {
       <header className="App-header">
         <FileUpload type="file" onChange={handleFileChange} />
         <Grid pixelArray={pixelArray} />
+        <ColorPicker setSelectedColor={setSelectedColor} selectedColor={selectedColor} />
       </header>
     </div>
   );
