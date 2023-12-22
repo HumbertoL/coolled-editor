@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { getColorFromChunk } from './helpers/colors';
 
 // Styled component for the individual grid square
 const GridSquare = styled.div`
@@ -21,13 +22,20 @@ const GridContainer = styled.div`
 
 
 // Component for rendering the grid
-const Grid = ({ pixelArray }) => {
-    if (!pixelArray) return <div>Please upload a file</div>;
+const Grid = ({ pixelArray, onClick }) => {
+    if (!pixelArray) {
+        return <div>Please upload a file</div>;
+    }
+
+    const handleClick = (index) => {
+        onClick(index);
+
+    }
 
     return (
         <GridContainer>
             {pixelArray.map((pixel, index) => (
-                <GridSquare key={index} style={{ backgroundColor: getColorFromChunk(pixel) }}>
+                <GridSquare key={index} style={{ backgroundColor: getColorFromChunk(pixel) }} onClick={() => handleClick(index)}>
                     {/* {index} */}
                 </GridSquare>
             ))}
@@ -36,13 +44,5 @@ const Grid = ({ pixelArray }) => {
 };
 
 
-function getColorFromChunk(pixel) {
-    const { r, g, b } = pixel;
-    const redValue = r ? 'FF' : '00';
-    const greenValue = g ? 'FF' : '00';
-    const blueValue = b ? 'FF' : '00';
-
-    return `#${redValue}${greenValue}${blueValue}`
-}
 
 export default Grid;

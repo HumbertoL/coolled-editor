@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { colors } from './helpers/colors';
 
 const ColorSquare = styled.div`
   width: 50px;
@@ -16,20 +17,13 @@ const ColorSquare = styled.div`
 
 const ColorPicker = ({ setSelectedColor, selectedColor }) => {
 
-    const colors = [
-        { name: 'Black', hex: '#000000' },
-        { name: 'Red', hex: '#FF0000' },
-        { name: 'Pink', hex: '#FF69B4' },
-        { name: 'Yellow', hex: '#FFFF00' },
-        { name: 'Green', hex: '#00FF00' },
-        { name: 'Cyan', hex: '#00FFFF' },
-        { name: 'Blue', hex: '#0000FF' },
-        { name: 'White', hex: '#FFFFFF' },
-    ];
+
 
     const handleColorSelection = (color) => {
         setSelectedColor(color === selectedColor ? null : color); // Toggle selection
     };
+
+
 
     return (
         <div>
@@ -39,14 +33,14 @@ const ColorPicker = ({ setSelectedColor, selectedColor }) => {
                     <ColorSquare
                         key={index}
                         color={color.hex}
-                        selected={selectedColor === color.hex}
-                        onClick={() => handleColorSelection(color.hex)}
+                        selected={selectedColor === color.name}
+                        onClick={() => handleColorSelection(color.name)}
                     >
                     </ColorSquare>
                 ))}
             </div>
             <div>
-                <p>Selected Color: {selectedColor || 'None'}</p>
+                <p>Selected Color: {selectedColor}</p>
             </div>
         </div>
     );
