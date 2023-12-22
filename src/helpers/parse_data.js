@@ -193,6 +193,6 @@ export const downloadJtFile = (pixelArray) => {
   const url = buildFile(originalData);
   // get timestamp for filename
   const timestamp = Date.now();
-  const filename = `output_${timestamp}.jt`;
+  const filename = `CoolLEDX_16x96_1_${timestamp}.jt`;
   downloadFile(url, filename);
 };
