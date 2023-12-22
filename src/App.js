@@ -23,10 +23,20 @@ const FileUploadWrapper = styled.div`
   }
 `;
 
+const getInitialPixelArray = () => {
+  const GRID_HEIGHT = 16;
+  const GRID_WIDTH = 96;
+  const totalPixels = GRID_HEIGHT * GRID_WIDTH;
+  const initialValue = { r: false, g: false, b: false };
+  const initialArray = Array(totalPixels).fill(initialValue);
+  return initialArray;
+}
+
 function App() {
-  const [pixelArray, setPixelArray] = useState(() =>
-    parseData(JSON.stringify(welcome))
-  );
+  // const [pixelArray, setPixelArray] = useState(() =>
+  //   parseData(JSON.stringify(welcome))
+  // );
+  const [pixelArray, setPixelArray] = useState(() => getInitialPixelArray());
   const [selectedColor, setSelectedColor] = useState("White");
 
   const readFile = (file) => {
