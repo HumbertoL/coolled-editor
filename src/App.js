@@ -1,27 +1,38 @@
-import './App.css';
-import { parseData } from './helpers/parse_data';
-import Grid from './Grid';
-import { useState } from 'react';
-import styled from 'styled-components';
+import "./App.css";
+import { downloadJtFile, parseData } from "./helpers/parse_data";
+import Grid from "./Grid";
+import { useState } from "react";
+import styled from "styled-components";
 
-import welcome from './sample/welcome_to_chaos_corner.json';
-import ColorPicker from './ColorPicker';
-import { getColorObjectFromName } from './helpers/colors';
-
+import welcome from "./sample/welcome_to_chaos_corner.json";
+import ColorPicker from "./ColorPicker";
+import { getColorObjectFromName } from "./helpers/colors";
 
 const FileUpload = styled.input`
-  margin: 60px;
+  margin-left: 50px;
+`;
+
+const FileUploadWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  font-size: 20px;
+  width: 500px;
+
+  & > button {
+    margin-left: 28px;
+  }
 `;
 
 function App() {
-  const [pixelArray, setPixelArray] = useState(() => parseData(JSON.stringify(welcome)));
-  const [selectedColor, setSelectedColor] = useState( "White");
+  const [pixelArray, setPixelArray] = useState(() =>
+    parseData(JSON.stringify(welcome))
+  );
+  const [selectedColor, setSelectedColor] = useState("White");
 
   const readFile = (file) => {
     const reader = new FileReader();
 
     reader.onload = (event) => {
-
       const content = event.target.result; // Get the file content
       const pixelArray = parseData(content);
       setPixelArray(pixelArray);
@@ -44,14 +55,29 @@ function App() {
     const newPixelArray = [...pixelArray];
     newPixelArray[index] = rgb;
     setPixelArray(newPixelArray);
-  }
+  };
+
+  const handleDownload = () => {
+    downloadJtFile(pixelArray);
+  };
 
   return (
     <div className="App">
       <header className="App-header">
-        <FileUpload type="file" onChange={handleFileChange} />
+        <FileUploadWrapper>
+          Upload File:
+          <FileUpload type="file" onChange={handleFileChange} />
+        </FileUploadWrapper>
+        <FileUploadWrapper>
+          Export Design:
+          <button onClick={handleDownload}>Download</button>
+        </FileUploadWrapper>
+
         <Grid pixelArray={pixelArray} onClick={handleClick} />
-        <ColorPicker setSelectedColor={setSelectedColor} selectedColor={selectedColor} />
+        <ColorPicker
+          setSelectedColor={setSelectedColor}
+          selectedColor={selectedColor}
+        />
       </header>
     </div>
   );
