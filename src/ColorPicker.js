@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import { colors } from "./helpers/colors";
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import { colors } from './helpers/colors';
 
 const ColorSquare = styled.div`
   width: 50px;
@@ -9,11 +9,11 @@ const ColorSquare = styled.div`
   cursor: pointer;
   background-color: ${(props) => props.color};
   border: ${(props) =>
-    props.selected ? "4px solid orange" : "2px solid transparent"};
+    props.selected ? '4px solid orange' : '2px solid transparent'};
   display: flex;
   align-items: center;
   justify-content: center;
-  color: ${(props) => (props.selected ? "black" : "inherit")};
+  color: ${(props) => (props.selected ? 'black' : 'inherit')};
 `;
 
 const ColorPicker = ({ setSelectedColor, selectedColor }) => {
@@ -24,7 +24,7 @@ const ColorPicker = ({ setSelectedColor, selectedColor }) => {
   return (
     <div>
       <h3>Select a Color:</h3>
-      <div style={{ display: "flex" }}>
+      <div style={{ display: 'flex' }}>
         {colors.map((color, index) => (
           <ColorSquare
             key={index}

@@ -1,12 +1,12 @@
-import "./App.css";
-import { downloadJtFile, parseData } from "./helpers/parse_data";
-import Grid from "./Grid";
-import { useState } from "react";
-import styled from "styled-components";
+import './App.css';
+import { downloadJtFile, parseData } from './helpers/parse_data';
+import Grid from './Grid';
+import { useState } from 'react';
+import styled from 'styled-components';
 
-import welcome from "./sample/welcome_to_chaos_corner.json";
-import ColorPicker from "./ColorPicker";
-import { getColorObjectFromName } from "./helpers/colors";
+import welcome from './sample/welcome_to_chaos_corner.json';
+import ColorPicker from './ColorPicker';
+import { getColorObjectFromName } from './helpers/colors';
 
 const FileUpload = styled.input`
   margin-left: 50px;
@@ -30,14 +30,15 @@ const getInitialPixelArray = () => {
   const initialValue = { r: false, g: false, b: false };
   const initialArray = Array(totalPixels).fill(initialValue);
   return initialArray;
-}
+};
 
 function App() {
   // const [pixelArray, setPixelArray] = useState(() =>
   //   parseData(JSON.stringify(welcome))
   // );
   const [pixelArray, setPixelArray] = useState(() => getInitialPixelArray());
-  const [selectedColor, setSelectedColor] = useState("White");
+  const [selectedColor, setSelectedColor] = useState('White');
+  const [isDragging, setIsDragging] = useState(false);
 
   const readFile = (file) => {
     const reader = new FileReader();
@@ -60,11 +61,26 @@ function App() {
   };
 
   const handleClick = (index) => {
-    console.log(index);
+    // console.log(index);
     const rgb = getColorObjectFromName(selectedColor);
     const newPixelArray = [...pixelArray];
     newPixelArray[index] = rgb;
     setPixelArray(newPixelArray);
+  };
+
+  const handleMouseDown = () => {
+    setIsDragging(true);
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  const handleMouseEnter = (id) => {
+    if (isDragging) {
+      // console.log(`Entered div with id: ${id} while dragging`);
+      handleClick(id);
+    }
   };
 
   const handleDownload = () => {
@@ -83,7 +99,13 @@ function App() {
           <button onClick={handleDownload}>Download</button>
         </FileUploadWrapper>
 
-        <Grid pixelArray={pixelArray} onClick={handleClick} />
+        <Grid
+          pixelArray={pixelArray}
+          onClick={handleClick}
+          onMouseDown={handleMouseDown}
+          onMouseUp={handleMouseUp}
+          onMouseEnter={handleMouseEnter}
+        />
         <ColorPicker
           setSelectedColor={setSelectedColor}
           selectedColor={selectedColor}
