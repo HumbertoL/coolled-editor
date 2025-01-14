@@ -92,7 +92,7 @@ const buildChunksFromColumn = (columnArray) => {
   return { redChunk, greenChunk, blueChunk };
 };
 
-const reconstructFrameFromChunks = (frameChunks) => {
+const reconstructFrameBinaryFromChunks = (frameChunks) => {
   const reconstructedBinaryString =
     frameChunks.redChunks.join('') +
     frameChunks.greenChunks.join('') +
@@ -131,19 +131,30 @@ const reconstructColorChunks = (ledArray) => {
 
 const reconstructGraffitiDataFromPixelArray = (imageData, pixelArray) => {
   const frames = imageData.frameNum;
+  const numFramePixels = GRID_HEIGHT * GRID_WIDTH;
 
-  let originalData = [];
+  const chunks = {
+    redChunks: [],
+    greenChunks: [],
+    blueChunks: [],
+  };
   for (let i = 0; i < frames; i++) {
-    const arrayOffset = i * GRID_WIDTH * GRID_HEIGHT;
+    const arrayOffset = i * numFramePixels;
     const frameArray = pixelArray.slice(
       arrayOffset,
-      arrayOffset + GRID_HEIGHT * GRID_WIDTH,
+      arrayOffset + numFramePixels,
     );
 
     const frameChunks = reconstructColorChunks(frameArray);
-    const frameData = reconstructFrameFromChunks(frameChunks);
-    originalData = originalData.concat(frameData);
+
+    chunks.redChunks.push(...frameChunks.redChunks);
+    chunks.greenChunks.push(...frameChunks.greenChunks);
+    chunks.blueChunks.push(...frameChunks.blueChunks);
+    // const frameData = reconstructFrameBinaryFromChunks(frameChunks);
+    // originalData = originalData.concat(frameData);
   }
+
+  const originalData = reconstructFrameBinaryFromChunks(chunks);
 
   return originalData;
 };

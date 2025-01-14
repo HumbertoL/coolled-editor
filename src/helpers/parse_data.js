@@ -124,7 +124,7 @@ const getFrameChunks = (chunkSize, frameIndex, colorChunks) => {
 };
 
 const buildLedArray = (imageObject, colorChunks) => {
-  let frameArray = [];
+  const frameArray = [];
   const numFrames = imageObject.frameNum;
 
   const chunkSize = imageObject.pixelWidth;
@@ -144,7 +144,7 @@ const buildLedArray = (imageObject, colorChunks) => {
 
     // TODO
     const chunkArray = buildLedFrame(frameChunks);
-    frameArray = frameArray.concat(chunkArray);
+    frameArray.push(...chunkArray);
   }
 
   return frameArray;
