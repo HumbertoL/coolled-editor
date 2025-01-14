@@ -4,7 +4,6 @@ import Grid from './Grid';
 import { useState } from 'react';
 import styled from 'styled-components';
 
-import welcome from './sample/welcome_to_chaos_corner.json';
 import ColorPicker from './ColorPicker';
 import { getColorObjectFromName } from './helpers/colors';
 
@@ -23,20 +22,33 @@ const FileUploadWrapper = styled.div`
   }
 `;
 
+const GRID_HEIGHT = 16;
+const GRID_WIDTH = 96;
+
 const getInitialPixelArray = () => {
-  const GRID_HEIGHT = 16;
-  const GRID_WIDTH = 96;
   const totalPixels = GRID_HEIGHT * GRID_WIDTH;
   const initialValue = { r: false, g: false, b: false };
   const initialArray = Array(totalPixels).fill(initialValue);
   return initialArray;
 };
 
+const getInitialData = () => {
+  const imageObject = {
+    pixelArray: getInitialPixelArray(),
+    isAnimation: false,
+    frameNum: 1,
+    pixelWidth: GRID_WIDTH,
+    pixelHeight: GRID_HEIGHT,
+  };
+
+  return imageObject;
+};
+
 function App() {
   // const [pixelArray, setPixelArray] = useState(() =>
   //   parseData(JSON.stringify(welcome))
   // );
-  const [pixelArray, setPixelArray] = useState(() => getInitialPixelArray());
+  const [imageData, setImageData] = useState(() => getInitialData());
   const [selectedColor, setSelectedColor] = useState('White');
   const [isDragging, setIsDragging] = useState(false);
 
@@ -45,8 +57,8 @@ function App() {
 
     reader.onload = (event) => {
       const content = event.target.result; // Get the file content
-      const pixelArray = parseData(content);
-      setPixelArray(pixelArray);
+      const imageData = parseData(content);
+      setImageData(imageData);
     };
 
     reader.readAsText(file);
@@ -63,9 +75,17 @@ function App() {
   const handleClick = (index) => {
     // console.log(index);
     const rgb = getColorObjectFromName(selectedColor);
-    const newPixelArray = [...pixelArray];
-    newPixelArray[index] = rgb;
-    setPixelArray(newPixelArray);
+
+    // performance hack, we're mutating the state directly here.
+    // We shouldn't be doing this, but it's fine for this project.
+    // We create a new imageData object, which should update the state correctly.
+    const pixelArray = imageData.pixelArray;
+    pixelArray[index] = rgb;
+
+    setImageData({
+      ...imageData,
+      pixelArray: pixelArray,
+    });
   };
 
   const handleMouseDown = () => {
@@ -84,7 +104,7 @@ function App() {
   };
 
   const handleDownload = () => {
-    downloadJtFile(pixelArray);
+    downloadJtFile(imageData.pixelArray);
   };
 
   return (
@@ -100,7 +120,7 @@ function App() {
         </FileUploadWrapper>
 
         <Grid
-          pixelArray={pixelArray}
+          pixelArray={imageData.pixelArray}
           onClick={handleClick}
           onMouseDown={handleMouseDown}
           onMouseUp={handleMouseUp}

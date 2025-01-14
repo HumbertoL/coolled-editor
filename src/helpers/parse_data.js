@@ -2,33 +2,57 @@
 // import greenTopRight from '../sample/green_top_right.json';
 
 export const parseData = (content) => {
-  const binaryString = convertDataToBinary(content);
+  const imageData = convertDataToBinary(content);
 
-  const columns = separateIntoColumns(binaryString);
+  const columns = separateIntoColumns(imageData.binaryString);
   const colorArrays = divideColumnsIntoRGBGroups(columns);
   const pixelArray = buildLedArray(colorArrays);
 
-  return pixelArray;
+  delete imageData.binaryString;
+
+  const imageObject = {
+    ...imageData,
+    pixelArray,
+  };
+
+  return imageObject;
 };
 
 function convertToBinary(num) {
   if (num < 0 || num > 255 || isNaN(num) || !Number.isInteger(num)) {
-    return "Invalid input: Please provide a number between 0 and 255.";
+    return 'Invalid input: Please provide a number between 0 and 255.';
   }
 
-  return ("00000000" + num.toString(2)).slice(-8);
+  return ('00000000' + num.toString(2)).slice(-8);
 }
 
 export const convertDataToBinary = (content) => {
   const parsedJson = JSON.parse(content);
-  const graffitiData = parsedJson[0].data.graffitiData;
+  const parsedData = parsedJson[0].data;
+  const graffitiData = parsedData.graffitiData;
+  const animationData = parsedData.aniData;
+  const isAnimation = Boolean(parsedData.aniType);
+  const frameNum = parsedData.frameNum;
+  const pixelWidth = parsedData.pixelWidth;
+  const pixelHeight = parsedData.pixelHeight;
+
+  // If no graffiti data, fall back to animation data
+  const imageData = isAnimation ? animationData : graffitiData;
 
   // combine into one string
-  const binaryString = graffitiData.reduce(function (result, currentNum) {
+  const binaryString = imageData.reduce(function (result, currentNum) {
     return result + convertToBinary(currentNum);
-  }, "");
+  }, '');
 
-  return binaryString;
+  const imageObject = {
+    binaryString,
+    isAnimation,
+    frameNum,
+    pixelWidth,
+    pixelHeight,
+  };
+
+  return imageObject;
 };
 
 // Each column is represent by 16bits
@@ -71,9 +95,9 @@ const buildColumn = (colorChunks, index) => {
 
   const columnArray = [];
   for (let j = 0; j < GRID_HEIGHT; j++) {
-    const isRedOn = columnRed[j] === "1";
-    const isGreenOn = columnGreen[j] === "1";
-    const isBlueOn = columnBlue[j] === "1";
+    const isRedOn = columnRed[j] === '1';
+    const isGreenOn = columnGreen[j] === '1';
+    const isBlueOn = columnBlue[j] === '1';
     const pixel = { r: isRedOn, g: isGreenOn, b: isBlueOn };
     columnArray.push(pixel);
   }
@@ -113,14 +137,14 @@ const convertBinaryToNumber = (binaryString) => {
 };
 
 const buildChunksFromColumn = (columnArray) => {
-  let redChunk = "";
-  let greenChunk = "";
-  let blueChunk = "";
+  let redChunk = '';
+  let greenChunk = '';
+  let blueChunk = '';
   for (let j = 0; j < columnArray.length; j++) {
     const pixel = columnArray[j];
-    const redBit = pixel.r ? "1" : "0";
-    const greenBit = pixel.g ? "1" : "0";
-    const blueBit = pixel.b ? "1" : "0";
+    const redBit = pixel.r ? '1' : '0';
+    const greenBit = pixel.g ? '1' : '0';
+    const blueBit = pixel.b ? '1' : '0';
     redChunk += redBit;
     greenChunk += greenBit;
     blueChunk += blueBit;
@@ -152,14 +176,14 @@ const reconstructGraffitiDataFromPixelArray = (pixelArray) => {
   const colorChunks = reconstructColorChunks(pixelArray);
 
   const reconstructedBinaryString =
-    colorChunks.redChunks.join("") +
-    colorChunks.greenChunks.join("") +
-    colorChunks.blueChunks.join("");
+    colorChunks.redChunks.join('') +
+    colorChunks.greenChunks.join('') +
+    colorChunks.blueChunks.join('');
 
   let originalData = [];
   for (let i = 0; i < reconstructedBinaryString.length; i += 8) {
     const num = convertBinaryToNumber(
-      reconstructedBinaryString.substring(i, i + 8)
+      reconstructedBinaryString.substring(i, i + 8),
     );
     originalData.push(num);
   }
@@ -176,13 +200,13 @@ export const buildTemplate = (graffitiData) => {
 export const buildFile = (chunks) => {
   const fileTemplate = buildTemplate(chunks);
   const json = JSON.stringify(fileTemplate);
-  const blob = new Blob([json], { type: "application/json" });
+  const blob = new Blob([json], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
   return url;
 };
 
 export const downloadFile = (url, filename) => {
-  const link = document.createElement("a");
+  const link = document.createElement('a');
   link.href = url;
   link.download = filename;
   link.click();
