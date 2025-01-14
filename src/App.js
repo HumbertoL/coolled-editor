@@ -1,5 +1,5 @@
 import './App.css';
-import { downloadJtFile, parseData } from './helpers/parse_data';
+import { parseData } from './helpers/parse_data';
 import Grid from './Grid';
 import { useState } from 'react';
 import styled from 'styled-components';
@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import ColorPicker from './ColorPicker';
 import { getColorObjectFromName } from './helpers/colors';
 import FramePicker from './FramePicker';
+import { downloadJtFile } from './helpers/export_data';
 
 const FileUpload = styled.input`
   margin-left: 50px;
