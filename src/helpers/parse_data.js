@@ -6,7 +6,7 @@ export const parseData = (content) => {
 
   const columns = separateIntoColumns(imageData.binaryString);
   const colorArrays = divideColumnsIntoRGBGroups(columns);
-  const pixelArray = buildLedArray(colorArrays);
+  const pixelArray = buildLedArray(imageData, colorArrays);
 
   delete imageData.binaryString;
 
@@ -32,7 +32,7 @@ export const convertDataToBinary = (content) => {
   const graffitiData = parsedData.graffitiData;
   const animationData = parsedData.aniData;
   const isAnimation = Boolean(parsedData.aniType);
-  const frameNum = parsedData.frameNum;
+  const frameNum = parsedData.frameNum ?? 1;
   const pixelWidth = parsedData.pixelWidth;
   const pixelHeight = parsedData.pixelHeight;
 
@@ -105,7 +105,7 @@ const buildColumn = (colorChunks, index) => {
   return columnArray;
 };
 
-const buildLedArray = (colorChunks) => {
+const buildLedFrame = (colorChunks) => {
   const ledArray = [];
 
   for (let i = 0; i < GRID_WIDTH; i++) {
@@ -117,7 +117,41 @@ const buildLedArray = (colorChunks) => {
   return ledArray;
 };
 
-const templateData = [
+const getFrameChunks = (chunkSize, frameIndex, colorChunks) => {
+  const chunkOffset = frameIndex * chunkSize;
+  const frameChunks = colorChunks.slice(chunkOffset, chunkOffset + chunkSize);
+
+  return frameChunks;
+};
+
+const buildLedArray = (imageObject, colorChunks) => {
+  let frameArray = [];
+  const numFrames = imageObject.frameNum;
+
+  const chunkSize = imageObject.pixelWidth;
+
+  for (let i = 0; i < numFrames; i++) {
+    // const chunkOffset = i * chunkSize;
+
+    const redChunks = getFrameChunks(chunkSize, i, colorChunks.redChunks);
+    const greenChunks = getFrameChunks(chunkSize, i, colorChunks.greenChunks);
+    const blueChunks = getFrameChunks(chunkSize, i, colorChunks.blueChunks);
+
+    const frameChunks = {
+      redChunks,
+      greenChunks,
+      blueChunks,
+    };
+
+    // TODO
+    const chunkArray = buildLedFrame(frameChunks);
+    frameArray = frameArray.concat(chunkArray);
+  }
+
+  return frameArray;
+};
+
+const graffitiTemplate = [
   {
     data: {
       graffitiData: [],
@@ -129,6 +163,20 @@ const templateData = [
       stayTime: 2,
     },
     dataType: 1,
+  },
+];
+
+const animationTemplate = [
+  {
+    dataType: 0,
+    data: {
+      aniType: 1,
+      pixelHeight: 16,
+      pixelWidth: 96,
+      frameNum: 3,
+      delays: 300,
+      aniData: [],
+    },
   },
 ];
 
@@ -172,13 +220,11 @@ const reconstructColorChunks = (ledArray) => {
   return { redChunks, greenChunks, blueChunks };
 };
 
-const reconstructGraffitiDataFromPixelArray = (pixelArray) => {
-  const colorChunks = reconstructColorChunks(pixelArray);
-
+const reconstructFrameFromPixelArray = (frameChunks) => {
   const reconstructedBinaryString =
-    colorChunks.redChunks.join('') +
-    colorChunks.greenChunks.join('') +
-    colorChunks.blueChunks.join('');
+    frameChunks.redChunks.join('') +
+    frameChunks.greenChunks.join('') +
+    frameChunks.blueChunks.join('');
 
   let originalData = [];
   for (let i = 0; i < reconstructedBinaryString.length; i += 8) {
@@ -187,18 +233,45 @@ const reconstructGraffitiDataFromPixelArray = (pixelArray) => {
     );
     originalData.push(num);
   }
+  return originalData;
+};
+
+const reconstructGraffitiDataFromPixelArray = (imageData, pixelArray) => {
+  const frames = imageData.frameNum;
+
+  let originalData = [];
+  for (let i = 0; i < frames; i++) {
+    const arrayOffset = i * GRID_WIDTH * GRID_HEIGHT;
+    const frameArray = pixelArray.slice(
+      arrayOffset,
+      arrayOffset + GRID_HEIGHT * GRID_WIDTH,
+    );
+
+    const frameChunks = reconstructColorChunks(frameArray);
+    const frameData = reconstructFrameFromPixelArray(frameChunks);
+    originalData = originalData.concat(frameData);
+  }
 
   return originalData;
 };
 
-export const buildTemplate = (graffitiData) => {
-  const template = [...templateData];
-  template[0].data.graffitiData = graffitiData;
+export const buildTemplate = (imageData, originalData) => {
+  const isAnimation = imageData.isAnimation;
+  const dataKey = isAnimation ? 'aniData' : 'graffitiData';
+  const template = isAnimation ? [...animationTemplate] : [...graffitiTemplate];
+
+  template[0].data[dataKey] = originalData;
+
+  if (isAnimation) {
+    template[0].data.aniType = 1;
+    template[0].data.frameNum = imageData.frameNum;
+  }
+
   return template;
 };
 
-export const buildFile = (chunks) => {
-  const fileTemplate = buildTemplate(chunks);
+export const buildFile = (imageData, chunks) => {
+  const fileTemplate = buildTemplate(imageData, chunks);
   const json = JSON.stringify(fileTemplate);
   const blob = new Blob([json], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
@@ -212,9 +285,13 @@ export const downloadFile = (url, filename) => {
   link.click();
 };
 
-export const downloadJtFile = (pixelArray) => {
-  const originalData = reconstructGraffitiDataFromPixelArray(pixelArray);
-  const url = buildFile(originalData);
+export const downloadJtFile = (imageData) => {
+  const pixelArray = imageData.pixelArray;
+  const originalData = reconstructGraffitiDataFromPixelArray(
+    imageData,
+    pixelArray,
+  );
+  const url = buildFile(imageData, originalData);
   // get timestamp for filename
   const timestamp = Date.now();
   const filename = `CoolLEDX_16x96_1_${timestamp}.jt`;

@@ -6,6 +6,7 @@ import styled from 'styled-components';
 
 import ColorPicker from './ColorPicker';
 import { getColorObjectFromName } from './helpers/colors';
+import FramePicker from './FramePicker';
 
 const FileUpload = styled.input`
   margin-left: 50px;
@@ -24,6 +25,8 @@ const FileUploadWrapper = styled.div`
 
 const GRID_HEIGHT = 16;
 const GRID_WIDTH = 96;
+
+const FRAME_OFFSET = GRID_HEIGHT * GRID_WIDTH;
 
 const getInitialPixelArray = () => {
   const totalPixels = GRID_HEIGHT * GRID_WIDTH;
@@ -44,6 +47,10 @@ const getInitialData = () => {
   return imageObject;
 };
 
+const getStartingPixel = (frame) => {
+  return frame === 1 ? 0 : FRAME_OFFSET * (frame - 1);
+};
+
 function App() {
   // const [pixelArray, setPixelArray] = useState(() =>
   //   parseData(JSON.stringify(welcome))
@@ -51,12 +58,15 @@ function App() {
   const [imageData, setImageData] = useState(() => getInitialData());
   const [selectedColor, setSelectedColor] = useState('White');
   const [isDragging, setIsDragging] = useState(false);
+  const [frame, setFrame] = useState(1);
+
+  const startingPixel = getStartingPixel(frame);
 
   const readFile = (file) => {
     const reader = new FileReader();
 
     reader.onload = (event) => {
-      const content = event.target.result; // Get the file content
+      const content = event.target.result;
       const imageData = parseData(content);
       setImageData(imageData);
     };
@@ -80,7 +90,10 @@ function App() {
     // We shouldn't be doing this, but it's fine for this project.
     // We create a new imageData object, which should update the state correctly.
     const pixelArray = imageData.pixelArray;
-    pixelArray[index] = rgb;
+
+    const startingPixel = getStartingPixel(frame);
+    const offsetPixel = startingPixel + index;
+    pixelArray[offsetPixel] = rgb;
 
     setImageData({
       ...imageData,
@@ -104,8 +117,13 @@ function App() {
   };
 
   const handleDownload = () => {
-    downloadJtFile(imageData.pixelArray);
+    downloadJtFile(imageData);
   };
+
+  const displayPixelArray = imageData.pixelArray.slice(
+    startingPixel,
+    startingPixel + GRID_HEIGHT * GRID_WIDTH,
+  );
 
   return (
     <div className="App">
@@ -119,8 +137,14 @@ function App() {
           <button onClick={handleDownload}>Download</button>
         </FileUploadWrapper>
 
+        <FramePicker
+          selectedFrame={frame}
+          frameNum={imageData.frameNum}
+          setFrame={setFrame}
+        />
+
         <Grid
-          pixelArray={imageData.pixelArray}
+          pixelArray={displayPixelArray}
           onClick={handleClick}
           onMouseDown={handleMouseDown}
           onMouseUp={handleMouseUp}
