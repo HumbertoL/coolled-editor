@@ -136,19 +136,24 @@ function App() {
           <button onClick={handleDownload}>Download</button>
         </FileUploadWrapper>
 
-        <FramePicker
-          selectedFrame={frame}
-          frameNum={imageData.frameNum}
-          setFrame={setFrame}
-        />
-        <FrameControls
-          setFrame={setFrame}
-          selectedFrame={frame}
-          frameNum={imageData.frameNum}
-          delays={imageData.delays}
-          setImageData={setImageData}
-          pixelArray={imageData.pixelArray}
-        />
+        {imageData.isAnimation && (
+          <>
+            <FramePicker
+              selectedFrame={frame}
+              frameNum={imageData.frameNum}
+              setFrame={setFrame}
+            />
+            <FrameControls
+              setFrame={setFrame}
+              selectedFrame={frame}
+              frameNum={imageData.frameNum}
+              delays={imageData.delays}
+              setImageData={setImageData}
+              pixelArray={imageData.pixelArray}
+            />
+          </>
+        )}
+
         <Grid
           pixelArray={displayPixelArray}
           onClick={handleClick}
