@@ -2,8 +2,6 @@
 
 This app was created to preview and edit data on a 16x96 LED panel
 
-
-
 # More Sample files
 
 http://coolledx.com/appDownload/CoolLED1248/animation_update_data/1696/data1696_static.json
@@ -25,3 +23,76 @@ See also
     private static final String DYNAMIC_ANIMATION_FILE_NAME_1664 = "data1664_dynamic.json";
     private static final String DYNAMIC_ANIMATION_FILE_NAME_1696 = "data1696_dynamic.json";
     private static final String DYNAMIC_ANIMATION_FILE_NAME_3232 = "data3232_dynamic.json";
+
+# Data Format
+
+This repo is using a reverse engineered data format that is used by the vendor.
+
+Data is saved in .jt files. There's two types of files:
+
+- Graffiti (static images)
+- Animations
+
+Both use essentially the same format.
+
+Data is stored in a large array, split into individual bytes. For example:
+
+```
+[192, 15, 64]
+```
+
+Becomes:
+
+```
+110000000000111101000000
+```
+
+First, we convert each number in the array to a binary string. Then we split the binary string in three.
+
+```
+11000000 00001111 01000000
+```
+
+These three parts represent the red bits, the green bits and the blue bits.
+
+So in this example, we take the first bit of each section:
+
+| 1   | 0   | 0   |
+| --- | --- | --- |
+| R   | G   | B   |
+| FF  | 00  | 00  |
+
+This gives us the color #FF0000, which is Red.
+
+Each of those is converted into a color in the same way:
+
+| Binary | Hex    | Name    |
+| ------ | ------ | ------- |
+| 000    | 000000 | Black   |
+| 001    | 0000FF | Blue    |
+| 010    | 00FF00 | Green   |
+| 011    | 00FFFF | Cyan    |
+| 100    | FF0000 | Red     |
+| 101    | FF00FF | Magenta |
+| 110    | FFFF00 | Yellow  |
+| 111    | FFFFFF | White   |
+
+To convert to an image, we render starting at the top left, then moving down the column. Once the bottom of a column is reached, it starts at the top of the next column, like so:
+
+| 1   | 4   | 7   |
+| --- | --- | --- |
+| 2   | 5   | 8   |
+| 3   | 6   | 9   |
+
+That'll look like:
+
+| 100 | 000 | 010 |
+| --- | --- | --- |
+| 101 | 010 | 010 |
+| 000 | 010 |     |
+
+This process is continued using a height of 16 pixels and width of 96 pixels.
+
+To represent multiple frames in an animation, each entire frame is stored in the binary data, one at a time:
+
+[ `[frame 1 data]`, `[frame 2 data]`, `[frame 3 data]` ]
