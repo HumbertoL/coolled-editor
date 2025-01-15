@@ -99,4 +99,6 @@ This process is continued using a height of 16 pixels and width of 96 pixels.
 
 To represent multiple frames in an animation, each entire frame is stored in the binary data, one at a time:
 
-[ `[frame 1 data]`, `[frame 2 data]`, `[frame 3 data]` ]
+[ `[576 bytes of frame 1 data]`, `[576 bytes of frame 2 data]`, `[576 bytes of frame 3 data]` ]
+
+Note that the data is one continuous blob. Each frame is not an element in the array. We have to know to divide it up first, then process each subset of data with the process described above.
