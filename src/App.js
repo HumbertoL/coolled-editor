@@ -8,6 +8,7 @@ import ColorPicker from './ColorPicker';
 import { getColorObjectFromName } from './helpers/colors';
 import FramePicker from './FramePicker';
 import { downloadJtFile } from './helpers/export_data';
+import FrameControls from './FrameControls';
 
 const FileUpload = styled.input`
   margin-left: 50px;
@@ -143,7 +144,12 @@ function App() {
           frameNum={imageData.frameNum}
           setFrame={setFrame}
         />
-
+        <FrameControls
+          setFrame={setFrame}
+          selectedFrame={frame}
+          frameNum={imageData.frameNum}
+          delays={imageData.delays}
+        />
         <Grid
           pixelArray={displayPixelArray}
           onClick={handleClick}

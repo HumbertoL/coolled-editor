@@ -22,17 +22,13 @@ const FramePicker = ({ setFrame, selectedFrame, frameNum }) => {
     return null;
   }
 
-  const handleColorSelection = (frameNum) => {
-    setFrame(frameNum);
-  };
-
   const frameButtons = [];
 
   for (let i = 1; i <= frameNum; i++) {
     const frameButton = (
       <FrameButton
         key={`frame-${i}`}
-        onClick={() => handleColorSelection(i)}
+        onClick={() => setFrame(i)}
         selected={selectedFrame === i}
       >
         {i}

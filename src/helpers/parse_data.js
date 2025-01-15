@@ -37,6 +37,7 @@ export const convertDataToBinary = (content) => {
   const frameNum = parsedData.frameNum ?? 1;
   const pixelWidth = parsedData.pixelWidth;
   const pixelHeight = parsedData.pixelHeight;
+  const delays = parsedData.delays;
 
   // If no graffiti data, fall back to animation data
   const imageData = isAnimation ? animationData : graffitiData;
@@ -52,6 +53,7 @@ export const convertDataToBinary = (content) => {
     frameNum,
     pixelWidth,
     pixelHeight,
+    delays,
   };
 
   return imageObject;
