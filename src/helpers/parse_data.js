@@ -1,12 +1,14 @@
 // import welcome from '../sample/welcome_to_chaos_corner.json';
 // import greenTopRight from '../sample/green_top_right.json';
 
+import { GRID_HEIGHT, GRID_WIDTH } from './constants';
+
 export const parseData = (content) => {
   const imageData = convertDataToBinary(content);
 
   const columns = separateIntoColumns(imageData.binaryString);
   const colorArrays = divideColumnsIntoRGBGroups(columns);
-  const pixelArray = buildLedArray(colorArrays);
+  const pixelArray = buildLedArray(imageData, colorArrays);
 
   delete imageData.binaryString;
 
@@ -32,9 +34,10 @@ export const convertDataToBinary = (content) => {
   const graffitiData = parsedData.graffitiData;
   const animationData = parsedData.aniData;
   const isAnimation = Boolean(parsedData.aniType);
-  const frameNum = parsedData.frameNum;
+  const frameNum = parsedData.frameNum ?? 1;
   const pixelWidth = parsedData.pixelWidth;
   const pixelHeight = parsedData.pixelHeight;
+  const delays = parsedData.delays;
 
   // If no graffiti data, fall back to animation data
   const imageData = isAnimation ? animationData : graffitiData;
@@ -50,6 +53,7 @@ export const convertDataToBinary = (content) => {
     frameNum,
     pixelWidth,
     pixelHeight,
+    delays,
   };
 
   return imageObject;
@@ -79,9 +83,6 @@ const divideColumnsIntoRGBGroups = (chunks) => {
   return { redChunks, greenChunks, blueChunks };
 };
 
-const GRID_HEIGHT = 16;
-const GRID_WIDTH = 96;
-
 // Each column is represented by 16 bits.
 // The first bit is in the top left corner of the grid.
 // The next bit is in the row below that, and so on.
@@ -105,7 +106,7 @@ const buildColumn = (colorChunks, index) => {
   return columnArray;
 };
 
-const buildLedArray = (colorChunks) => {
+const buildLedFrame = (colorChunks) => {
   const ledArray = [];
 
   for (let i = 0; i < GRID_WIDTH; i++) {
@@ -117,106 +118,36 @@ const buildLedArray = (colorChunks) => {
   return ledArray;
 };
 
-const templateData = [
-  {
-    data: {
-      graffitiData: [],
-      graffitiType: 1,
-      mode: 247,
-      pixelHeight: 16,
-      pixelWidth: 96,
-      speed: 1,
-      stayTime: 2,
-    },
-    dataType: 1,
-  },
-];
+const getFrameChunks = (chunkSize, frameIndex, colorChunks) => {
+  const chunkOffset = frameIndex * chunkSize;
+  const frameChunks = colorChunks.slice(chunkOffset, chunkOffset + chunkSize);
 
-const convertBinaryToNumber = (binaryString) => {
-  return parseInt(binaryString, 2);
+  return frameChunks;
 };
 
-const buildChunksFromColumn = (columnArray) => {
-  let redChunk = '';
-  let greenChunk = '';
-  let blueChunk = '';
-  for (let j = 0; j < columnArray.length; j++) {
-    const pixel = columnArray[j];
-    const redBit = pixel.r ? '1' : '0';
-    const greenBit = pixel.g ? '1' : '0';
-    const blueBit = pixel.b ? '1' : '0';
-    redChunk += redBit;
-    greenChunk += greenBit;
-    blueChunk += blueBit;
-  }
-  return { redChunk, greenChunk, blueChunk };
-};
+const buildLedArray = (imageObject, colorChunks) => {
+  const frameArray = [];
+  const numFrames = imageObject.frameNum;
 
-const reconstructColorChunks = (ledArray) => {
-  const redChunks = [];
-  const greenChunks = [];
-  const blueChunks = [];
+  const chunkSize = imageObject.pixelWidth;
 
-  for (let i = 0; i < GRID_WIDTH; i++) {
-    // Column start and end index
-    const startIndex = i * GRID_HEIGHT;
-    const endIndex = (i + 1) * GRID_HEIGHT;
-    const columnArray = ledArray.slice(startIndex, endIndex);
+  for (let i = 0; i < numFrames; i++) {
+    // const chunkOffset = i * chunkSize;
 
-    const columnChunks = buildChunksFromColumn(columnArray);
-    redChunks.push(...columnChunks.redChunk);
-    greenChunks.push(...columnChunks.greenChunk);
-    blueChunks.push(...columnChunks.blueChunk);
+    const redChunks = getFrameChunks(chunkSize, i, colorChunks.redChunks);
+    const greenChunks = getFrameChunks(chunkSize, i, colorChunks.greenChunks);
+    const blueChunks = getFrameChunks(chunkSize, i, colorChunks.blueChunks);
+
+    const frameChunks = {
+      redChunks,
+      greenChunks,
+      blueChunks,
+    };
+
+    // TODO
+    const chunkArray = buildLedFrame(frameChunks);
+    frameArray.push(...chunkArray);
   }
 
-  return { redChunks, greenChunks, blueChunks };
-};
-
-const reconstructGraffitiDataFromPixelArray = (pixelArray) => {
-  const colorChunks = reconstructColorChunks(pixelArray);
-
-  const reconstructedBinaryString =
-    colorChunks.redChunks.join('') +
-    colorChunks.greenChunks.join('') +
-    colorChunks.blueChunks.join('');
-
-  let originalData = [];
-  for (let i = 0; i < reconstructedBinaryString.length; i += 8) {
-    const num = convertBinaryToNumber(
-      reconstructedBinaryString.substring(i, i + 8),
-    );
-    originalData.push(num);
-  }
-
-  return originalData;
-};
-
-export const buildTemplate = (graffitiData) => {
-  const template = [...templateData];
-  template[0].data.graffitiData = graffitiData;
-  return template;
-};
-
-export const buildFile = (chunks) => {
-  const fileTemplate = buildTemplate(chunks);
-  const json = JSON.stringify(fileTemplate);
-  const blob = new Blob([json], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  return url;
-};
-
-export const downloadFile = (url, filename) => {
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = filename;
-  link.click();
-};
-
-export const downloadJtFile = (pixelArray) => {
-  const originalData = reconstructGraffitiDataFromPixelArray(pixelArray);
-  const url = buildFile(originalData);
-  // get timestamp for filename
-  const timestamp = Date.now();
-  const filename = `CoolLEDX_16x96_1_${timestamp}.jt`;
-  downloadFile(url, filename);
+  return frameArray;
 };

@@ -1,11 +1,16 @@
 import './App.css';
-import { downloadJtFile, parseData } from './helpers/parse_data';
+import { parseData } from './helpers/parse_data';
 import Grid from './Grid';
 import { useState } from 'react';
 import styled from 'styled-components';
 
 import ColorPicker from './ColorPicker';
 import { getColorObjectFromName } from './helpers/colors';
+import FramePicker from './FramePicker';
+import { downloadJtFile } from './helpers/export_data';
+import FrameControls from './FrameControls';
+import { GRID_HEIGHT, GRID_WIDTH } from './helpers/constants';
+import { getStartingPixel } from './helpers/frame';
 
 const FileUpload = styled.input`
   margin-left: 50px;
@@ -22,8 +27,8 @@ const FileUploadWrapper = styled.div`
   }
 `;
 
-const GRID_HEIGHT = 16;
-const GRID_WIDTH = 96;
+// const GRID_HEIGHT = 16;
+// const GRID_WIDTH = 96;
 
 const getInitialPixelArray = () => {
   const totalPixels = GRID_HEIGHT * GRID_WIDTH;
@@ -35,7 +40,8 @@ const getInitialPixelArray = () => {
 const getInitialData = () => {
   const imageObject = {
     pixelArray: getInitialPixelArray(),
-    isAnimation: false,
+    isAnimation: true,
+    delays: 300,
     frameNum: 1,
     pixelWidth: GRID_WIDTH,
     pixelHeight: GRID_HEIGHT,
@@ -51,12 +57,15 @@ function App() {
   const [imageData, setImageData] = useState(() => getInitialData());
   const [selectedColor, setSelectedColor] = useState('White');
   const [isDragging, setIsDragging] = useState(false);
+  const [frame, setFrame] = useState(1);
+
+  const startingPixel = getStartingPixel(frame);
 
   const readFile = (file) => {
     const reader = new FileReader();
 
     reader.onload = (event) => {
-      const content = event.target.result; // Get the file content
+      const content = event.target.result;
       const imageData = parseData(content);
       setImageData(imageData);
     };
@@ -80,7 +89,10 @@ function App() {
     // We shouldn't be doing this, but it's fine for this project.
     // We create a new imageData object, which should update the state correctly.
     const pixelArray = imageData.pixelArray;
-    pixelArray[index] = rgb;
+
+    const startingPixel = getStartingPixel(frame);
+    const offsetPixel = startingPixel + index;
+    pixelArray[offsetPixel] = rgb;
 
     setImageData({
       ...imageData,
@@ -104,8 +116,13 @@ function App() {
   };
 
   const handleDownload = () => {
-    downloadJtFile(imageData.pixelArray);
+    downloadJtFile(imageData);
   };
+
+  const displayPixelArray = imageData.pixelArray.slice(
+    startingPixel,
+    startingPixel + GRID_HEIGHT * GRID_WIDTH,
+  );
 
   return (
     <div className="App">
@@ -119,8 +136,21 @@ function App() {
           <button onClick={handleDownload}>Download</button>
         </FileUploadWrapper>
 
-        <Grid
+        <FramePicker
+          selectedFrame={frame}
+          frameNum={imageData.frameNum}
+          setFrame={setFrame}
+        />
+        <FrameControls
+          setFrame={setFrame}
+          selectedFrame={frame}
+          frameNum={imageData.frameNum}
+          delays={imageData.delays}
+          setImageData={setImageData}
           pixelArray={imageData.pixelArray}
+        />
+        <Grid
+          pixelArray={displayPixelArray}
           onClick={handleClick}
           onMouseDown={handleMouseDown}
           onMouseUp={handleMouseUp}

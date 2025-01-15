@@ -12,7 +12,7 @@ const GridSquare = styled.div`
 `;
 
 const GridContainer = styled.div`
-  margin-top: 60px;
+  margin-top: 20px;
   display: grid;
   grid-template-columns: repeat(
     96,
