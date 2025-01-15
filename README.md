@@ -43,13 +43,13 @@ Data is stored in a large array, split into individual bytes. For example:
 
 A static image with dimensions of 16x96 will have an array of 576 bytes. Note that this means each pixel is represented by 3 bits.
 
-To interpret the data, first we convert each number in the array to a binary string.
+To interpret the data, first we convert each number in the array to an 8 bit binary number and build up a string.
 
 ```
 110000000000111101000000
 ```
 
-Then we split the binary string in three.
+Then we split the binary string in three evenly sized sections.
 
 ```
 11000000 00001111 01000000
@@ -66,9 +66,11 @@ So in this example, we take the first bit of each section:
 | R   | G   | B   |
 | FF  | 00  | 00  |
 
-This gives us the first bit, which is the color #FF0000 aka red.
+This gives us the first pixel, which is the color #FF0000 aka red.
 
-Each of those is converted into a color in the same way:
+The second pixel is made up of the second bit in each array and so forth.
+
+Each of those pixels is converted into a color in the same way:
 
 | Binary | Hex    | Name    |
 | ------ | ------ | ------- |
