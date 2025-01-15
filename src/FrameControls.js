@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
+import { getFrameData, getStartingPixel, insertFrame } from './helpers/frame';
 
 const StyledRoot = styled.div`
   display: flex;
@@ -24,7 +25,14 @@ const StyledLabel = styled.div`
   margin-left: 20px;
 `;
 
-const FrameControls = ({ setFrame, selectedFrame, frameNum, delays }) => {
+const FrameControls = ({
+  setFrame,
+  selectedFrame,
+  frameNum,
+  delays,
+  setImageData,
+  pixelArray,
+}) => {
   const [isPreviewing, setIsPreviewing] = React.useState(false);
 
   useEffect(() => {
@@ -52,6 +60,27 @@ const FrameControls = ({ setFrame, selectedFrame, frameNum, delays }) => {
     setIsPreviewing(!isPreviewing);
   };
 
+  const handleChangeDelay = (e) => {
+    const value = e.target.value;
+    setImageData((prev) => ({
+      ...prev,
+      delays: value,
+    }));
+  };
+
+  const handleAddFrame = () => {
+    // copy current frame and insert new frame after it
+
+    const tempNewFrame = getFrameData(pixelArray, selectedFrame);
+    const newFrameData = insertFrame(pixelArray, selectedFrame, tempNewFrame);
+
+    setImageData((prev) => ({
+      ...prev,
+      frameNum: frameNum + 1,
+      pixelArray: newFrameData,
+    }));
+  };
+
   return (
     <StyledRoot>
       <FrameButton onClick={handleClick}>
@@ -59,11 +88,11 @@ const FrameControls = ({ setFrame, selectedFrame, frameNum, delays }) => {
       </FrameButton>
 
       <StyledLabel>Frame Delay</StyledLabel>
-      <input type="text" value={delays} />
+      <input value={delays} onChange={handleChangeDelay} type="number" />
 
       <StyledLabel>Add/Remove Frame</StyledLabel>
       <FrameButton>-</FrameButton>
-      <FrameButton>+</FrameButton>
+      <FrameButton onClick={handleAddFrame}>+</FrameButton>
     </StyledRoot>
   );
 };

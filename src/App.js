@@ -9,6 +9,8 @@ import { getColorObjectFromName } from './helpers/colors';
 import FramePicker from './FramePicker';
 import { downloadJtFile } from './helpers/export_data';
 import FrameControls from './FrameControls';
+import { GRID_HEIGHT, GRID_WIDTH } from './helpers/constants';
+import { getStartingPixel } from './helpers/frame';
 
 const FileUpload = styled.input`
   margin-left: 50px;
@@ -25,10 +27,8 @@ const FileUploadWrapper = styled.div`
   }
 `;
 
-const GRID_HEIGHT = 16;
-const GRID_WIDTH = 96;
-
-const FRAME_OFFSET = GRID_HEIGHT * GRID_WIDTH;
+// const GRID_HEIGHT = 16;
+// const GRID_WIDTH = 96;
 
 const getInitialPixelArray = () => {
   const totalPixels = GRID_HEIGHT * GRID_WIDTH;
@@ -47,10 +47,6 @@ const getInitialData = () => {
   };
 
   return imageObject;
-};
-
-const getStartingPixel = (frame) => {
-  return frame === 1 ? 0 : FRAME_OFFSET * (frame - 1);
 };
 
 function App() {
@@ -149,6 +145,8 @@ function App() {
           selectedFrame={frame}
           frameNum={imageData.frameNum}
           delays={imageData.delays}
+          setImageData={setImageData}
+          pixelArray={imageData.pixelArray}
         />
         <Grid
           pixelArray={displayPixelArray}
