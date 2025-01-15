@@ -38,20 +38,24 @@ Both use essentially the same format.
 Data is stored in a large array, split into individual bytes. For example:
 
 ```
-[192, 15, 64]
+[192, 15, 64, ...]
 ```
 
-Becomes:
+A static image with dimensions of 16x96 will have an array of 576 bytes. Note that this means each pixel is represented by 3 bits.
+
+To interpret the data, first we convert each number in the array to a binary string.
 
 ```
 110000000000111101000000
 ```
 
-First, we convert each number in the array to a binary string. Then we split the binary string in three.
+Then we split the binary string in three.
 
 ```
 11000000 00001111 01000000
 ```
+
+For static image with dimensions of 16x96, each group will be 192 bytes.
 
 These three parts represent the red bits, the green bits and the blue bits.
 
@@ -62,7 +66,7 @@ So in this example, we take the first bit of each section:
 | R   | G   | B   |
 | FF  | 00  | 00  |
 
-This gives us the color #FF0000, which is Red.
+This gives us the first bit, which is the color #FF0000 aka red.
 
 Each of those is converted into a color in the same way:
 
@@ -77,7 +81,7 @@ Each of those is converted into a color in the same way:
 | 110    | FFFF00 | Yellow  |
 | 111    | FFFFFF | White   |
 
-To convert to an image, we render starting at the top left, then moving down the column. Once the bottom of a column is reached, it starts at the top of the next column, like so:
+To convert the pixels to an image, we render starting at the top left, then moving down the column. Once the bottom of a column is reached, it starts at the top of the next column, like so:
 
 | 1   | 4   | 7   |
 | --- | --- | --- |
