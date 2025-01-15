@@ -21,3 +21,10 @@ export const insertFrame = (pixelArray, selectedFrame, frameData) => {
   newFrameData.splice(frameIndex * FRAME_OFFSET, 0, ...frameData);
   return newFrameData;
 };
+
+export const removeFrame = (pixelArray, selectedFrame) => {
+  const newFrameData = [...pixelArray];
+  const frameIndex = selectedFrame - 1;
+  newFrameData.splice(frameIndex * FRAME_OFFSET, FRAME_OFFSET);
+  return newFrameData;
+};

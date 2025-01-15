@@ -1,6 +1,11 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import { getFrameData, getStartingPixel, insertFrame } from './helpers/frame';
+import {
+  getFrameData,
+  getStartingPixel,
+  insertFrame,
+  removeFrame,
+} from './helpers/frame';
 
 const StyledRoot = styled.div`
   display: flex;
@@ -52,10 +57,6 @@ const FrameControls = ({
     }
   }, [isPreviewing, delays, frameNum]);
 
-  if (!frameNum || frameNum <= 1) {
-    return null;
-  }
-
   const handleClick = () => {
     setIsPreviewing(!isPreviewing);
   };
@@ -70,7 +71,6 @@ const FrameControls = ({
 
   const handleAddFrame = () => {
     // copy current frame and insert new frame after it
-
     const tempNewFrame = getFrameData(pixelArray, selectedFrame);
     const newFrameData = insertFrame(pixelArray, selectedFrame, tempNewFrame);
 
@@ -79,6 +79,22 @@ const FrameControls = ({
       frameNum: frameNum + 1,
       pixelArray: newFrameData,
     }));
+  };
+
+  const handleRemoveFrame = () => {
+    // remove current frame
+    const newFrameData = removeFrame(pixelArray, selectedFrame);
+    const newFrameCount = frameNum - 1;
+
+    setImageData((prev) => ({
+      ...prev,
+      frameNum: newFrameCount,
+      pixelArray: newFrameData,
+    }));
+
+    if (selectedFrame > newFrameCount) {
+      setFrame(newFrameCount);
+    }
   };
 
   return (
@@ -91,7 +107,7 @@ const FrameControls = ({
       <input value={delays} onChange={handleChangeDelay} type="number" />
 
       <StyledLabel>Add/Remove Frame</StyledLabel>
-      <FrameButton>-</FrameButton>
+      <FrameButton onClick={handleRemoveFrame}>-</FrameButton>
       <FrameButton onClick={handleAddFrame}>+</FrameButton>
     </StyledRoot>
   );

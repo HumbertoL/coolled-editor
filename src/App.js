@@ -40,7 +40,8 @@ const getInitialPixelArray = () => {
 const getInitialData = () => {
   const imageObject = {
     pixelArray: getInitialPixelArray(),
-    isAnimation: false,
+    isAnimation: true,
+    delays: 300,
     frameNum: 1,
     pixelWidth: GRID_WIDTH,
     pixelHeight: GRID_HEIGHT,
