@@ -46,18 +46,24 @@ A static image with dimensions of 16x96 will have an array of 576 bytes. Note th
 To interpret the data, first we convert each number in the array to an 8 bit binary number and build up a string.
 
 ```
-110000000000111101000000
+110000001100000000001111000011110100000001000000...
 ```
 
-Then we split the binary string in three evenly sized sections.
+Then we split the binary string into pieces that represent each column of pixels. Each column is 16 pixels tall and represented in 6 bytes.
 
 ```
-11000000 00001111 01000000
+11000000 11000000 00001111 00001111 01000000 01000000
 ```
 
-For static image with dimensions of 16x96, each group will be 192 bytes.
+We split the bytes representing the column into three evenly sized sections.
 
-These three parts represent the red bits, the green bits and the blue bits.
+```
+[1100000011000000, 0000111100001111, 0100000001000000]
+```
+
+For static image with dimensions of 16x96, there will be 96 columns, each 6 bytes. Each group represents one column.
+
+These three parts of the group represent the red bits, the green bits and the blue bits.
 
 So in this example, we take the first bit of each section:
 
