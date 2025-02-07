@@ -60,6 +60,7 @@ export const buildTemplate = (imageData, originalData) => {
   if (isAnimation) {
     template[0].data.aniType = 1;
     template[0].data.frameNum = imageData.frameNum;
+    template[0].data.delays = imageData.delays;
   }
 
   return template;
