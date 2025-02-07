@@ -4869,6 +4869,13 @@ get-symbol-description@^1.0.0:
     call-bind "^1.0.2"
     get-intrinsic "^1.1.1"
 
+gifuct-js@^2.1.2:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/gifuct-js/-/gifuct-js-2.1.2.tgz#06152437ba30ec914db8398bd838bd0fbc8a6ecd"
+  integrity sha512-rI2asw77u0mGgwhV3qA+OEgYqaDn5UNqgs+Bx0FGwSpuqfYn+Ir6RQY5ENNQ8SbIiG/m5gVa7CD5RriO4f4Lsg==
+  dependencies:
+    js-binary-schema-parser "^2.0.3"
+
 glob-parent@^5.1.2, glob-parent@~5.1.2:
   version "5.1.2"
   resolved "https://registry.yarnpkg.com/glob-parent/-/glob-parent-5.1.2.tgz#869832c58034fe68a4093c17dc15e8340d8401c4"
@@ -6154,6 +6161,11 @@ jiti@^1.19.1:
   version "1.21.0"
   resolved "https://registry.yarnpkg.com/jiti/-/jiti-1.21.0.tgz#7c97f8fe045724e136a397f7340475244156105d"
   integrity sha512-gFqAIbuKyyso/3G2qhiO2OM6shY6EPP/R0+mkDbyspxKazh8BXDC5FiFsUjlczgdNz/vfra0da2y+aHrusLG/Q==
+
+js-binary-schema-parser@^2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/js-binary-schema-parser/-/js-binary-schema-parser-2.0.3.tgz#3d7848748e8586e63b34e8911b643f59cfb6396e"
+  integrity sha512-xezGJmOb4lk/M1ZZLTR/jaBHQ4gG/lqQnJqdIv4721DMggsa1bDVlHXNeHYogaIEHD9vCRv0fcL4hMA+Coarkg==
 
 "js-tokens@^3.0.0 || ^4.0.0", js-tokens@^4.0.0:
   version "4.0.0"

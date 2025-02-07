@@ -11,6 +11,7 @@ import { downloadJtFile } from './helpers/export_data';
 import FrameControls from './FrameControls';
 import { GRID_HEIGHT, GRID_WIDTH } from './helpers/constants';
 import { getStartingPixel } from './helpers/frame';
+import { processGif } from './helpers/gif_utils';
 
 const FileUpload = styled.input`
   margin-left: 50px;
@@ -61,21 +62,29 @@ function App() {
 
   const startingPixel = getStartingPixel(frame);
 
-  const readFile = (file) => {
-    const reader = new FileReader();
+  const readFile = async (file) => {
+    const fileName = file.name;
+    if (fileName.endsWith('.jt')) {
+      const reader = new FileReader();
 
-    reader.onload = (event) => {
-      const content = event.target.result;
-      const imageData = parseData(content);
+      reader.onload = (event) => {
+        const content = event.target.result;
+
+        const imageData = parseData(content);
+        setImageData(imageData);
+      };
+
+      reader.readAsText(file);
+    } else if (fileName.endsWith('.gif')) {
+      const imageData = await processGif(file);
       setImageData(imageData);
-    };
-
-    reader.readAsText(file);
+    }
   };
 
   // Function to handle file selection
   const handleFileChange = (event) => {
     const file = event.target.files[0];
+
     if (file) {
       readFile(file);
     }
