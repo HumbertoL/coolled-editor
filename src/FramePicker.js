@@ -4,6 +4,7 @@ const StyledRoot = styled.div`
   display: flex;
   margin-top: 10px;
   align-items: center;
+  flex-wrap: wrap;
 `;
 
 const FrameButton = styled.button`
