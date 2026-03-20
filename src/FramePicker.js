@@ -1,21 +1,48 @@
 import React from 'react';
 import styled from 'styled-components';
+
 const StyledRoot = styled.div`
   display: flex;
-  margin-top: 10px;
+  margin-top: 8px;
+  margin-bottom: 4px;
   align-items: center;
   flex-wrap: wrap;
+  gap: 4px;
 `;
 
 const FrameButton = styled.button`
-  margin-left: 14px;
-  width: 30px;
-  height: 30px;
+  width: 32px;
+  height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: ${(props) => (props.selected ? 'grey' : 'inherit')};
-  color: #fff;
+  background: ${(props) =>
+    props.selected
+      ? 'linear-gradient(135deg, #7a5cff 0%, #5c6cff 100%)'
+      : 'rgba(255, 255, 255, 0.06)'};
+  color: ${(props) => (props.selected ? '#fff' : 'rgba(255, 255, 255, 0.6)')};
+  border: 1px solid ${(props) =>
+    props.selected ? 'rgba(122, 92, 255, 0.5)' : 'rgba(255, 255, 255, 0.08)'};
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+
+  &:hover {
+    background: ${(props) =>
+      props.selected
+        ? 'linear-gradient(135deg, #7a5cff 0%, #5c6cff 100%)'
+        : 'rgba(255, 255, 255, 0.1)'};
+    color: #fff;
+  }
+`;
+
+const Label = styled.span`
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.4);
+  margin-right: 8px;
 `;
 
 const FramePicker = ({ setFrame, selectedFrame, frameNum }) => {
@@ -40,7 +67,7 @@ const FramePicker = ({ setFrame, selectedFrame, frameNum }) => {
 
   return (
     <StyledRoot>
-      <div>Frame</div>
+      <Label>Frames</Label>
       {frameButtons}
     </StyledRoot>
   );

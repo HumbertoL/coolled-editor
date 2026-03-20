@@ -4,28 +4,29 @@ import { getColorFromChunk } from './helpers/colors';
 
 const squareSize = 12;
 
-// Styled component for the individual grid square
 const GridSquare = styled.div`
   width: ${squareSize}px;
   height: ${squareSize}px;
-  border: 1px solid #ccc;
+  border-radius: 2px;
   font-size: 10px;
   display: grid;
+  transition: box-shadow 0.05s ease;
 `;
 
 const GridContainer = styled.div`
   margin-top: 20px;
   display: grid;
-  grid-template-columns: repeat(
-    96,
-    ${squareSize}px
-  ); /* 96 columns, each with a width of 20px */
-  grid-template-rows: repeat(
-    16,
-    ${squareSize}px
-  ); /* 16 rows, each with a height of 20px */
-  grid-gap: 1px; /* Gap between each grid square */
-  grid-auto-flow: column; /* Automatically flow the grid items into columns */
+  grid-template-columns: repeat(96, ${squareSize}px);
+  grid-template-rows: repeat(16, ${squareSize}px);
+  grid-gap: 1px;
+  grid-auto-flow: column;
+  background: #0a0a0f;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow:
+    0 0 40px rgba(0, 0, 0, 0.5),
+    inset 0 0 30px rgba(0, 0, 0, 0.3);
 `;
 
 // Component for rendering the grid
@@ -51,19 +52,26 @@ const Grid = ({
     onMouseUp();
   };
 
+  const getSquareStyle = (pixel) => {
+    const color = getColorFromChunk(pixel);
+    const isLit = color !== '#000000';
+    return {
+      backgroundColor: color,
+      boxShadow: isLit ? `0 0 4px ${color}80, 0 0 1px ${color}40` : 'none',
+    };
+  };
+
   return (
     <GridContainer onMouseEnter={handleEnterGrid}>
       {pixelArray.map((pixel, index) => (
         <GridSquare
           key={index}
-          style={{ backgroundColor: getColorFromChunk(pixel) }}
+          style={getSquareStyle(pixel)}
           onClick={() => handleClick(index)}
           onMouseDown={onMouseDown}
           onMouseUp={onMouseUp}
           onMouseEnter={() => onMouseEnter(index)}
-        >
-          {/* {index} */}
-        </GridSquare>
+        />
       ))}
     </GridContainer>
   );

@@ -13,23 +13,82 @@ import { GRID_HEIGHT, GRID_WIDTH } from './helpers/constants';
 import { getStartingPixel } from './helpers/frame';
 import { processGif } from './helpers/gif_utils';
 
-const FileUpload = styled.input`
-  margin-left: 50px;
+const AppTitle = styled.h1`
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  margin-bottom: 32px;
+  background: linear-gradient(135deg, #00d2ff, #7a5cff, #ff6bca);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-transform: uppercase;
 `;
 
-const FileUploadWrapper = styled.div`
+const Toolbar = styled.div`
   display: flex;
   align-items: center;
-  font-size: 20px;
-  width: 500px;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 24px;
+  padding: 16px 24px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  backdrop-filter: blur(12px);
+`;
 
-  & > button {
-    margin-left: 28px;
+const StyledButton = styled.button`
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #7a5cff 0%, #5c6cff 100%);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  letter-spacing: 0.5px;
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 20px rgba(122, 92, 255, 0.4);
+  }
+
+  &:active {
+    transform: translateY(0);
   }
 `;
 
-// const GRID_HEIGHT = 16;
-// const GRID_WIDTH = 96;
+const FileInput = styled.input`
+  display: none;
+`;
+
+const FileLabel = styled.label`
+  padding: 10px 20px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #c0c0d0;
+  border: 1px dashed rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(122, 92, 255, 0.5);
+    color: #fff;
+  }
+`;
+
+const Divider = styled.div`
+  width: 1px;
+  height: 28px;
+  background: rgba(255, 255, 255, 0.1);
+  margin: 0 4px;
+`;
 
 const getInitialPixelArray = () => {
   const totalPixels = GRID_HEIGHT * GRID_WIDTH;
@@ -52,9 +111,6 @@ const getInitialData = () => {
 };
 
 function App() {
-  // const [pixelArray, setPixelArray] = useState(() =>
-  //   parseData(JSON.stringify(welcome))
-  // );
   const [imageData, setImageData] = useState(() => getInitialData());
   const [selectedColor, setSelectedColor] = useState('White');
   const [isDragging, setIsDragging] = useState(false);
@@ -91,7 +147,6 @@ function App() {
   };
 
   const handleClick = (index) => {
-    // console.log(index);
     const rgb = getColorObjectFromName(selectedColor);
 
     // performance hack, we're mutating the state directly here.
@@ -119,7 +174,6 @@ function App() {
 
   const handleMouseEnter = (id) => {
     if (isDragging) {
-      // console.log(`Entered div with id: ${id} while dragging`);
       handleClick(id);
     }
   };
@@ -136,22 +190,19 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <FileUploadWrapper>
-          Upload File:
-          <FileUpload type="file" onChange={handleFileChange} />
-        </FileUploadWrapper>
-        <FileUploadWrapper>
-          Export Design:
-          <button onClick={handleDownload}>Download</button>
-        </FileUploadWrapper>
+        <AppTitle>CoolLED Editor</AppTitle>
+
+        <Toolbar>
+          <FileLabel>
+            Upload .jt / .gif
+            <FileInput type="file" onChange={handleFileChange} />
+          </FileLabel>
+          <Divider />
+          <StyledButton onClick={handleDownload}>Export .jt</StyledButton>
+        </Toolbar>
 
         {imageData.isAnimation && (
           <>
-            <FramePicker
-              selectedFrame={frame}
-              frameNum={imageData.frameNum}
-              setFrame={setFrame}
-            />
             <FrameControls
               setFrame={setFrame}
               selectedFrame={frame}
@@ -159,6 +210,11 @@ function App() {
               delays={imageData.delays}
               setImageData={setImageData}
               pixelArray={imageData.pixelArray}
+            />
+            <FramePicker
+              selectedFrame={frame}
+              frameNum={imageData.frameNum}
+              setFrame={setFrame}
             />
           </>
         )}
