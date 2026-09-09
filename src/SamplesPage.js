@@ -6,6 +6,8 @@ import {
   VENDOR_PACKS,
   downloadJt,
   loadBundledSamples,
+  loadMaterialIndex,
+  loadMaterialPack,
   loadVendorPack,
   readJt,
   sendCommandFor,
@@ -84,6 +86,46 @@ const Tab = styled.button`
 
   &:hover {
     color: #fff;
+  }
+`;
+
+const CatalogRow = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: -8px 0 20px;
+`;
+
+const CatalogLabel = styled.span`
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: #6a6a80;
+  margin-right: 2px;
+`;
+
+const SmallTab = styled.button`
+  padding: 5px 11px;
+  background: ${({ $active }) =>
+    $active ? 'rgba(122, 92, 255, 0.28)' : 'rgba(255, 255, 255, 0.05)'};
+  color: ${({ $active }) => ($active ? '#d8d0ff' : '#8a8aa0')};
+  border: 1px solid
+    ${({ $active }) => ($active ? 'rgba(122,92,255,0.5)' : 'rgba(255,255,255,0.1)')};
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+
+  &:hover {
+    color: #fff;
+  }
+
+  span {
+    opacity: 0.6;
+    margin-left: 5px;
   }
 `;
 
@@ -306,6 +348,19 @@ const SamplesPage = ({ onEdit }) => {
   const [cache, setCache] = useState({});
   const [status, setStatus] = useState('loading');
   const [error, setError] = useState(null);
+  const [materialPacks, setMaterialPacks] = useState([]);
+
+  // The catalog is vendored by scripts/fetch-material.mjs. If it hasn't been
+  // run, the index is missing and these tabs simply don't appear.
+  useEffect(() => {
+    let cancelled = false;
+    loadMaterialIndex().then((packs) => {
+      if (!cancelled) setMaterialPacks(packs);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -320,10 +375,22 @@ const SamplesPage = ({ onEdit }) => {
     setStatus('loading');
     setError(null);
 
-    const load =
-      tab === 'bundled'
-        ? loadBundledSamples()
-        : loadVendorPack(VENDOR_PACKS.find((pack) => pack.id === tab));
+    const vendorPack = VENDOR_PACKS.find((pack) => pack.id === tab);
+    const materialPack = materialPacks.find((pack) => pack.id === tab);
+
+    let load;
+    if (tab === 'bundled') {
+      load = loadBundledSamples();
+    } else if (vendorPack) {
+      load = loadVendorPack(vendorPack);
+    } else if (materialPack) {
+      load = loadMaterialPack(materialPack);
+    } else {
+      // A material tab selected before the index arrived; the effect reruns.
+      return () => {
+        cancelled = true;
+      };
+    }
 
     load
       .then((samples) => {
@@ -340,7 +407,7 @@ const SamplesPage = ({ onEdit }) => {
     return () => {
       cancelled = true;
     };
-  }, [tab, cache]);
+  }, [tab, cache, materialPacks]);
 
   const samples = cache[tab] ?? [];
   const filtered = useMemo(() => {
@@ -352,14 +419,15 @@ const SamplesPage = ({ onEdit }) => {
   }, [samples, query]);
 
   const activePack = VENDOR_PACKS.find((pack) => pack.id === tab);
+  const activeMaterial = materialPacks.find((pack) => pack.id === tab);
 
   return (
     <Page>
       <Lede>
-        Every sample bundled with this repo, plus the two vendor packs linked in
-        the README. Preview them here, open one in the editor, download a{' '}
-        <code>.jt</code>, or copy the command that pushes it to the panel. Hover
-        an animation to play it.
+        Every sample bundled with this repo, the two vendor animation packs, and
+        the CoolLED1248 app&apos;s own material catalog. Preview them here, open
+        one in the editor, download a <code>.jt</code>, or copy the command that
+        pushes it to the panel. Hover an animation to play it.
       </Lede>
 
       <HowTo>
@@ -411,7 +479,39 @@ const SamplesPage = ({ onEdit }) => {
         )}
       </Controls>
 
+      {materialPacks.length > 0 && (
+        <CatalogRow>
+          <CatalogLabel>Material catalog</CatalogLabel>
+          {materialPacks.map((pack) => (
+            <SmallTab
+              key={pack.id}
+              $active={tab === pack.id}
+              onClick={() => setTab(pack.id)}
+              title={`${pack.colorDir}/${pack.size}/${pack.slug}`}
+            >
+              {pack.label}
+              <span>
+                {pack.colorDir} · {pack.count}
+              </span>
+            </SmallTab>
+          ))}
+        </CatalogRow>
+      )}
+
       {activePack && status === 'ready' && <Lede>{activePack.blurb}</Lede>}
+      {activeMaterial && status === 'ready' && (
+        <Lede>
+          {activeMaterial.count} items from the CoolLED1248 app&apos;s{' '}
+          <code>
+            {activeMaterial.colorDir}/{activeMaterial.size}/
+            {activeMaterial.slug}
+          </code>{' '}
+          category, converted from the vendor&apos;s GIFs.{' '}
+          {activeMaterial.colorDir === 'sc'
+            ? 'Drawn for single-colour panels.'
+            : 'Drawn for full-colour panels.'}
+        </Lede>
+      )}
 
       {status === 'loading' && <Status>Loading samples…</Status>}
       {status === 'error' && <Status>Could not load samples: {error}</Status>}

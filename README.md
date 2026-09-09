@@ -48,43 +48,15 @@ Things that will otherwise cost you an afternoon:
 Sending to the panel needs [three fixes to coolledx-driver](https://github.com/UpDryTwist/coolledx-driver)
 that aren't upstream yet — without them the driver can't import, can't encode a
 command, and can't write to the characteristic on macOS.
+# Samples and the vendor's data
 
-# More Sample files
+The editor ships with the `.jt` files under `src/sample`, and the **Samples**
+tab (`#/samples`) also serves two vendor animation packs and the CoolLED1248
+app's whole material catalog -- 1526 items across Driving, Business, Creative,
+Emoji, Festival and more.
 
-Run the app and open the **Samples** tab (`#/samples`) to browse every sample:
-the `.jt` files committed under `src/sample`, plus the two vendor packs below
-(62 static images and 147 animations). Each one previews on a 96x16 canvas,
-animations play on hover, and every card gives you a `.jt` download and the
-exact command to push it to the sign.
-
-The two vendor packs are vendored into `public/samples/` so the page can fetch
-them on demand rather than bundling 2.7MB into the JS. They came from:
-
-http://coolledx.com/appDownload/CoolLED1248/animation_update_data/1696/data1696_static.json
-
-http://coolledx.com/appDownload/CoolLED1248/animation_update_data/1696/data1696_dynamic.json
-
-Their entries hold a ready-made `sendData` payload rather than a `.jt` body:
-24 zero bytes, a frame count, a 16-bit frame delay, then the pixel planes. The
-Samples page converts that back into a `.jt` on the fly, which round-trips
-exactly -- re-encoding all 209 of them through the driver reproduces the
-original payload byte for byte.
-
-See also
-
-    private static final String UPDATE_JSON_FILE_URL_1248 = "http://coolledx.com/appDownload/CoolLED1248/animation_update_data/1248/";
-    private static final String UPDATE_JSON_FILE_URL_1616 = "http://coolledx.com/appDownload/CoolLED1248/animation_update_data/1616/";
-    private static final String UPDATE_JSON_FILE_URL_1632 = "http://coolledx.com/appDownload/CoolLED1248/animation_update_data/1632/";
-    private static final String UPDATE_JSON_FILE_URL_1664 = "http://coolledx.com/appDownload/CoolLED1248/animation_update_data/1664/";
-    private static final String UPDATE_JSON_FILE_URL_1696 = "http://coolledx.com/appDownload/CoolLED1248/animation_update_data/1696/";
-    private static final String UPDATE_JSON_FILE_URL_3232 = "http://coolledx.com/appDownload/CoolLED1248/animation_update_data/3232/";
-
-        private static final String DYNAMIC_ANIMATION_FILE_NAME_1248 = "data1248_dynamic.json";
-    private static final String DYNAMIC_ANIMATION_FILE_NAME_1616 = "data1616_dynamic.json";
-    private static final String DYNAMIC_ANIMATION_FILE_NAME_1632 = "data1632_dynamic.json";
-    private static final String DYNAMIC_ANIMATION_FILE_NAME_1664 = "data1664_dynamic.json";
-    private static final String DYNAMIC_ANIMATION_FILE_NAME_1696 = "data1696_dynamic.json";
-    private static final String DYNAMIC_ANIMATION_FILE_NAME_3232 = "data3232_dynamic.json";
+Where all of that comes from, how the vendor's CDN is laid out, and how to
+refresh it: [docs/VENDOR_DATA.md](docs/VENDOR_DATA.md).
 
 # Data Format
 

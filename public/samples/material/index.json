@@ -1,0 +1,145 @@
+{
+  "generated": "2026-09-09T17:16:06.302Z",
+  "packs": [
+    {
+      "id": "material-sc-driving",
+      "file": "material-sc-driving.json.gz",
+      "label": "Driving",
+      "colorDir": "sc",
+      "size": "16x96",
+      "slug": "driving",
+      "count": 41,
+      "bytes": 12689
+    },
+    {
+      "id": "material-sc-business",
+      "file": "material-sc-business.json.gz",
+      "label": "Business",
+      "colorDir": "sc",
+      "size": "16x96",
+      "slug": "business",
+      "count": 61,
+      "bytes": 27762
+    },
+    {
+      "id": "material-sc-creative",
+      "file": "material-sc-creative.json.gz",
+      "label": "Creative",
+      "colorDir": "sc",
+      "size": "16x96",
+      "slug": "creative",
+      "count": 104,
+      "bytes": 73618
+    },
+    {
+      "id": "material-sc-emoji",
+      "file": "material-sc-emoji.json.gz",
+      "label": "Emoji",
+      "colorDir": "sc",
+      "size": "16x96",
+      "slug": "emoji",
+      "count": 66,
+      "bytes": 67428
+    },
+    {
+      "id": "material-sc-festival",
+      "file": "material-sc-festival.json.gz",
+      "label": "Festival",
+      "colorDir": "sc",
+      "size": "16x96",
+      "slug": "festival",
+      "count": 68,
+      "bytes": 40585
+    },
+    {
+      "id": "material-fc-devileyes",
+      "file": "material-fc-devileyes.json.gz",
+      "label": "DevilEyes",
+      "colorDir": "fc",
+      "size": "16x96",
+      "slug": "devileyes",
+      "count": 522,
+      "bytes": 934971
+    },
+    {
+      "id": "material-fc-driving",
+      "file": "material-fc-driving.json.gz",
+      "label": "Driving",
+      "colorDir": "fc",
+      "size": "16x96",
+      "slug": "driving",
+      "count": 96,
+      "bytes": 68799
+    },
+    {
+      "id": "material-fc-business",
+      "file": "material-fc-business.json.gz",
+      "label": "Business",
+      "colorDir": "fc",
+      "size": "16x96",
+      "slug": "business",
+      "count": 94,
+      "bytes": 104514
+    },
+    {
+      "id": "material-fc-creative",
+      "file": "material-fc-creative.json.gz",
+      "label": "Creative",
+      "colorDir": "fc",
+      "size": "16x96",
+      "slug": "creative",
+      "count": 110,
+      "bytes": 337621
+    },
+    {
+      "id": "material-fc-emoji",
+      "file": "material-fc-emoji.json.gz",
+      "label": "Emoji",
+      "colorDir": "fc",
+      "size": "16x96",
+      "slug": "emoji",
+      "count": 51,
+      "bytes": 99512
+    },
+    {
+      "id": "material-fc-festival",
+      "file": "material-fc-festival.json.gz",
+      "label": "Festival",
+      "colorDir": "fc",
+      "size": "16x96",
+      "slug": "festival",
+      "count": 112,
+      "bytes": 210269
+    },
+    {
+      "id": "material-fc-default",
+      "file": "material-fc-default.json.gz",
+      "label": "Default",
+      "colorDir": "fc",
+      "size": "16x96",
+      "slug": "default",
+      "count": 100,
+      "bytes": 160973
+    },
+    {
+      "id": "material-fc-sport",
+      "file": "material-fc-sport.json.gz",
+      "label": "Sport",
+      "colorDir": "fc",
+      "size": "16x96",
+      "slug": "sport",
+      "count": 18,
+      "bytes": 19827
+    },
+    {
+      "id": "material-fc-flag",
+      "file": "material-fc-flag.json.gz",
+      "label": "Flag",
+      "colorDir": "fc",
+      "size": "16x96",
+      "slug": "flag",
+      "count": 83,
+      "bytes": 7478
+    }
+  ]
+}

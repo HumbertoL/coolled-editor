@@ -1,4 +1,4 @@
-import { GRID_HEIGHT, GRID_WIDTH } from './constants';
+import { GRID_HEIGHT, GRID_WIDTH } from './constants.js';
 
 // Where the driver lives, for the send commands shown next to each sample.
 export const DRIVER_PATH = '~/workspace/coolledx-driver';
@@ -13,6 +13,9 @@ export const BYTES_PER_FRAME = (GRID_WIDTH * GRID_HEIGHT * 3) / 8;
 const VENDOR_HEADER_BYTES = 27;
 const VENDOR_FRAME_OFFSET = 24;
 const VENDOR_SPEED_OFFSET = 25;
+
+// Where fetch-material.mjs writes the vendored catalog.
+export const MATERIAL_DIR = 'samples/material';
 
 export const VENDOR_PACKS = [
   {
@@ -153,6 +156,97 @@ export const vendorEntryToJt = (sendData) => {
       },
     },
   ];
+};
+
+/**
+ * Read one of the material packs. They are gzipped JSON on disk -- the packed
+ * planes are repetitive enough that it saves ~20x -- so inflate before
+ * parsing. A host that decodes .gz transparently is handled too, since then
+ * the bytes have already stopped looking like gzip.
+ */
+const inflateJson = async (response) => {
+  const bytes = new Uint8Array(await response.arrayBuffer());
+
+  if (bytes[0] !== 0x1f || bytes[1] !== 0x8b) {
+    return JSON.parse(new TextDecoder().decode(bytes));
+  }
+
+  if (typeof DecompressionStream === 'undefined') {
+    throw new Error('This browser cannot inflate the material packs');
+  }
+
+  const stream = new Blob([bytes])
+    .stream()
+    .pipeThrough(new DecompressionStream('gzip'));
+
+  return new Response(stream).json();
+};
+
+const base64ToBytes = (base64) => {
+  const binary = atob(base64);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) {
+    bytes[i] = binary.charCodeAt(i);
+  }
+  return bytes;
+};
+
+/**
+ * Build a .jt from a material pack entry. The pack already holds the packed
+ * planes, converted from the vendor's GIF by scripts/fetch-material.mjs.
+ */
+export const materialEntryToJt = (entry) => [
+  {
+    dataType: 0,
+    data: {
+      aniType: 1,
+      pixelHeight: GRID_HEIGHT,
+      pixelWidth: GRID_WIDTH,
+      frameNum: entry.frameNum,
+      delays: entry.delays,
+      aniData: Array.from(base64ToBytes(entry.data)),
+    },
+  },
+];
+
+/** Which material packs have been vendored, and how big each one is. */
+export const loadMaterialIndex = async () => {
+  const url = `${process.env.PUBLIC_URL}/${MATERIAL_DIR}/index.json`;
+
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      return [];
+    }
+    const body = await response.json();
+    return body.packs ?? [];
+  } catch (error) {
+    // Nobody has run the fetch script yet; the catalog tabs just stay hidden.
+    console.warn('No material catalog index', error);
+    return [];
+  }
+};
+
+export const loadMaterialPack = async (pack) => {
+  const url = `${process.env.PUBLIC_URL}/${MATERIAL_DIR}/${pack.file}`;
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error(`Could not load ${pack.file} (${response.status})`);
+  }
+
+  const body = await inflateJson(response);
+
+  return (body.items ?? []).map((entry, index) => {
+    const name = `${body.label} ${entry.name}`;
+    return {
+      id: `${pack.id}:${index}`,
+      name,
+      source: pack.id,
+      localPath: null,
+      downloadName: safeFilename(name, `${pack.id}-${index + 1}`),
+      jt: materialEntryToJt(entry),
+    };
+  });
 };
 
 /** Strip the numbering the vendor prefixes to each name ("152.圣诞礼物袜"). */
