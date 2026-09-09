@@ -161,22 +161,20 @@ buffer would have allowed 56, which failed, so that is ruled out.
 Reading it as a byte cap matters for other hardware: a 16x64 panel uses 384
 bytes per frame, so the same 30KB would hold about 79 frames.
 
-**But which byte count?** The payload is escaped before transmission, so the
-bytes on the wire outnumber the payload. A second cap fits the boundary just
-as well:
+**And it is the decoded payload, not the transmitted size.** Those two were
+initially indistinguishable — 30KB (30,720) falls between the payloads of the
+last working and first failing file, and 33KB (33,792) falls between their
+wire sizes, so both predicted the boundary exactly.
 
-| | Payload | Wire | Result |
-| --- | --- | --- | --- |
-| 53 frames | 30,555 | 33,729 | works |
-| 54 frames | 31,131 | 34,368 | fails |
+`maxesc_053.jt` settled it. Once the chunking fix below let it transfer, it
+**applied successfully** with:
 
-30KB (30,720) sits between the payloads; 33KB (33,792) sits between the wire
-sizes. Both predict the observed boundary exactly.
+- payload **30,555 bytes** — inside a 30KB cap
+- wire **61,492 bytes** — nearly double any 33KB cap
 
-`tools/animations/wire_probe.py` writes `sparse_053.jt` to separate them: the
-same 30,555-byte payload as the working file, nudged to 33,849 wire bytes,
-just past the 33KB line, with no single packet any larger. If it applies, a
-33KB total-wire cap is disproven and the 30KB payload cap stands.
+So total transmitted size is irrelevant, and the constraint is the decoded
+payload. `sparse_053.jt` was built as a narrower discriminator and is no
+longer needed.
 
 ## The driver mis-chunks escape-heavy content
 
@@ -211,25 +209,41 @@ chunks had already gone through. And the command hex in the error names
 chunk 0, because `truncated_command()` always prints the first chunk, not the
 one that failed.
 
-**Fixed** in `f0344b5`: chunks still aim for 128 payload bytes but shrink
-where escaping would push the packet past `MAX_PACKET_BYTES` (180). That
-figure comes from measurement — across 34 image and animation files ordinary
-content peaks at 170 bytes — so nothing that already worked is re-chunked. 33
-of the 34 produce byte-identical chunks, including every file confirmed on
-hardware; only `maxesc_053` re-chunks, 239 chunks to 351, reassembling to
-exactly the original payload.
+**Fixed** in `f0344b5`, and confirmed on hardware: `maxesc_053.jt` now
+applies where it previously aborted. Chunks still aim for 128 payload bytes
+but shrink where escaping would push the packet past `MAX_PACKET_BYTES`
+(180). That figure came from measurement — across 34 image and animation
+files ordinary content peaks at 170 bytes — so nothing that already worked is
+re-chunked: 33 of the 34 produce byte-identical chunks, including every file
+confirmed on hardware. Only `maxesc_053` re-chunks, 239 chunks to 351.
 
-Not upstream yet, and worth a caveat: `plasma.jt` and `PancakesVWaffles.jt`
-sit at 170-byte packets and have never been sent to a sign. If either fails,
-lowering `MAX_PACKET_BYTES` is the knob — it costs only a few extra chunks.
+Since its largest packet after re-chunking is exactly 180 bytes and it
+applied, **180-byte packets are now hardware-confirmed** — which also
+retroactively covers the 170-byte peak of `plasma.jt` and
+`PancakesVWaffles.jt`.
+
+Not upstream yet.
 
 This is also a third distinct failure mode, alongside the other two:
 
 | Symptom | Cause |
 | --- | --- |
-| Transfer succeeds, panel unchanged, no percent counter | Payload over ~30KB |
-| Transfer aborts on a notify timeout, panel shows an error and falls back | Packets too large — escape-heavy content |
+| Transfer succeeds, panel unchanged, no percent counter | Decoded payload over ~30KB |
+| Transfer aborts on a notify timeout, panel shows an error and falls back | A packet exceeded one write — fixed in `f0344b5` |
 | Transfer succeeds, panel updates | Fine |
+
+## The complete model
+
+Three independent constraints, all now measured:
+
+| Constraint | Limit | Consequence of exceeding it |
+| --- | --- | --- |
+| Decoded payload | ~30KB (53 frames at 96x16) | silently not applied |
+| Single packet, after escaping | ~180 bytes | transfer aborts, panel shows an error |
+| Protocol payload field | 65,535 bytes (113 frames) | `OverflowError` before sending |
+
+Total transmitted size is not a constraint: 61,492 wire bytes went through
+without complaint.
 
 ### What actually gets escaped
 

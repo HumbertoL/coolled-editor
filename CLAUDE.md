@@ -93,11 +93,16 @@ Measured on a CoolLEDX 16x96:
 **53 frames is the hard hardware limit** on a 96x16 sign, well under the
 protocol's 113. `jtkit` warns past it, and warns more mildly past 24.
 
-The real constraint is almost certainly **payload size, not frame count**: the
-cap falls between 30,555 and 31,131 bytes, and 30KB (30,720) is the only round
-number in that window — it predicts exactly 53. So a narrower panel would get
-proportionally more frames. Stay at or below 24 for anything that matters,
-since 40 proved flaky.
+The constraint is **decoded payload size, not frame count**: the cap falls
+between 30,555 and 31,131 bytes, and 30KB (30,720) is the only round number in
+that window. Confirmed by sending a file with a 30,555-byte payload but 61,492
+wire bytes — it applied, so transmitted size is irrelevant. A narrower panel
+therefore gets proportionally more frames. Stay at or below 24 for anything
+that matters, since 40 proved flaky.
+
+A separate limit applies per packet: after escaping, each must fit one BLE
+write (~180 bytes). Exceeding it aborts the transfer and the panel shows an
+error — a loud failure, unlike the silent oversized-payload one.
 
 The 113 is the protocol's own ceiling: the driver writes the payload length
 in two bytes, so past 65535 bytes it raises `OverflowError` before anything

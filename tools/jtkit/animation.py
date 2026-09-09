@@ -40,8 +40,9 @@ MAX_DEVICE_FRAMES = 53
 
 #: The payload cap those measurements bracket. 53 frames is 30,555 bytes and
 #: works, 54 is 31,131 and does not, and 30KB is the only round number in
-#: between -- so the real constraint looks like payload size rather than frame
-#: count. On a narrower panel the frame budget would be correspondingly larger.
+#: between. Confirmed to be the *decoded payload* rather than the transmitted
+#: size: a file with this payload but 61,492 wire bytes applied fine. On a
+#: narrower panel the frame budget is correspondingly larger.
 MAX_DEVICE_PAYLOAD_BYTES = 30 * 1024
 
 #: Kept for callers written against the older name.

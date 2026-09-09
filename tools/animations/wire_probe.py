@@ -2,12 +2,17 @@
 """
 Wire-size probe: is the sign's limit on the payload or on the bytes sent?
 
-Measurement put the limit between 53 frames (30,555-byte payload) and 54
-(31,131). Two caps fit that boundary exactly:
+RESOLVED: the sign's limit is on the decoded payload, ~30KB. maxesc_053
+applied on hardware with a 30,555-byte payload and 61,492 wire bytes, so the
+transmitted size does not matter. These files are kept as reproducers.
+
+The limit sits between 53 frames (30,555-byte payload) and 54 (31,131). Two
+caps initially fit that boundary:
 
 * a **30KB payload** cap -- 30,720, the only round number in the window
-* a **33KB wire** cap -- 33,792, which also falls between the two files'
-  transmitted sizes of 33,729 and 34,368
+  (confirmed)
+* a **33KB wire** cap -- 33,792, which also fell between the two files'
+  transmitted sizes of 33,729 and 34,368 (disproven)
 
 They differ because the payload is escaped before transmission: the protocol
 turns 0x01, 0x02 and 0x03 into two bytes each. Notably **0x00 is not
