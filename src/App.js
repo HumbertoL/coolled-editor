@@ -1,7 +1,7 @@
 import './App.css';
 import { parseData } from './helpers/parse_data';
 import Grid from './Grid';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import ColorPicker from './ColorPicker';
@@ -11,6 +11,7 @@ import { downloadJtFile } from './helpers/export_data';
 import FrameControls from './FrameControls';
 import DeployInstructions from './DeployInstructions';
 import SamplesPage from './SamplesPage';
+import FileDrop from './FileDrop';
 import { GRID_HEIGHT, GRID_WIDTH } from './helpers/constants';
 import { getStartingPixel } from './helpers/frame';
 import { processGif } from './helpers/gif_utils';
@@ -150,6 +151,17 @@ const useHashRoute = () => {
   return route.replace(/^#\/?/, '');
 };
 
+const ErrorBanner = styled.div`
+  max-width: 640px;
+  margin: 0 auto 20px;
+  padding: 10px 16px;
+  background: rgba(255, 90, 90, 0.1);
+  border: 1px solid rgba(255, 90, 90, 0.35);
+  border-radius: 10px;
+  font-size: 13px;
+  color: #ff9c9c;
+`;
+
 const getInitialPixelArray = () => {
   const totalPixels = GRID_HEIGHT * GRID_WIDTH;
   const initialValue = { r: false, g: false, b: false };
@@ -177,27 +189,49 @@ function App() {
   const [frame, setFrame] = useState(1);
   const [showDeploy, setShowDeploy] = useState(false);
   const [lastExportedFile, setLastExportedFile] = useState(null);
+  const [fileError, setFileError] = useState(null);
 
   const route = useHashRoute();
 
   const startingPixel = getStartingPixel(frame);
 
+  // parseData assumes a .jt shape; check it first so an unrelated JSON file
+  // reports what is actually wrong rather than a property access failure.
+  const loadJtText = (text) => {
+    let parsed;
+    try {
+      parsed = JSON.parse(text);
+    } catch (error) {
+      throw new Error(`not valid JSON (${error.message})`);
+    }
+
+    const data = Array.isArray(parsed) ? parsed[0]?.data : parsed?.data;
+    if (!data || !(data.aniData || data.graffitiData)) {
+      throw new Error('no aniData or graffitiData - is this a .jt file?');
+    }
+
+    return parseData(text);
+  };
+
   const readFile = async (file) => {
-    const fileName = file.name;
-    if (fileName.endsWith('.jt')) {
-      const reader = new FileReader();
+    const fileName = file.name.toLowerCase();
+    setFileError(null);
 
-      reader.onload = (event) => {
-        const content = event.target.result;
-
-        const imageData = parseData(content);
-        setImageData(imageData);
-      };
-
-      reader.readAsText(file);
-    } else if (fileName.endsWith('.gif')) {
-      const imageData = await processGif(file);
-      setImageData(imageData);
+    try {
+      if (fileName.endsWith('.jt') || fileName.endsWith('.json')) {
+        // .json samples carry the same structure as .jt.
+        setImageData(loadJtText(await file.text()));
+      } else if (fileName.endsWith('.gif')) {
+        setImageData(await processGif(file));
+      } else {
+        setFileError(`${file.name} is not a .jt, .json or .gif file.`);
+        return;
+      }
+      // A shorter file than the one before would leave us on a frame that
+      // no longer exists.
+      setFrame(1);
+    } catch (error) {
+      setFileError(`Could not read ${file.name} - ${error.message}`);
     }
   };
 
@@ -209,6 +243,15 @@ function App() {
       readFile(file);
     }
   };
+
+  const handleDroppedFile = useCallback((file) => {
+    readFile(file);
+    // A file dropped while browsing samples belongs in the editor.
+    if (window.location.hash.replace(/^#\/?/, '') !== '') {
+      window.location.hash = '#/';
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleClick = (index) => {
     const rgb = getColorObjectFromName(selectedColor);
@@ -268,6 +311,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
+        <FileDrop onFile={handleDroppedFile} />
         <AppTitle>CoolLED Editor</AppTitle>
 
         <Nav>
@@ -285,8 +329,12 @@ function App() {
           <>
             <Toolbar>
               <FileLabel>
-                Upload .jt / .gif
-                <FileInput type="file" onChange={handleFileChange} />
+                Upload or drop .jt / .gif
+                <FileInput
+                  type="file"
+                  accept=".jt,.json,.gif"
+                  onChange={handleFileChange}
+                />
               </FileLabel>
               <Divider />
               <StyledButton onClick={handleDownload}>Export .jt</StyledButton>
@@ -295,6 +343,8 @@ function App() {
                 {showDeploy ? 'Hide' : 'Send to sign'}
               </SecondaryButton>
             </Toolbar>
+
+            {fileError && <ErrorBanner>{fileError}</ErrorBanner>}
 
             {showDeploy && (
               <DeployInstructions lastExportedFile={lastExportedFile} />
