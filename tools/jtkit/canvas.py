@@ -154,6 +154,22 @@ class Canvas:
                         self.pixel(x + cell_x + col, y + row, color)
         return self
 
+    def glyph(self, name, x=0, y=0, color=colors.WHITE, fold_case=True):
+        """
+        Draw one glyph by name, for the symbol entries in the font.
+
+        ``text()`` iterates over characters, so passing it "+ARROW_U" spells
+        that out literally. Use this for the named symbols instead.
+        """
+        bitmap = glyph(name, fold_case=fold_case)
+        if x == "center":
+            x = (self.width - GLYPH_WIDTH) // 2
+        for row in range(GLYPH_HEIGHT):
+            for col in range(GLYPH_WIDTH):
+                if bitmap[row][col] == "#":
+                    self.pixel(x + col, y + row, color)
+        return self
+
     # -- shapes ----------------------------------------------------------
 
     def hline(self, x, y, length, color):
