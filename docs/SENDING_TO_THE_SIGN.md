@@ -161,6 +161,35 @@ buffer would have allowed 56, which failed, so that is ruled out.
 Reading it as a byte cap matters for other hardware: a 16x64 panel uses 384
 bytes per frame, so the same 30KB would hold about 79 frames.
 
+**But which byte count?** The payload is escaped before transmission, so the
+bytes on the wire outnumber the payload. A second cap fits the boundary just
+as well:
+
+| | Payload | Wire | Result |
+| --- | --- | --- | --- |
+| 53 frames | 30,555 | 33,729 | works |
+| 54 frames | 31,131 | 34,368 | fails |
+
+30KB (30,720) sits between the payloads; 33KB (33,792) sits between the wire
+sizes. Both predict the observed boundary exactly.
+
+`tools/animations/wire_probe.py` separates them. `maxesc_053.jt` keeps the
+payload at 30,555 — matching the file known to work — while lighting only the
+last row of each 8-row byte group, which makes nearly every plane byte `0x01`
+and doubles the wire size to **61,492**:
+
+- if it **applies**, the cap is on the decoded payload and wire size is
+  irrelevant;
+- if it **fails**, the cap involves the transmitted size.
+
+### What actually gets escaped
+
+`escape_bytes` doubles only `0x01`, `0x02` and `0x03`. **`0x00` passes through
+unescaped**, which is why mostly-black frames inflate far less than you would
+expect. The unused `escape_byte` helper beside it documents the opposite rule
+("bytes < 4 need to be escaped") and is dead code — nothing calls it. Worth
+reporting upstream, since the two would disagree if anyone ever used it.
+
 ### Distinguishing an accepted transfer from a rejected one
 
 The sign's own percent counter is the tell. On a file it accepts, the counter
