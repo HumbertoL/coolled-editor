@@ -11,6 +11,7 @@ import { downloadJtFile } from './helpers/export_data';
 import FrameControls from './FrameControls';
 import DeployInstructions from './DeployInstructions';
 import SamplesPage from './SamplesPage';
+import TextTool from './TextTool';
 import FileDrop from './FileDrop';
 import { GRID_HEIGHT, GRID_WIDTH } from './helpers/constants';
 import { getStartingPixel } from './helpers/frame';
@@ -190,6 +191,7 @@ function App() {
   const [showDeploy, setShowDeploy] = useState(false);
   const [lastExportedFile, setLastExportedFile] = useState(null);
   const [fileError, setFileError] = useState(null);
+  const [showText, setShowText] = useState(false);
 
   const route = useHashRoute();
 
@@ -339,12 +341,26 @@ function App() {
               <Divider />
               <StyledButton onClick={handleDownload}>Export .jt</StyledButton>
               <Divider />
+              <SecondaryButton onClick={() => setShowText((shown) => !shown)}>
+                {showText ? 'Close text' : 'Add text'}
+              </SecondaryButton>
+              <Divider />
               <SecondaryButton onClick={() => setShowDeploy((shown) => !shown)}>
                 {showDeploy ? 'Hide' : 'Send to sign'}
               </SecondaryButton>
             </Toolbar>
 
             {fileError && <ErrorBanner>{fileError}</ErrorBanner>}
+
+            {showText && (
+              <TextTool
+                imageData={imageData}
+                setImageData={setImageData}
+                frame={frame}
+                selectedColor={selectedColor}
+                onClose={() => setShowText(false)}
+              />
+            )}
 
             {showDeploy && (
               <DeployInstructions lastExportedFile={lastExportedFile} />

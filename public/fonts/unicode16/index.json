@@ -1,0 +1,303 @@
+{
+  "name": "unicode16",
+  "asset": "UNICODE16",
+  "glyphWidth": 16,
+  "glyphHeight": 16,
+  "bytesPerGlyph": 32,
+  "pageSize": 1024,
+  "glyphs": 56844,
+  "source": "CoolLED1248com.jtkj.led1248v2.7.7.apk!assets/UNICODE16",
+  "generated": "2026-09-09T19:53:26.056Z",
+  "pages": [
+    {
+      "start": 0,
+      "file": "u0000.bin.gz",
+      "bytes": 6836
+    },
+    {
+      "start": 1024,
+      "file": "u0400.bin.gz",
+      "bytes": 6426
+    },
+    {
+      "start": 2048,
+      "file": "u0800.bin.gz",
+      "bytes": 5517
+    },
+    {
+      "start": 3072,
+      "file": "u0c00.bin.gz",
+      "bytes": 6273
+    },
+    {
+      "start": 4096,
+      "file": "u1000.bin.gz",
+      "bytes": 6752
+    },
+    {
+      "start": 5120,
+      "file": "u1400.bin.gz",
+      "bytes": 4779
+    },
+    {
+      "start": 6144,
+      "file": "u1800.bin.gz",
+      "bytes": 2829
+    },
+    {
+      "start": 7168,
+      "file": "u1c00.bin.gz",
+      "bytes": 4486
+    },
+    {
+      "start": 8192,
+      "file": "u2000.bin.gz",
+      "bytes": 7037
+    },
+    {
+      "start": 9216,
+      "file": "u2400.bin.gz",
+      "bytes": 8586
+    },
+    {
+      "start": 10240,
+      "file": "u2800.bin.gz",
+      "bytes": 5379
+    },
+    {
+      "start": 11264,
+      "file": "u2c00.bin.gz",
+      "bytes": 8093
+    },
+    {
+      "start": 12288,
+      "file": "u3000.bin.gz",
+      "bytes": 11133
+    },
+    {
+      "start": 13312,
+      "file": "u3400.bin.gz",
+      "bytes": 19852
+    },
+    {
+      "start": 14336,
+      "file": "u3800.bin.gz",
+      "bytes": 18900
+    },
+    {
+      "start": 15360,
+      "file": "u3c00.bin.gz",
+      "bytes": 19190
+    },
+    {
+      "start": 16384,
+      "file": "u4000.bin.gz",
+      "bytes": 19160
+    },
+    {
+      "start": 17408,
+      "file": "u4400.bin.gz",
+      "bytes": 19190
+    },
+    {
+      "start": 18432,
+      "file": "u4800.bin.gz",
+      "bytes": 17435
+    },
+    {
+      "start": 19456,
+      "file": "u4c00.bin.gz",
+      "bytes": 16414
+    },
+    {
+      "start": 20480,
+      "file": "u5000.bin.gz",
+      "bytes": 18594
+    },
+    {
+      "start": 21504,
+      "file": "u5400.bin.gz",
+      "bytes": 17479
+    },
+    {
+      "start": 22528,
+      "file": "u5800.bin.gz",
+      "bytes": 19337
+    },
+    {
+      "start": 23552,
+      "file": "u5c00.bin.gz",
+      "bytes": 18998
+    },
+    {
+      "start": 24576,
+      "file": "u6000.bin.gz",
+      "bytes": 17653
+    },
+    {
+      "start": 25600,
+      "file": "u6400.bin.gz",
+      "bytes": 17643
+    },
+    {
+      "start": 26624,
+      "file": "u6800.bin.gz",
+      "bytes": 18525
+    },
+    {
+      "start": 27648,
+      "file": "u6c00.bin.gz",
+      "bytes": 18177
+    },
+    {
+      "start": 28672,
+      "file": "u7000.bin.gz",
+      "bytes": 17239
+    },
+    {
+      "start": 29696,
+      "file": "u7400.bin.gz",
+      "bytes": 18502
+    },
+    {
+      "start": 30720,
+      "file": "u7800.bin.gz",
+      "bytes": 19248
+    },
+    {
+      "start": 31744,
+      "file": "u7c00.bin.gz",
+      "bytes": 18007
+    },
+    {
+      "start": 32768,
+      "file": "u8000.bin.gz",
+      "bytes": 18213
+    },
+    {
+      "start": 33792,
+      "file": "u8400.bin.gz",
+      "bytes": 21416
+    },
+    {
+      "start": 34816,
+      "file": "u8800.bin.gz",
+      "bytes": 16521
+    },
+    {
+      "start": 35840,
+      "file": "u8c00.bin.gz",
+      "bytes": 16252
+    },
+    {
+      "start": 36864,
+      "file": "u9000.bin.gz",
+      "bytes": 16539
+    },
+    {
+      "start": 37888,
+      "file": "u9400.bin.gz",
+      "bytes": 17367
+    },
+    {
+      "start": 38912,
+      "file": "u9800.bin.gz",
+      "bytes": 15676
+    },
+    {
+      "start": 39936,
+      "file": "u9c00.bin.gz",
+      "bytes": 16272
+    },
+    {
+      "start": 40960,
+      "file": "ua000.bin.gz",
+      "bytes": 11424
+    },
+    {
+      "start": 41984,
+      "file": "ua400.bin.gz",
+      "bytes": 7444
+    },
+    {
+      "start": 43008,
+      "file": "ua800.bin.gz",
+      "bytes": 3626
+    },
+    {
+      "start": 44032,
+      "file": "uac00.bin.gz",
+      "bytes": 11229
+    },
+    {
+      "start": 45056,
+      "file": "ub000.bin.gz",
+      "bytes": 11166
+    },
+    {
+      "start": 46080,
+      "file": "ub400.bin.gz",
+      "bytes": 11303
+    },
+    {
+      "start": 47104,
+      "file": "ub800.bin.gz",
+      "bytes": 11121
+    },
+    {
+      "start": 48128,
+      "file": "ubc00.bin.gz",
+      "bytes": 10083
+    },
+    {
+      "start": 49152,
+      "file": "uc000.bin.gz",
+      "bytes": 12464
+    },
+    {
+      "start": 50176,
+      "file": "uc400.bin.gz",
+      "bytes": 12906
+    },
+    {
+      "start": 51200,
+      "file": "uc800.bin.gz",
+      "bytes": 13275
+    },
+    {
+      "start": 52224,
+      "file": "ucc00.bin.gz",
+      "bytes": 12681
+    },
+    {
+      "start": 53248,
+      "file": "ud000.bin.gz",
+      "bytes": 11190
+    },
+    {
+      "start": 54272,
+      "file": "ud400.bin.gz",
+      "bytes": 12056
+    },
+    {
+      "start": 58368,
+      "file": "ue400.bin.gz",
+      "bytes": 349
+    },
+    {
+      "start": 59392,
+      "file": "ue800.bin.gz",
+      "bytes": 1875
+    },
+    {
+      "start": 63488,
+      "file": "uf800.bin.gz",
+      "bytes": 7890
+    },
+    {
+      "start": 64512,
+      "file": "ufc00.bin.gz",
+      "bytes": 3368
+    }
+  ]
+}

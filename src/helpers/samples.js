@@ -1,4 +1,5 @@
 import { GRID_HEIGHT, GRID_WIDTH } from './constants.js';
+import { inflateJson } from './gzip.js';
 
 // Where the driver lives, for the send commands shown next to each sample.
 export const DRIVER_PATH = '~/workspace/coolledx-driver';
@@ -156,30 +157,6 @@ export const vendorEntryToJt = (sendData) => {
       },
     },
   ];
-};
-
-/**
- * Read one of the material packs. They are gzipped JSON on disk -- the packed
- * planes are repetitive enough that it saves ~20x -- so inflate before
- * parsing. A host that decodes .gz transparently is handled too, since then
- * the bytes have already stopped looking like gzip.
- */
-const inflateJson = async (response) => {
-  const bytes = new Uint8Array(await response.arrayBuffer());
-
-  if (bytes[0] !== 0x1f || bytes[1] !== 0x8b) {
-    return JSON.parse(new TextDecoder().decode(bytes));
-  }
-
-  if (typeof DecompressionStream === 'undefined') {
-    throw new Error('This browser cannot inflate the material packs');
-  }
-
-  const stream = new Blob([bytes])
-    .stream()
-    .pipeThrough(new DecompressionStream('gzip'));
-
-  return new Response(stream).json();
 };
 
 const base64ToBytes = (base64) => {

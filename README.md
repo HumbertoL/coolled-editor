@@ -50,6 +50,22 @@ Things that will otherwise cost you an afternoon:
 Sending to the panel needs [three fixes to coolledx-driver](https://github.com/UpDryTwist/coolledx-driver)
 that aren't upstream yet — without them the driver can't import, can't encode a
 command, and can't write to the characteristic on macOS.
+# Setting text
+
+**Add text** in the toolbar sets a string in the CoolLED1248 app's own 16px
+bitmap font, extracted from its APK -- so accented Latin, Greek, Cyrillic,
+Kana and CJK all work, not just ASCII. Alignment, tracking and a
+monospace/proportional toggle are there, with a live preview and a column
+count so you can see what fits in 96.
+
+The result is stamped into the current frame as ordinary pixels, editable
+afterwards like anything you drew.
+
+The glyph pages live in `public/fonts/` and are regenerated with
+`node scripts/extract-font.mjs`. See
+[docs/VENDOR_DATA.md](docs/VENDOR_DATA.md) for the font's layout and where it
+came from.
+
 # Samples and the vendor's data
 
 The editor ships with the `.jt` files under `src/sample`, and the **Samples**

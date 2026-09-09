@@ -18,6 +18,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "fetch-material": "node scripts/fetch-material.mjs",
+    "extract-font": "node scripts/extract-font.mjs",
     "eject": "react-scripts eject",
     "deploy": "yarn build && firebase deploy"
   },

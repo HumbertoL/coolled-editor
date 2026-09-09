@@ -348,10 +348,48 @@ exactly.
 Glyphs are stored full-width; the app trims blank leading and trailing columns
 per glyph to space text proportionally.
 
-Nothing in this repo uses them yet. A text tool is mostly a matter of reading
-the right 32 bytes per character -- worth knowing before writing a rasteriser
-against a TTF instead. The fonts appear to be rasterised from the Noto faces
-that ship alongside them in `assets/`.
+The fonts appear to be rasterised from the Noto faces that ship alongside them
+in `assets/`, though the APK says nothing about their provenance.
+
+## Using the font in this editor
+
+`scripts/extract-font.mjs` pulls a table out of an APK and writes
+`public/fonts/<name>/`:
+
+```bash
+node scripts/extract-font.mjs                          # UNICODE16, default APK path
+node scripts/extract-font.mjs --apk ~/Downloads/x.apk
+node scripts/extract-font.mjs --name unicode12         # or unicode16bold, font8
+node scripts/extract-font.mjs --asset /tmp/UNICODE16   # already-extracted asset
+```
+
+It splits the table into pages of 1024 code points, drops the pages with no
+ink -- most of the BMP is unassigned -- and gzips each one. `UNICODE16` comes
+out as 58 pages holding 56,844 glyphs, 720KB in total, of which the editor
+fetches **6.7KB** to set Latin text: only the pages a string actually touches.
+
+`src/helpers/font.js` reads them. Two things about its shape are worth
+knowing:
+
+- **`ensureGlyphs(text)` is async, everything after it is not.** Laying text
+  out has to be synchronous to run inside a render, so fetching is a separate
+  step you do first. It resolves to the manifest.
+- **The manifest is a cached singleton, so its identity never changes.** It
+  cannot be used as a "the font changed" signal for a memo or effect: the
+  first call, usually with empty text, caches it before any glyph page has
+  loaded, and every later resolution hands back the same object. `TextTool`
+  keeps a counter it bumps on each resolve, and depends on that instead. This
+  cost an hour: text laid out as all-missing, with the pages sitting loaded
+  in the map.
+
+The **Add text** button in the editor toolbar sets a string and stamps it into
+the current frame. It stamps rather than keeping a text layer, so the pixels
+stay editable afterwards, which on 96x16 they usually need to be.
+
+Scrolling text is deliberately not part of this. A 20-character message needs
+about 54 frames of travel, which is at the sign's hard frame limit, and the
+sign has native scroll modes for exactly this -- the `mode` field above, which
+`coolledx-driver` currently ignores.
 
 ## Emoji and icon sets
 

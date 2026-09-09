@@ -11,7 +11,7 @@ route to push files to real hardware over Bluetooth.
 | [README.md](README.md) | What the app is, sending to the sign, the `.jt` data format |
 | [tools/README.md](tools/README.md) | Generating `.jt` files in Python, the bit layout, frame limits |
 | [docs/SENDING_TO_THE_SIGN.md](docs/SENDING_TO_THE_SIGN.md) | Driver setup, macOS Bluetooth, error-by-error troubleshooting |
-| [docs/VENDOR_DATA.md](docs/VENDOR_DATA.md) | The vendor's CDN endpoints and material catalog |
+| [docs/VENDOR_DATA.md](docs/VENDOR_DATA.md) | The vendor's CDN endpoints, material catalog, and the bitmap font behind **Add text** |
 
 ## The one rule that will bite you
 
@@ -74,6 +74,11 @@ reads the data. So:
 - `public/samples/` — the vendor packs and material catalog, fetched at
   runtime rather than bundled. Keeps a few MB out of the JS bundle.
   Regenerate the catalog with `yarn fetch-material`.
+- `public/fonts/` — glyph pages for the text tool, extracted from the APK by
+  `node scripts/extract-font.mjs`. Paged and gzipped, so setting Latin text
+  fetches 6.7KB of the 720KB table. `src/helpers/font.js` reads them; the
+  manifest it resolves is a **cached singleton whose identity never changes**,
+  so it cannot double as a "glyphs arrived" signal — see the doc.
 - `tools/out/` — generated diagnostics, gitignored. Large and reproducible.
 - `tools/jtkit/` — the Python authoring library. Not installed; scripts find
   it by relative path, so any Python 3 interpreter works.
