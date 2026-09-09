@@ -14,9 +14,9 @@ watch the counter:
 Work down the ladder until one displays fully, then use --frames to bisect
 between that and the next one up.
 
-    python tools/animations/frame_ladder.py                 # the default ladder
-    python tools/animations/frame_ladder.py --frames 48     # one specific size
-    python tools/animations/frame_ladder.py --frames 30,34,38
+    python3 tools/animations/frame_ladder.py                 # the default ladder
+    python3 tools/animations/frame_ladder.py --frames 48     # one specific size
+    python3 tools/animations/frame_ladder.py --frames 30,34,38
 
 Note that frame count and payload size are not the same question, and the
 sign more likely cares about the latter. The table printed on each run gives

@@ -4,6 +4,38 @@ Author and inspect `.jt` files from Python. The editor is for drawing pixels;
 this is for anything driven by timing, maths, or a simulation — sweeps, wipes,
 fades, generated fields.
 
+## Running these
+
+Use **`python3`**, not `python` — macOS ships no bare `python`, so
+`python tools/...` fails with `command not found`.
+
+```sh
+python3 tools/animations/plasma.py
+```
+
+Nothing needs installing for the common path: writing `.jt` files, `--verify`
+and `--ascii` use only the standard library. Any Python 3.8+ will do.
+
+`--gif` and `--sheet` need Pillow. If `python3 -c "import PIL"` fails, either
+install it:
+
+```sh
+python3 -m pip install pillow
+```
+
+...or use the driver's virtualenv, which already has it. `jtkit` is found
+relative to the script rather than installed, so any interpreter works:
+
+```sh
+~/workspace/coolledx-driver/.venv/bin/python tools/preview_jt.py src/sample/life.jt --gif /tmp/life.gif
+```
+
+The scripts are executable and carry a `python3` shebang, so this works too:
+
+```sh
+./tools/animations/life.py
+```
+
 ## Layout
 
 ```
@@ -35,7 +67,7 @@ Run any of the existing scripts to write its `.jt` into `src/sample/`, where
 the editor's Samples page will pick it up:
 
 ```sh
-python tools/animations/plasma.py
+python3 tools/animations/plasma.py
 ```
 
 ### Colors as functions
@@ -76,8 +108,8 @@ A packing bug can hide when the same wrong assumption both writes and reads
 the data. So check a file you loaded **from disk**:
 
 ```sh
-python tools/preview_jt.py src/sample/plasma.jt --verify --ascii --frames 0,12
-python tools/preview_jt.py src/sample/plasma.jt --gif /tmp/plasma.gif
+python3 tools/preview_jt.py src/sample/plasma.jt --verify --ascii --frames 0,12
+python3 tools/preview_jt.py src/sample/plasma.jt --gif /tmp/plasma.gif
 ```
 
 `--verify` decodes and re-encodes, confirming the bytes come back identical.
@@ -126,8 +158,8 @@ as `N/TOTAL` plus a progress bar, so a truncated transfer can be read
 straight off the panel:
 
 ```sh
-python tools/animations/frame_ladder.py            # 24, 40, 60, 80, 113
-python tools/animations/frame_ladder.py --frames 48
+python3 tools/animations/frame_ladder.py            # 24, 40, 60, 80, 113
+python3 tools/animations/frame_ladder.py --frames 48
 ```
 
 Files land in `tools/out/` (gitignored -- they are large and regenerate on

@@ -3,9 +3,9 @@
 Inspect any .jt file: the editor's exports, these tools' output, or the
 vendor sample packs.
 
-    python tools/preview_jt.py src/sample/LFG.jt --ascii
-    python tools/preview_jt.py src/sample/LFG.jt --gif /tmp/lfg.gif
-    python tools/preview_jt.py src/sample/LFG.jt --frames 0,4,8 --ascii
+    python3 tools/preview_jt.py src/sample/LFG.jt --ascii
+    python3 tools/preview_jt.py src/sample/LFG.jt --gif /tmp/lfg.gif
+    python3 tools/preview_jt.py src/sample/LFG.jt --frames 0,4,8 --ascii
 
 --gif and --sheet need Pillow; --ascii and --verify need nothing extra.
 """
