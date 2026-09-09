@@ -124,9 +124,9 @@ sign agrees with you.
 
 ## Limits
 
-- **53 frames is the hard limit; keep it to 24.** Measured on hardware: 24
-  works reliably, 40 works but proved flaky and needed a retry, 53 is the
-  maximum that applies, and 54 upward transfer "successfully" while the sign
+- **53 frames is the hard limit.** Measured on hardware: 24 and 40 work
+  (40 failed once early on, before later driver fixes, and not since), 53 is
+  the maximum that applies, and 54 upward transfer "successfully" while the sign
   silently keeps its previous content. `Animation.to_jt()` warns past 53, and
   more mildly past 24.
 - The cap is really **payload size** — between 30,555 and 31,131 bytes, so

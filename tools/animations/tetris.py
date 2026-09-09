@@ -7,12 +7,12 @@ hit the stack growing from the left wall; a full column is a cleared line. The
 cells are 2x2 pixels so the well is 48 wide by 8 high, which is enough for the
 pieces to be recognisable.
 
-Six pieces -- I, O, T, L, Z, T -- land per loop. The L completes a column,
-which flashes and drops out; the final T completes two at once, a double,
-and the well is empty again. So the loop is a perfect clear that starts and
-ends on nothing, and ALL CLEAR flashes across the empty well before the next
-I piece arrives. The sequence came out of a search over piece orders, since
-a hand-designed one kept leaving a stray cell behind.
+The game is already in progress: a ragged stack with holes in it fills the
+first six columns, the way a real board looks mid-game. Six pieces -- J, T,
+T, I, L, I -- drop into it, chosen by search so every one lands flush against
+the stack without leaving a new hole, and between them they clear four
+columns, including a double. The loop cuts straight back to the starting
+board rather than pretending to be seamless.
 
 Uses 53 frames, the measured device maximum, for a six-frame slide per piece.
 """
@@ -33,15 +33,29 @@ COLS, ROWS = 48, 8
 SLIDE_FRAMES = 6
 FLASH_FRAMES = 3
 
-# (cells relative to (col, row), row, colour). Found by search: from an empty
-# well these six land, clear three columns, and leave it empty.
+# The board mid-game: for each row, which columns are filled from the wall.
+# Holes at (2, 0), (2, 2) and (6, 3) are covered, as real ones are.
+BOARD = {
+    0: [0, 1, 2, 3, 4],
+    1: [0, 1, 2, 3],
+    2: [1, 3],
+    3: [0, 1, 2],
+    4: [0, 1, 2, 3, 4],
+    5: [0, 1, 2, 3, 4, 5],
+    6: [0, 1, 2, 4],
+    7: [0, 1, 2, 3],
+}
+BOARD_COLORS = [C.BLUE, C.MAGENTA, C.RED, C.YELLOW, C.GREEN, C.CYAN]
+
+# (cells relative to (col, row), row, colour). Found by search over this
+# board: each lands flush, four columns clear, no new holes.
 PIECES = [
-    ([(0, 0), (0, 1), (0, 2), (0, 3)], 1, C.CYAN),             # I
-    ([(0, 0), (0, 1), (1, 0), (1, 1)], 5, C.YELLOW),           # O
-    ([(0, 0), (1, 0), (1, 1), (2, 0)], 0, C.MAGENTA),          # T, nub down
-    ([(0, 1), (1, 1), (2, 0), (2, 1)], 6, C.RED),              # L  -> clears 1
-    ([(0, 0), (0, 1), (1, 1), (1, 2)], 3, C.GREEN),            # Z
-    ([(0, 1), (1, 0), (1, 1), (1, 2)], 1, C.BLUE),             # T  -> clears 2
+    ([(0, 0), (0, 1), (0, 2), (1, 0)], 1, C.CYAN),             # J
+    ([(0, 0), (0, 1), (0, 2), (1, 1)], 0, C.MAGENTA),          # T
+    ([(0, 0), (0, 1), (0, 2), (1, 1)], 3, C.YELLOW),           # T
+    ([(0, 0), (0, 1), (0, 2), (0, 3)], 0, C.WHITE),            # I
+    ([(0, 1), (1, 1), (2, 0), (2, 1)], 6, C.RED),              # L
+    ([(0, 0), (0, 1), (0, 2), (0, 3)], 4, C.GREEN),            # I
 ]
 
 
@@ -87,7 +101,11 @@ def draw(frame, grid, flashing=(), flash_on=True):
 
 def build():
     anim = Animation(delay=DELAY)
-    grid = {}
+    grid = {
+        (c, r): BOARD_COLORS[c % len(BOARD_COLORS)]
+        for r, cols in BOARD.items()
+        for c in cols
+    }
     for cells, row, color in PIECES:
         start = entry_col(cells)
         target = landing_col(grid, cells, row)
@@ -105,11 +123,9 @@ def build():
                 draw(anim.frame(), grid, flashing=full, flash_on=k != 1)
             grid = clear(grid, full)
         draw(anim.frame(), grid)
-    assert not grid, grid
+    assert len(anim) <= FRAMES, len(anim)
     while len(anim) < FRAMES:
-        frame = anim.frame()
-        frame.text("ALL CLEAR", "center", 4, C.GREEN if len(anim) % 2 else C.WHITE)
-    assert len(anim) == FRAMES, len(anim)
+        draw(anim.frame(), grid)
     return anim
 
 

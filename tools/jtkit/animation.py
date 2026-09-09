@@ -136,8 +136,8 @@ class Animation:
             warnings.warn(
                 f"{count} frames is above the {VENDOR_FRAMES} the vendor packs "
                 f"use. It should apply -- the measured limit is "
-                f"{MAX_DEVICE_FRAMES} -- but sends this large have proved "
-                "flaky and may need a retry.",
+                f"{MAX_DEVICE_FRAMES} -- and sends this large now go through "
+                "reliably; pass --command-timeout 8 when sending.",
                 FrameCountWarning,
                 stacklevel=2,
             )

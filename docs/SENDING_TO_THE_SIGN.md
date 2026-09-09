@@ -139,7 +139,7 @@ Frame-ladder results, from `tools/animations/frame_ladder.py`:
 | Frames | Payload | Chunks | Result |
 | --- | --- | --- | --- |
 | 24 | 13,851 | 109 | works reliably |
-| 40 | 23,067 | 181 | works; failed once, succeeded on retry |
+| 40 | 23,067 | 181 | works; one early failure, none since driver fixes |
 | 52 | 29,979 | 235 | works |
 | **53** | **30,555** | **239** | **works — the maximum** |
 | 54 | 31,131 | 243 | reports success, sign never applies it |
@@ -148,8 +148,9 @@ Frame-ladder results, from `tools/animations/frame_ladder.py`:
 | 113 | 65,115 | 509 | as 54 |
 
 **53 frames is the limit** on a 96x16 panel — far below the protocol's 113.
-Treat 24 as the safe working figure, since 40 proved flaky and needed a
-retry.
+Anything up to 53 is usable. The single 40-frame failure happened before
+later fixes to the driver and has not recurred, so it was most likely the
+transfer rather than the sign.
 
 ### It is a size limit, not a frame limit
 

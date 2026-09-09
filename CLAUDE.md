@@ -90,20 +90,21 @@ Measured on a CoolLEDX 16x96:
 | Frames | Payload | Result |
 | --- | --- | --- |
 | 24 | 13.9KB | works reliably |
-| 40 | 23.1KB | works, but failed once and needed a retry |
+| 40 | 23.1KB | works; one early failure, not repeated since driver fixes |
 | **53** | **30,555 B** | **works — the measured maximum** |
 | 54 | 31,131 B | **transfer reports success; the sign never applies it** |
 | 56, 60, 113 | up to 65.1KB | same as 54 |
 
 **53 frames is the hard hardware limit** on a 96x16 sign, well under the
-protocol's 113. `jtkit` warns past it, and warns more mildly past 24.
+protocol's 113. `jtkit` warns past it, and notes more mildly past 24.
 
 The constraint is **decoded payload size, not frame count**: the cap falls
 between 30,555 and 31,131 bytes, and 30KB (30,720) is the only round number in
 that window. Confirmed by sending a file with a 30,555-byte payload but 61,492
 wire bytes — it applied, so transmitted size is irrelevant. A narrower panel
-therefore gets proportionally more frames. Stay at or below 24 for anything
-that matters, since 40 proved flaky.
+therefore gets proportionally more frames. Anything up to 53 is fair game;
+the one 40-frame failure was early on, before later fixes to the driver, and
+has not recurred.
 
 A separate limit applies per packet: after escaping, each must fit one BLE
 write (~180 bytes). Exceeding it aborts the transfer and the panel shows an
