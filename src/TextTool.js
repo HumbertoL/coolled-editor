@@ -81,7 +81,7 @@ const Pill = styled.button`
   }
 `;
 
-const Number = styled.input`
+const NumberInput = styled.input`
   width: 54px;
   padding: 5px 8px;
   background: rgba(0, 0, 0, 0.3);
@@ -298,7 +298,7 @@ const TextTool = ({
         ))}
         <Label>
           Nudge x
-          <Number
+          <NumberInput
             type="number"
             value={offsetX}
             onChange={(event) => setOffsetX(Number(event.target.value) || 0)}
@@ -306,7 +306,7 @@ const TextTool = ({
         </Label>
         <Label>
           y
-          <Number
+          <NumberInput
             type="number"
             value={offsetY}
             onChange={(event) => setOffsetY(Number(event.target.value) || 0)}
@@ -317,7 +317,7 @@ const TextTool = ({
       <Row>
         <Label>
           Tracking
-          <Number
+          <NumberInput
             type="number"
             min="0"
             max="8"
