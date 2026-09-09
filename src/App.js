@@ -1,7 +1,7 @@
 import './App.css';
 import { parseData } from './helpers/parse_data';
 import Grid from './Grid';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import ColorPicker from './ColorPicker';
@@ -9,6 +9,8 @@ import { getColorObjectFromName } from './helpers/colors';
 import FramePicker from './FramePicker';
 import { downloadJtFile } from './helpers/export_data';
 import FrameControls from './FrameControls';
+import DeployInstructions from './DeployInstructions';
+import SamplesPage from './SamplesPage';
 import { GRID_HEIGHT, GRID_WIDTH } from './helpers/constants';
 import { getStartingPixel } from './helpers/frame';
 import { processGif } from './helpers/gif_utils';
@@ -90,6 +92,64 @@ const Divider = styled.div`
   margin: 0 4px;
 `;
 
+const SecondaryButton = styled.button`
+  padding: 10px 20px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #c0c0d0;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  letter-spacing: 0.5px;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.14);
+    color: #fff;
+  }
+`;
+
+const Nav = styled.nav`
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 24px;
+`;
+
+const NavLink = styled.a`
+  padding: 7px 16px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-decoration: none;
+  color: ${({ $active }) => ($active ? '#fff' : '#8a8aa0')};
+  background: ${({ $active }) =>
+    $active ? 'rgba(122, 92, 255, 0.18)' : 'transparent'};
+  border: 1px solid
+    ${({ $active }) => ($active ? 'rgba(122,92,255,0.5)' : 'transparent')};
+  transition: all 0.15s ease;
+
+  &:hover {
+    color: #fff;
+  }
+`;
+
+// Hash routing keeps each view bookmarkable without pulling in a router or
+// needing rewrite rules on static hosting.
+const useHashRoute = () => {
+  const [route, setRoute] = useState(() => window.location.hash);
+
+  useEffect(() => {
+    const onHashChange = () => setRoute(window.location.hash);
+    window.addEventListener('hashchange', onHashChange);
+    return () => window.removeEventListener('hashchange', onHashChange);
+  }, []);
+
+  return route.replace(/^#\/?/, '');
+};
+
 const getInitialPixelArray = () => {
   const totalPixels = GRID_HEIGHT * GRID_WIDTH;
   const initialValue = { r: false, g: false, b: false };
@@ -115,6 +175,10 @@ function App() {
   const [selectedColor, setSelectedColor] = useState('White');
   const [isDragging, setIsDragging] = useState(false);
   const [frame, setFrame] = useState(1);
+  const [showDeploy, setShowDeploy] = useState(false);
+  const [lastExportedFile, setLastExportedFile] = useState(null);
+
+  const route = useHashRoute();
 
   const startingPixel = getStartingPixel(frame);
 
@@ -179,7 +243,10 @@ function App() {
   };
 
   const handleDownload = () => {
-    downloadJtFile(imageData);
+    const filename = downloadJtFile(imageData);
+    setLastExportedFile(filename);
+    // Surface the send command as soon as there is a file to send.
+    setShowDeploy(true);
   };
 
   const displayPixelArray = imageData.pixelArray.slice(
@@ -187,49 +254,74 @@ function App() {
     startingPixel + GRID_HEIGHT * GRID_WIDTH,
   );
 
+  const isSamples = route === 'samples';
+
   return (
     <div className="App">
       <header className="App-header">
         <AppTitle>CoolLED Editor</AppTitle>
 
-        <Toolbar>
-          <FileLabel>
-            Upload .jt / .gif
-            <FileInput type="file" onChange={handleFileChange} />
-          </FileLabel>
-          <Divider />
-          <StyledButton onClick={handleDownload}>Export .jt</StyledButton>
-        </Toolbar>
+        <Nav>
+          <NavLink href="#/" $active={!isSamples}>
+            Editor
+          </NavLink>
+          <NavLink href="#/samples" $active={isSamples}>
+            Samples
+          </NavLink>
+        </Nav>
 
-        {imageData.isAnimation && (
+        {isSamples && <SamplesPage />}
+
+        {!isSamples && (
           <>
-            <FrameControls
-              setFrame={setFrame}
-              selectedFrame={frame}
-              frameNum={imageData.frameNum}
-              delays={imageData.delays}
-              setImageData={setImageData}
-              pixelArray={imageData.pixelArray}
+            <Toolbar>
+              <FileLabel>
+                Upload .jt / .gif
+                <FileInput type="file" onChange={handleFileChange} />
+              </FileLabel>
+              <Divider />
+              <StyledButton onClick={handleDownload}>Export .jt</StyledButton>
+              <Divider />
+              <SecondaryButton onClick={() => setShowDeploy((shown) => !shown)}>
+                {showDeploy ? 'Hide' : 'Send to sign'}
+              </SecondaryButton>
+            </Toolbar>
+
+            {showDeploy && (
+              <DeployInstructions lastExportedFile={lastExportedFile} />
+            )}
+
+            {imageData.isAnimation && (
+              <>
+                <FrameControls
+                  setFrame={setFrame}
+                  selectedFrame={frame}
+                  frameNum={imageData.frameNum}
+                  delays={imageData.delays}
+                  setImageData={setImageData}
+                  pixelArray={imageData.pixelArray}
+                />
+                <FramePicker
+                  selectedFrame={frame}
+                  frameNum={imageData.frameNum}
+                  setFrame={setFrame}
+                />
+              </>
+            )}
+
+            <Grid
+              pixelArray={displayPixelArray}
+              onClick={handleClick}
+              onMouseDown={handleMouseDown}
+              onMouseUp={handleMouseUp}
+              onMouseEnter={handleMouseEnter}
             />
-            <FramePicker
-              selectedFrame={frame}
-              frameNum={imageData.frameNum}
-              setFrame={setFrame}
+            <ColorPicker
+              setSelectedColor={setSelectedColor}
+              selectedColor={selectedColor}
             />
           </>
         )}
-
-        <Grid
-          pixelArray={displayPixelArray}
-          onClick={handleClick}
-          onMouseDown={handleMouseDown}
-          onMouseUp={handleMouseUp}
-          onMouseEnter={handleMouseEnter}
-        />
-        <ColorPicker
-          setSelectedColor={setSelectedColor}
-          selectedColor={selectedColor}
-        />
       </header>
     </div>
   );

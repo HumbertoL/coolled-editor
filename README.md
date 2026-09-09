@@ -2,11 +2,73 @@
 
 This app was created to preview and edit data on a 16x96 LED panel
 
+# Sending to the sign from your machine
+
+You don't need the phone or the CoolLED1248 app. Click **Send to sign** in the
+toolbar for the copy-paste commands, with the filename of your last export
+filled in automatically. The pieces:
+
+- This editor exports a `.jt` file (the format documented below).
+- [coolledx-driver](https://github.com/UpDryTwist/coolledx-driver) sends it to
+  the panel over Bluetooth LE, via `utils/tweak_sign.py -jt <file>`.
+
+Assuming the driver is checked out at `~/workspace/coolledx-driver` with a venv
+holding `bleak` and `pillow`:
+
+```sh
+# Confirm the sign is visible (expect: CoolLEDX, Height: 16, Width: 96)
+cd ~/workspace/coolledx-driver && PYTHONPATH=src .venv/bin/python utils/scan.py -t 15
+
+# Send an exported .jt
+cd ~/workspace/coolledx-driver && PYTHONPATH=src .venv/bin/python utils/tweak_sign.py -jt ~/Downloads/your-export.jt
+```
+
+Things that will otherwise cost you an afternoon:
+
+- **There is no pairing mode, and the sign never shows up in macOS Bluetooth
+  settings.** It's an unbonded BLE peripheral speaking GATT on service `0xFFF0`,
+  so `scan.py` is the only place it appears. Nothing is wrong if Bluetooth
+  settings doesn't list it.
+- **Force-quit the phone app first.** The sign takes one connection at a time
+  and stops advertising while the app holds it, so it's invisible to your Mac
+  until you actually quit CoolLED1248.
+- **macOS Bluetooth permission belongs to the terminal**, not to Python. iTerm2
+  declares the entitlement; Terminal.app does not. Run the commands from a
+  terminal directly — under anything lacking it, Python is killed outright with
+  `Abort trap: 6` before it can scan.
+- **`PYTHONPATH=src` is required.** The driver package lives in `src/coolledx`,
+  but a stale empty `coolledx/` directory at the repo root shadows it whenever
+  the working directory is on `sys.path`.
+- **Renaming the sign in the app doesn't change what it advertises.** It still
+  broadcasts as `CoolLEDX`, which is the driver's default, so `-d` isn't needed.
+- On macOS, `-a` takes a CoreBluetooth UUID, not the MAC address the driver's
+  README shows. That identifier is per-host, so it won't match what your phone
+  or a Raspberry Pi reports. Prefer `-d`.
+
+Sending to the panel needs [three fixes to coolledx-driver](https://github.com/UpDryTwist/coolledx-driver)
+that aren't upstream yet — without them the driver can't import, can't encode a
+command, and can't write to the characteristic on macOS.
+
 # More Sample files
+
+Run the app and open the **Samples** tab (`#/samples`) to browse every sample:
+the `.jt` files committed under `src/sample`, plus the two vendor packs below
+(62 static images and 147 animations). Each one previews on a 96x16 canvas,
+animations play on hover, and every card gives you a `.jt` download and the
+exact command to push it to the sign.
+
+The two vendor packs are vendored into `public/samples/` so the page can fetch
+them on demand rather than bundling 2.7MB into the JS. They came from:
 
 http://coolledx.com/appDownload/CoolLED1248/animation_update_data/1696/data1696_static.json
 
 http://coolledx.com/appDownload/CoolLED1248/animation_update_data/1696/data1696_dynamic.json
+
+Their entries hold a ready-made `sendData` payload rather than a `.jt` body:
+24 zero bytes, a frame count, a 16-bit frame delay, then the pixel planes. The
+Samples page converts that back into a `.jt` on the fly, which round-trips
+exactly -- re-encoding all 209 of them through the driver reproduces the
+original payload byte for byte.
 
 See also
 

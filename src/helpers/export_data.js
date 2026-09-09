@@ -11,6 +11,8 @@ export const downloadJtFile = (imageData) => {
   const timestamp = Date.now();
   const filename = `CoolLEDX_16x96_1_${timestamp}.jt`;
   downloadFile(url, filename);
+  // Returned so the UI can show the exact path in the deploy command.
+  return filename;
 };
 
 export const buildFile = (imageData, chunks) => {
