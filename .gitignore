@@ -31,3 +31,6 @@ firebase-debug.log*
 __pycache__/
 *.py[cod]
 .venv/
+
+# generated diagnostics (regenerate with tools/animations/frame_ladder.py)
+tools/out/

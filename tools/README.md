@@ -104,6 +104,40 @@ sign agrees with you.
 - The font is uppercase only; lowercase input is folded automatically. Add
   glyphs to `FONT_5X7` as 7 rows of 5 characters.
 
+## How many frames will the sign take?
+
+Unknown, and worth establishing. Three different ceilings are in play:
+
+| Level | Limit | Basis |
+| --- | --- | --- |
+| Format | 255 frames | the frame count is a single byte |
+| Driver / protocol | **113 frames** | measured; see below |
+| Known-good | 24 frames | the largest in the vendor packs |
+| Sign hardware | unknown | never tested |
+
+113 is a hard ceiling: `coolledx-driver` writes the payload length as two
+bytes in `chop_up_data`, so anything over 65535 bytes raises `OverflowError`
+before it ever reaches the sign. 113 frames is 65115 bytes across 509 BLE
+chunks, each awaiting a notification, so expect a slow transfer even if it
+works.
+
+`frame_ladder.py` measures the last row. Each frame displays its own number
+as `N/TOTAL` plus a progress bar, so a truncated transfer can be read
+straight off the panel:
+
+```sh
+python tools/animations/frame_ladder.py            # 24, 40, 60, 80, 113
+python tools/animations/frame_ladder.py --frames 48
+```
+
+Files land in `tools/out/` (gitignored -- they are large and regenerate on
+demand). Send the largest, then read the highest counter the panel reaches:
+if it cycles but never passes 61, that is your limit. Bisect with `--frames`
+from there.
+
+Note that frame count and payload size are different questions, and the sign
+more likely cares about the latter; the table the script prints gives both.
+
 ## Sending to the sign
 
 ```sh
