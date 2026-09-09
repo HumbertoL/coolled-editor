@@ -173,14 +173,55 @@ as well:
 30KB (30,720) sits between the payloads; 33KB (33,792) sits between the wire
 sizes. Both predict the observed boundary exactly.
 
-`tools/animations/wire_probe.py` separates them. `maxesc_053.jt` keeps the
-payload at 30,555 — matching the file known to work — while lighting only the
-last row of each 8-row byte group, which makes nearly every plane byte `0x01`
-and doubles the wire size to **61,492**:
+`tools/animations/wire_probe.py` writes `sparse_053.jt` to separate them: the
+same 30,555-byte payload as the working file, nudged to 33,849 wire bytes,
+just past the 33KB line, with no single packet any larger. If it applies, a
+33KB total-wire cap is disproven and the 30KB payload cap stands.
 
-- if it **applies**, the cap is on the decoded payload and wire size is
-  irrelevant;
-- if it **fails**, the cap involves the transmitted size.
+## The driver mis-chunks escape-heavy content
+
+A first attempt at that probe, `maxesc_053.jt`, was not a valid test and
+revealed a separate bug instead.
+
+`chop_up_data` splits the payload into 128-byte chunks and *then* each chunk
+is escaped, so escaping inflates the packets after the split. For ordinary
+content that hardly matters, but for a payload full of `0x01` bytes the
+packets nearly double:
+
+| | Largest packet | Total wire |
+| --- | --- | --- |
+| normal content | 148 B | 33,729 |
+| escape-heavy (`maxesc_053`) | **269 B** | 61,492 |
+
+A typical CoreBluetooth ATT payload is around 180 bytes, so those 269-byte
+packets are too large. The sign stops acknowledging, the transfer aborts
+part way on a notify timeout, and — unlike the oversized-animation case —
+**the panel displays an error and falls back to a default animation**:
+
+```
+asyncio.exceptions.CancelledError
+...
+TimeoutError
+2026-... - __main__ - ERROR - Connection timed out while trying to connect
+```
+
+Two things to note about that output. The driver reports it as a *connection*
+timeout, which is misleading — the connection was fine and 8 seconds of
+chunks had already gone through. And the command hex in the error names
+chunk 0, because `truncated_command()` always prints the first chunk, not the
+one that failed.
+
+The fix is to split on the escaped length rather than the raw length. Content
+that does not escape heavily would chunk identically, so it need not change
+existing behaviour.
+
+This is also a third distinct failure mode, alongside the other two:
+
+| Symptom | Cause |
+| --- | --- |
+| Transfer succeeds, panel unchanged, no percent counter | Payload over ~30KB |
+| Transfer aborts on a notify timeout, panel shows an error and falls back | Packets too large — escape-heavy content |
+| Transfer succeeds, panel updates | Fine |
 
 ### What actually gets escaped
 

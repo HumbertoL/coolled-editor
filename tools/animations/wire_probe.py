@@ -18,19 +18,33 @@ despite the unused `escape_byte` helper next to it claiming everything below
 This script writes files that separate the hypotheses by pushing the wire
 size around while holding the payload fixed:
 
-``maxesc_053``
-    53 frames, so the payload matches the file already known to work. Lights
-    only the last row of each 8-row byte group, making nearly every plane
-    byte 0x01 -- which doubles on the wire. Payload 30,555, wire ~61,500.
+``sparse_053`` -- the clean discriminator
+    53 frames, payload 30,555: identical to the file known to work. Draws
+    only a counter, so slightly more of the payload escapes and the total
+    wire size reaches 33,849, just past the 33,792 line. Crucially the
+    largest single packet is 146 bytes, no bigger than the working file's
+    148, so nothing else changes.
 
-    Applies  -> the cap is on the decoded payload; wire size is irrelevant.
-    Fails    -> the cap involves the transmitted size.
+    Applies  -> a 33KB total-wire cap is disproven; the 30KB payload cap
+                stands.
+    Fails    -> the total transmitted size is what matters.
+
+``maxesc_053`` -- demonstrates a driver bug, NOT a size cap
+    Lights only the last row of each 8-row byte group so nearly every plane
+    byte is 0x01, doubling the wire size to 61,492. This was written as a
+    discriminator and is not one: ``chop_up_data`` splits on the *unescaped*
+    length (128 bytes), and escaping then inflates each packet afterwards, so
+    the largest packet reaches **269 bytes** against ~148 for normal content.
+    The sign stops acknowledging, the transfer times out part way, and the
+    panel shows an error and falls back to a default animation.
+
+    It is kept because it reproduces that bug on demand.
 
 ``dense_054``
-    54 frames, filled so almost nothing escapes. The counterpart test, though
-    a weak one: the wire size only drops to ~34,200, still above 33,792.
+    54 frames, filled so almost nothing escapes. A weak counterpart test: the
+    wire size only drops to ~34,200, still above 33,792.
 
-Both draw a frame counter, so the panel shows whether they applied.
+All three draw a frame counter, so the panel shows whether they applied.
 """
 
 from __future__ import annotations
@@ -55,6 +69,19 @@ def counter(frame, number, total, color):
         y=0,
         color=color,
     )
+
+
+def build_sparse(total=53):
+    """
+    Same payload as a working file, nudged just past the 33KB wire line
+    without making any single packet bigger.
+    """
+    anim = Animation(delay=DELAY)
+    for index in range(total):
+        number = index + 1
+        frame = anim.frame()
+        counter(frame, number, total, C.YELLOW if number == total else C.WHITE)
+    return anim
 
 
 def build_max_escape(total=53):
@@ -101,6 +128,7 @@ def main():
 
     out_dir = Path(args.out_dir)
     for name, animation in [
+        ("sparse_053", build_sparse()),
         ("maxesc_053", build_max_escape()),
         ("dense_054", build_dense()),
     ]:
@@ -108,9 +136,12 @@ def main():
         print(f"{path}  {len(animation)} frames, payload {animation.payload_bytes():,}")
 
     print()
-    print("Send maxesc_053 first -- it is the decisive one:")
-    print("  applies -> the cap is the decoded payload (~30KB)")
-    print("  fails   -> the cap involves the transmitted size")
+    print("Send sparse_053 -- it is the clean discriminator:")
+    print("  applies -> a 33KB total-wire cap is disproven; 30KB payload stands")
+    print("  fails   -> the total transmitted size is what matters")
+    print()
+    print("maxesc_053 reproduces the chunking bug: packets reach 269 bytes")
+    print("because chop_up_data splits before escaping. Expect a timeout.")
 
     return 0
 
