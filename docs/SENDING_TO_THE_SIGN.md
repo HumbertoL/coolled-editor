@@ -140,11 +140,17 @@ Frame-ladder results, from `tools/animations/frame_ladder.py`:
 | --- | --- | --- | --- |
 | 24 | 13,851 | 109 | works reliably |
 | 40 | 23,067 | 181 | works; failed once, succeeded on retry |
+| 52 | 29,979 | 235 | works |
+| 56 | 32,283 | 253 | reports success, sign never applies it |
 | 60 | 34,587 | 271 | reports success, sign never applies it |
 | 113 | 65,115 | 509 | reports success, sign never applies it |
 
-**The hardware limit is between 40 and 60 frames**, far below the protocol's
-113. Treat 24 as the safe working figure, since even 40 proved flaky.
+**The hardware limit is between 52 and 56 frames** — roughly 30KB of payload
+— far below the protocol's 113. Treat 24 as the safe working figure, since
+even 40 proved flaky.
+
+A 32KB buffer would have allowed 56 frames, so that is ruled out. 30KB caps
+at 53 frames and 31KB at 55, so the exact boundary distinguishes them.
 
 ## The transfer and the apply are separate phases
 
@@ -166,20 +172,30 @@ self.current_command.error_code = ErrorCode.SUCCESS
 Every notification is recorded as success and the status byte the sign
 returns is discarded, even though `ErrorCode` already enumerates
 `TRANSMISSION_FAILED`, `DEVICE_ABNORMALITY`, `DATA_ERROR`,
-`DATA_LENGTH_ERROR`, `DATA_ID_ERROR` and `DATA_CHECKSUM_ERROR`. So
-"LED sign update completed successfully" means only that every chunk was
-written and acked.
+`DATA_LENGTH_ERROR`, `DATA_ID_ERROR` and `DATA_CHECKSUM_ERROR`.
 
-The sign is quite possibly reporting `DATA_LENGTH_ERROR` (0x04) on the
-oversized transfers and the driver is throwing it away. The raw bytes are
-already in the debug log, so this is checkable:
+### The sign does not report the failure at all
 
-```sh
-cd ~/workspace/coolledx-driver && PYTHONPATH=src .venv/bin/python \
-  utils/tweak_sign.py -l DEBUG --command-timeout 8 \
-  -jt ~/workspace/coolled-editor/tools/out/ladder_060.jt 2>&1 | tee /tmp/send60.log
-grep -o 'data: [0-9a-f]*' /tmp/send60.log | sort | uniq -c | sort -rn | head
-```
+It would be reasonable to assume the sign returns an error the driver is
+throwing away. It does not. A full `-l DEBUG` capture of a failing 60-frame
+send was decoded, and the sign acknowledges everything:
 
-Comparing the distinct notification payloads from a failing send against a
-working 24-frame one should show which byte carries the status.
+- **271 notifications for 271 chunks**, ids 0 to 270 with no gaps and none
+  malformed.
+- Every one carries status byte `0x00` in the same position — success.
+- The driver logged no error and printed "LED sign update completed
+  successfully".
+
+The response format is `04 <status> <chunk_id:16> <trailing>`, where `04` is
+the animation command byte. The trailing byte is `0x05` on every chunk except
+the first, which is `0x04`; it does not look like a checksum of the preceding
+bytes.
+
+So the transfer genuinely succeeds at the protocol level and the animation is
+dropped afterwards, during the commit the sign shows its own percent counter
+for. Nothing about it reaches the host. Fixing `handle_notify` to parse the
+status byte is still worth doing — it currently masks any real error — but it
+would **not** catch this failure, because no error is sent.
+
+Detecting it would need a status query after the transfer, if such a command
+exists. None is known.

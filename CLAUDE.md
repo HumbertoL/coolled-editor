@@ -86,11 +86,12 @@ Measured on a CoolLEDX 16x96:
 | --- | --- | --- |
 | 24 | 13.9KB | works reliably |
 | 40 | 23.1KB | works, but failed once and needed a retry |
-| 60 | 34.6KB | **transfer reports success; the sign never applies it** |
-| 113 | 65.1KB | same as 60 |
+| 52 | 30.0KB | works |
+| 56 | 32.3KB | **transfer reports success; the sign never applies it** |
+| 60, 113 | 34.6KB, 65.1KB | same as 56 |
 
-So the hardware limit sits **between 40 and 60 frames**, well under the
-protocol's 113. Stay at or below 24 for anything that matters.
+So the hardware limit sits **between 52 and 56 frames** (~30KB), well under
+the protocol's 113. Stay at or below 24 for anything that matters.
 
 The 113 is the protocol's own ceiling: the driver writes the payload length
 in two bytes, so past 65535 bytes it raises `OverflowError` before anything
@@ -99,10 +100,11 @@ reaches the sign.
 **A successful-looking send does not mean the sign applied it.** The transfer
 and the apply are separate phases — after the last chunk the sign runs its own
 percent counter to commit the animation, and that is where oversized files
-fail. The driver has no visibility into it: `handle_notify` hardcodes
-`ErrorCode.SUCCESS` for every notification and never reads the status byte the
-sign sends back, so "LED sign update completed successfully" means only that
-every chunk was written and acked.
+fail. A decoded debug capture confirms the sign acks all 271 chunks of a
+failing 60-frame send with status `0x00`, so the failure is never reported to
+the host at all. `handle_notify` also hardcodes `ErrorCode.SUCCESS` and
+discards the status byte, but that is a separate latent bug, not the cause
+here. See [docs/SENDING_TO_THE_SIGN.md](docs/SENDING_TO_THE_SIGN.md).
 
 Large sends also need `--command-timeout 8` or so: the per-chunk
 acknowledgement timeout defaults to 1.0s, and a 24-frame animation is 109
