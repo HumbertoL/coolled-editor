@@ -1,10 +1,6 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import {
-  getFrameData,
-  insertFrame,
-  removeFrame,
-} from './helpers/frame';
+import { getFrameData, insertFrame, removeFrame } from './helpers/frame';
 
 const StyledRoot = styled.div`
   display: flex;
@@ -30,7 +26,8 @@ const ControlButton = styled.button`
       ? 'linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%)'
       : 'rgba(255, 255, 255, 0.08)'};
   color: #fff;
-  border: 1px solid ${(props) =>
+  border: 1px solid
+    ${(props) =>
     props.active ? 'rgba(255, 107, 107, 0.3)' : 'rgba(255, 255, 255, 0.1)'};
   border-radius: 8px;
   font-size: 13px;
@@ -101,22 +98,42 @@ const FrameControls = ({
 }) => {
   const [isPreviewing, setIsPreviewing] = React.useState(false);
 
-  useEffect(() => {
-    if (isPreviewing) {
-      let currentFrame = selectedFrame;
-      const interval = setInterval(() => {
-        // currentFrame index starts from 1
-        // wrap around to frame 1 when reaching frameNum length
-        const nextFrame = currentFrame === frameNum ? 1 : currentFrame + 1;
-        setFrame(nextFrame);
-        currentFrame = nextFrame;
-      }, delays);
+  // Read at loop start without making the loop depend on it: including
+  // selectedFrame in the deps below would tear down and restart the loop on
+  // every single frame, since the loop is what changes it.
+  const startFrameRef = React.useRef(selectedFrame);
+  startFrameRef.current = selectedFrame;
 
-      return () => {
-        clearInterval(interval);
-      };
+  useEffect(() => {
+    if (!isPreviewing) {
+      return undefined;
     }
-  }, [isPreviewing, delays, frameNum]);
+
+    // The delay comes from a text input, so it can be '' or nonsense.
+    const period = Math.max(20, Number(delays) || 100);
+    let currentFrame = startFrameRef.current;
+    let previous = performance.now();
+    let request;
+
+    // requestAnimationFrame rather than setInterval: it syncs to the display's
+    // refresh, self-corrects drift by advancing however many periods actually
+    // elapsed, and stops on its own when the tab is hidden instead of queueing
+    // up a backlog of state updates.
+    const tick = (now) => {
+      const elapsed = now - previous;
+      if (elapsed >= period) {
+        const steps = Math.floor(elapsed / period);
+        previous += steps * period;
+        // Frame indexes are 1-based, so wrap through zero and back.
+        currentFrame = ((currentFrame - 1 + steps) % frameNum) + 1;
+        setFrame(currentFrame);
+      }
+      request = requestAnimationFrame(tick);
+    };
+
+    request = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(request);
+  }, [isPreviewing, delays, frameNum, setFrame]);
 
   const handleClick = () => {
     setIsPreviewing(!isPreviewing);
