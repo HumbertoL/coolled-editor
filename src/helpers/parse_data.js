@@ -1,7 +1,7 @@
 // import welcome from '../sample/welcome_to_chaos_corner.json';
 // import greenTopRight from '../sample/green_top_right.json';
 
-import { GRID_HEIGHT, GRID_WIDTH } from './constants';
+import { GRID_HEIGHT, GRID_WIDTH } from './constants.js';
 
 export const parseData = (content) => {
   const imageData = convertDataToBinary(content);

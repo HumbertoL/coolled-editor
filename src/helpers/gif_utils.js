@@ -1,215 +1,234 @@
 import { parseGIF, decompressFrames } from 'gifuct-js';
-import { GRID_HEIGHT, GRID_WIDTH } from './constants';
+import { GRID_HEIGHT, GRID_WIDTH } from './constants.js';
 
-const colorMap = [
-  // black
-  {
-    source: { r: 0, g: 0, b: 0 },
-    target: { r: false, g: false, b: false },
-  },
-  // undefined becomes black
-  {
-    source: { r: undefined, g: undefined, b: undefined },
-    target: { r: true, g: true, b: false },
-  },
-  // white
-  {
-    source: { r: 255, g: 255, b: 255 },
-    target: { r: false, g: false, b: false },
-  },
-  // magenta
-  {
-    source: { r: 255, g: 110, b: 124 },
-    target: { r: false, g: true, b: false },
-  },
-  // cyan
-  {
-    source: { r: 187, g: 226, b: 213 },
-    target: { r: false, g: true, b: true },
-  },
-  // // 255, 141, 139 to magenta
-  {
-    source: { r: 255, g: 141, b: 139 },
-    target: { r: false, g: true, b: false },
-  },
-  // // 254, 214, 137 to yellow
-  // {
-  //   source: { r: 254, g: 214, b: 137 },
-  //   target: { r: false, g: true, b: true },
-  // },
-];
+/**
+ * GIF -> panel pixels.
+ *
+ * Two things make this less trivial than it looks, and both bit the earlier
+ * version of this file:
+ *
+ * 1. A GIF frame is a *patch*, not a picture. It can be smaller than the
+ *    canvas, sit at an offset, and leave pixels transparent so whatever the
+ *    previous frame drew shows through. Reading `frame.patch` as if it were
+ *    the whole canvas shifts and smears anything that isn't a full-size
+ *    frame -- and in the vendor material catalog roughly a third of all
+ *    frames are partial.
+ * 2. The panel has 3 bits per pixel (one on/off per channel), so every colour
+ *    has to be reduced to one of eight. Doing that by exact-matching a
+ *    handful of hardcoded RGB triples only ever works for the one GIF the
+ *    list was tuned against.
+ */
 
-const totalPixels = GRID_HEIGHT * GRID_WIDTH;
-const initialValue = { r: false, g: false, b: false };
-const centerOffset = 16 * 36;
+/** All-off pixel. Shared: nothing in the app mutates these objects. */
+const BLACK = Object.freeze({ r: false, g: false, b: false });
 
-export const getGifBitmaps = async (frames) => {
-  const bitmaps = frames.map((frame, index) => {
-    const { patch, dims } = frame;
-    const { width, height } = dims;
+/**
+ * Items in the vendor material catalog are real GIFs whose first 32 bytes are
+ * XOR'd with 0xDA. See DptModelLoader in the CoolLED1248 app, which does
+ * exactly this before handing the stream to its image loader. Left alone for
+ * bytes that already look like a GIF, so it is safe to call on any input.
+ */
+export const MATERIAL_GIF_XOR = 0xda;
+export const MATERIAL_GIF_XOR_LENGTH = 32;
 
-    // Create bitmap array from patch data
-    const bitmap = new Array(height);
-    for (let y = 0; y < height; y++) {
-      bitmap[y] = new Array(width);
-      for (let x = 0; x < width; x++) {
-        const i = (y * width + x) * 4;
-        bitmap[y][x] = {
-          r: patch[i],
-          g: patch[i + 1],
-          b: patch[i + 2],
-          a: patch[i + 3],
-        };
-      }
-    }
-
-    return {
-      frameIndex: index,
-      bitmap,
-      delay: frame.delay,
-    };
-  });
-
-  return bitmaps;
+export const deobfuscateMaterialGif = (bytes) => {
+  const out = Uint8Array.from(bytes);
+  if (out[0] === 0x47 && out[1] === 0x49 && out[2] === 0x46) {
+    return out;
+  }
+  for (let i = 0; i < Math.min(MATERIAL_GIF_XOR_LENGTH, out.length); i++) {
+    out[i] ^= MATERIAL_GIF_XOR;
+  }
+  return out;
 };
 
-const COLOR_MAP = [
-  { name: 'Black', values: { r: false, g: false, b: false } }, // 000
-  { name: 'Blue', values: { r: false, g: false, b: true } }, // 001
-  { name: 'Green', values: { r: false, g: true, b: false } }, // 010
-  { name: 'Cyan', values: { r: false, g: true, b: true } }, // 011
-  { name: 'Red', values: { r: true, g: false, b: false } }, // 100
-  { name: 'Magenta', values: { r: true, g: false, b: true } }, // 101
-  { name: 'Yellow', values: { r: true, g: true, b: false } }, // 110
-  { name: 'White', values: { r: true, g: true, b: true } }, // 111
-];
+/**
+ * Reduce a colour to the eight the panel can show, keeping its hue.
+ *
+ * A channel lights up if it carries at least half of the pixel's dominant
+ * channel, which is what separates "dim red" from "dark grey": (120, 20, 20)
+ * stays red, (120, 110, 100) goes white. Anything below the floor, or mostly
+ * transparent, is off.
+ */
+const BRIGHTNESS_FLOOR = 24;
+const CHANNEL_RATIO = 0.5;
 
-const guessPixelValue = (r, g, b, a) => {
-  // If alpha is too low (nearly transparent), return black
-  if (a < 127) {
-    return { r: false, g: false, b: false };
+export const quantizePixel = (r, g, b, a = 255) => {
+  if (a < 128) {
+    return BLACK;
   }
 
-  // Calculate distances to each possible color
-  const distances = COLOR_MAP.map((color) => {
-    const rDist = Math.abs(r - (color.values.r ? 255 : 0));
-    const gDist = Math.abs(g - (color.values.g ? 255 : 0));
-    const bDist = Math.abs(b - (color.values.b ? 255 : 0));
+  const dominant = Math.max(r, g, b);
+  if (dominant < BRIGHTNESS_FLOOR) {
+    return BLACK;
+  }
 
-    return {
-      color: color.values,
-      distance: Math.sqrt(rDist * rDist + gDist * gDist + bDist * bDist),
-    };
-  });
-
-  // Find the closest color
-  const closestColor = distances.reduce((prev, curr) =>
-    curr.distance < prev.distance ? curr : prev,
-  );
-
-  return closestColor.color;
-};
-
-const handlePixelNotFound = (pixel, notFoundPixels) => {
-  const { r, g, b } = pixel;
-
-  const pixelValue = `rgb(${r}, ${g}, ${b})`;
-
-  const notFoundObject = {
-    count: 1,
-    value: pixelValue,
+  const threshold = dominant * CHANNEL_RATIO;
+  return {
+    r: r >= threshold,
+    g: g >= threshold,
+    b: b >= threshold,
   };
-
-  const existingPixelIndex = notFoundPixels.findIndex((pixel) => {
-    return pixel.value === pixelValue;
-  });
-
-  if (existingPixelIndex !== -1) {
-    notFoundPixels[existingPixelIndex].count++;
-  } else {
-    notFoundPixels.push(notFoundObject);
-  }
 };
 
-const notFoundPixels = [];
-export const getGridPixelsFromBitmap = (bitmap) => {
-  const { bitmap: frame } = bitmap;
+/**
+ * Flatten a GIF into one full-canvas RGBA buffer per frame.
+ *
+ * Both disposal methods the vendor GIFs use (0 "unspecified" and 1 "keep")
+ * leave the previous frame in place, so frames accumulate. Disposal 2
+ * ("restore to background") clears the patch area first, and 3 ("restore to
+ * previous") rolls back to the frame before -- handled so this works on
+ * arbitrary GIFs a user drops in, not just the catalog's.
+ */
+export const compositeGifFrames = (buffer) => {
+  const gif = parseGIF(buffer);
+  const frames = decompressFrames(gif, true);
 
-  const pixelArray = Array(totalPixels).fill(initialValue);
+  const { width, height } = gif.lsd;
+  let canvas = new Uint8ClampedArray(width * height * 4);
 
-  // Iterate over columns first, then rows
-  for (let columnIndex = 0; columnIndex < frame[0].length; columnIndex++) {
-    for (let rowIndex = 0; rowIndex < frame.length; rowIndex++) {
-      const pixel = frame[rowIndex][columnIndex];
-      const { r, g, b, a } = pixel;
+  return frames.map((frame) => {
+    const { dims, patch, disposalType, delay } = frame;
+    const previous = disposalType === 3 ? canvas.slice() : null;
 
-      const targetPixel = colorMap.find((color) => {
-        return (
-          color.source.r === r && color.source.g === g && color.source.b === b
-        );
-      });
+    for (let y = 0; y < dims.height; y++) {
+      const canvasY = dims.top + y;
+      if (canvasY < 0 || canvasY >= height) continue;
 
-      // Calculate index in the output array based on column-first ordering
-      const pixelOffset = columnIndex * frame.length + rowIndex;
-      const pixelIndex = pixelOffset + centerOffset;
+      for (let x = 0; x < dims.width; x++) {
+        const canvasX = dims.left + x;
+        if (canvasX < 0 || canvasX >= width) continue;
 
-      if (targetPixel) {
-        pixelArray[pixelIndex] = targetPixel.target;
-      } else {
-        handlePixelNotFound(pixel, notFoundPixels);
-        // notFoundPixels.push({pixel: { r, g, b }
-        // count :1});
-        pixelArray[pixelIndex] = guessPixelValue(r, g, b, a);
+        const from = (y * dims.width + x) * 4;
+        // Transparent patch pixels leave the frame underneath showing.
+        if (patch[from + 3] === 0) continue;
+
+        const to = (canvasY * width + canvasX) * 4;
+        canvas[to] = patch[from];
+        canvas[to + 1] = patch[from + 1];
+        canvas[to + 2] = patch[from + 2];
+        canvas[to + 3] = patch[from + 3];
       }
     }
-  }
 
-  return pixelArray;
+    const rgba = canvas.slice();
+
+    if (disposalType === 2) {
+      for (let y = 0; y < dims.height; y++) {
+        const canvasY = dims.top + y;
+        if (canvasY < 0 || canvasY >= height) continue;
+        const start = (canvasY * width + Math.max(0, dims.left)) * 4;
+        const span = Math.min(dims.width, width - dims.left) * 4;
+        if (span > 0) canvas.fill(0, start, start + span);
+      }
+    } else if (disposalType === 3 && previous) {
+      canvas = previous;
+    }
+
+    return { rgba, width, height, delay };
+  });
 };
 
-export const getGridPixelArray = (bitmaps) => {
-  const pixelArray = [];
-  bitmaps.forEach((bitmap) => {
-    const frame = getGridPixelsFromBitmap(bitmap);
-    pixelArray.push(...frame);
+/**
+ * Drop one composited frame onto the panel grid.
+ *
+ * A GIF the same size as the panel lands 1:1; anything else is centred, and
+ * anything larger is cropped rather than scaled. The grid is stored column by
+ * column, which is the order the .jt planes are packed in.
+ */
+const placeFrameOnGrid = (frame, target, base, gridWidth, gridHeight) => {
+  const offsetX = Math.round((gridWidth - frame.width) / 2);
+  const offsetY = Math.round((gridHeight - frame.height) / 2);
+
+  for (let y = 0; y < frame.height; y++) {
+    const row = y + offsetY;
+    if (row < 0 || row >= gridHeight) continue;
+
+    for (let x = 0; x < frame.width; x++) {
+      const column = x + offsetX;
+      if (column < 0 || column >= gridWidth) continue;
+
+      const source = (y * frame.width + x) * 4;
+      target[base + column * gridHeight + row] = quantizePixel(
+        frame.rgba[source],
+        frame.rgba[source + 1],
+        frame.rgba[source + 2],
+        frame.rgba[source + 3],
+      );
+    }
+  }
+};
+
+/**
+ * The .jt format carries a single frame delay for the whole animation, so pick
+ * the one most frames use. GIF delays are in 10ms units internally; gifuct
+ * has already converted them to milliseconds.
+ */
+const commonDelay = (frames, fallback = 300) => {
+  const counts = new Map();
+  frames.forEach(({ delay }) => {
+    if (!delay) return;
+    counts.set(delay, (counts.get(delay) ?? 0) + 1);
   });
 
-  notFoundPixels.sort((a, b) => b.count - a.count);
-  console.table(notFoundPixels);
+  let best = fallback;
+  let bestCount = 0;
+  counts.forEach((count, delay) => {
+    if (count > bestCount) {
+      best = delay;
+      bestCount = count;
+    }
+  });
 
-  return pixelArray;
+  return best;
 };
 
+/**
+ * Convert a GIF into the imageData shape the editor works with: one
+ * {r, g, b} per LED, all frames end to end.
+ */
+export const gifToImageData = (
+  buffer,
+  { width = GRID_WIDTH, height = GRID_HEIGHT } = {},
+) => {
+  const frames = compositeGifFrames(buffer);
+  if (frames.length === 0) {
+    throw new Error('GIF has no frames');
+  }
+
+  const pixelsPerFrame = width * height;
+  const pixelArray = new Array(pixelsPerFrame * frames.length).fill(BLACK);
+
+  frames.forEach((frame, index) => {
+    placeFrameOnGrid(
+      frame,
+      pixelArray,
+      index * pixelsPerFrame,
+      width,
+      height,
+    );
+  });
+
+  return {
+    pixelArray,
+    isAnimation: frames.length > 1,
+    delays: commonDelay(frames),
+    frameNum: frames.length,
+    pixelWidth: width,
+    pixelHeight: height,
+  };
+};
+
+/** Read a File/Blob from the editor's file picker. */
 export const processGif = async (file) => {
   try {
-    // Read the file as ArrayBuffer
     const buffer = await file.arrayBuffer();
-
-    // Parse the GIF
-    const gif = parseGIF(buffer);
-    const frames = decompressFrames(gif, true);
-    const bitmaps = await getGifBitmaps(frames);
-    const pixelArray = getGridPixelArray(bitmaps);
-
-    const delay = frames[0].delay;
-
-    const imageObject = {
-      pixelArray,
-      isAnimation: true,
-      delays: delay,
-      frameNum: frames.length,
-      pixelWidth: GRID_WIDTH,
-      pixelHeight: GRID_HEIGHT,
-    };
-
-    return imageObject;
-
-    // Process each frame into a bitmap
-
-    //   setFrames(bitmaps);
-    //   setError(null);
-  } catch (err) {
-    // setError('Error processing GIF: ' + err.message);
-    console.error(err);
+    const bytes = deobfuscateMaterialGif(new Uint8Array(buffer));
+    return gifToImageData(
+      bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength),
+    );
+  } catch (error) {
+    console.error('Could not process GIF', error);
+    return undefined;
   }
 };

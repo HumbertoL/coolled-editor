@@ -1,4 +1,4 @@
-import { GRID_HEIGHT, GRID_WIDTH } from './constants';
+import { GRID_HEIGHT, GRID_WIDTH } from './constants.js';
 
 export const downloadJtFile = (imageData) => {
   const pixelArray = imageData.pixelArray;
@@ -75,89 +75,40 @@ export const downloadFile = (url, filename) => {
   link.click();
 };
 
-const convertBinaryToNumber = (binaryString) => {
-  return parseInt(binaryString, 2);
-};
+/**
+ * Pack a pixel array into the byte layout a .jt file carries.
+ *
+ * Three colour planes span the whole animation rather than sitting inside
+ * each frame: every frame's red bits, then green, then blue. Within a plane
+ * the frames sit side by side, each walking down its columns. Same layout
+ * parse_data.js and samples.js read back.
+ */
+export const packPixelArray = (pixelArray, frameNum) => {
+  const pixelsPerFrame = GRID_WIDTH * GRID_HEIGHT;
+  const planeBits = frameNum * pixelsPerFrame;
+  const bytes = new Uint8Array((planeBits * 3) / 8);
 
-const buildChunksFromColumn = (columnArray) => {
-  let redChunk = '';
-  let greenChunk = '';
-  let blueChunk = '';
-  for (let j = 0; j < columnArray.length; j++) {
-    const pixel = columnArray[j];
-    const redBit = pixel.r ? '1' : '0';
-    const greenBit = pixel.g ? '1' : '0';
-    const blueBit = pixel.b ? '1' : '0';
-    redChunk += redBit;
-    greenChunk += greenBit;
-    blueChunk += blueBit;
-  }
-  return { redChunk, greenChunk, blueChunk };
-};
-
-const reconstructFrameBinaryFromChunks = (frameChunks) => {
-  const reconstructedBinaryString =
-    frameChunks.redChunks.join('') +
-    frameChunks.greenChunks.join('') +
-    frameChunks.blueChunks.join('');
-
-  let originalData = [];
-  for (let i = 0; i < reconstructedBinaryString.length; i += 8) {
-    const num = convertBinaryToNumber(
-      reconstructedBinaryString.substring(i, i + 8),
-    );
-    originalData.push(num);
-  }
-
-  return originalData;
-};
-
-const reconstructColorChunks = (ledArray) => {
-  const redChunks = [];
-  const greenChunks = [];
-  const blueChunks = [];
-
-  for (let i = 0; i < GRID_WIDTH; i++) {
-    // Column start and end index
-    const startIndex = i * GRID_HEIGHT;
-    const endIndex = (i + 1) * GRID_HEIGHT;
-    const columnArray = ledArray.slice(startIndex, endIndex);
-
-    const columnChunks = buildChunksFromColumn(columnArray);
-    redChunks.push(...columnChunks.redChunk);
-    greenChunks.push(...columnChunks.greenChunk);
-    blueChunks.push(...columnChunks.blueChunk);
-  }
-
-  return { redChunks, greenChunks, blueChunks };
-};
-
-const reconstructGraffitiDataFromPixelArray = (imageData, pixelArray) => {
-  const frames = imageData.frameNum;
-  const numFramePixels = GRID_HEIGHT * GRID_WIDTH;
-
-  const chunks = {
-    redChunks: [],
-    greenChunks: [],
-    blueChunks: [],
+  const setBit = (bitIndex) => {
+    bytes[bitIndex >> 3] |= 0x80 >> (bitIndex & 7);
   };
-  for (let i = 0; i < frames; i++) {
-    const arrayOffset = i * numFramePixels;
-    const frameArray = pixelArray.slice(
-      arrayOffset,
-      arrayOffset + numFramePixels,
-    );
 
-    const frameChunks = reconstructColorChunks(frameArray);
+  for (let frame = 0; frame < frameNum; frame++) {
+    for (let column = 0; column < GRID_WIDTH; column++) {
+      for (let row = 0; row < GRID_HEIGHT; row++) {
+        const pixel =
+          pixelArray[frame * pixelsPerFrame + column * GRID_HEIGHT + row];
+        if (!pixel) continue;
 
-    chunks.redChunks.push(...frameChunks.redChunks);
-    chunks.greenChunks.push(...frameChunks.greenChunks);
-    chunks.blueChunks.push(...frameChunks.blueChunks);
-    // const frameData = reconstructFrameBinaryFromChunks(frameChunks);
-    // originalData = originalData.concat(frameData);
+        const bitIndex = (frame * GRID_WIDTH + column) * GRID_HEIGHT + row;
+        if (pixel.r) setBit(bitIndex);
+        if (pixel.g) setBit(planeBits + bitIndex);
+        if (pixel.b) setBit(planeBits * 2 + bitIndex);
+      }
+    }
   }
 
-  const originalData = reconstructFrameBinaryFromChunks(chunks);
-
-  return originalData;
+  return bytes;
 };
+
+const reconstructGraffitiDataFromPixelArray = (imageData, pixelArray) =>
+  Array.from(packPixelArray(pixelArray, imageData.frameNum ?? 1));
