@@ -23,8 +23,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from jtkit import Animation, colors as C  # noqa: E402
 
-FRAMES = 24
-DELAY = 110
+FRAMES = 53          # device maximum, so the morph is as smooth as it gets
+DELAY = 80
 
 RADIUS = 0.74
 MAX_ITER = 22

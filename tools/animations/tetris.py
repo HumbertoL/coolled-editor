@@ -7,9 +7,14 @@ hit the stack growing from the left wall; a full column is a cleared line. The
 cells are 2x2 pixels so the well is 48 wide by 8 high, which is enough for the
 pieces to be recognisable.
 
-Three pieces land per loop. The I completes a column, which flashes white
-and drops out, shifting everything past it back by one; the T then plugs the
-gap in the wall column and clears that too. Place, clear, shift, twice over.
+Six pieces -- I, O, T, L, Z, T -- land per loop. The L completes a column,
+which flashes and drops out; the final T completes two at once, a double,
+and the well is empty again. So the loop is a perfect clear that starts and
+ends on nothing, and ALL CLEAR flashes across the empty well before the next
+I piece arrives. The sequence came out of a search over piece orders, since
+a hand-designed one kept leaving a stray cell behind.
+
+Uses 53 frames, the measured device maximum, for a six-frame slide per piece.
 """
 
 from __future__ import annotations
@@ -21,23 +26,22 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from jtkit import Animation, colors as C  # noqa: E402
 
-FRAMES = 24
+FRAMES = 53
 DELAY = 120
 
 COLS, ROWS = 48, 8
-ENTRY_COL = 46
-SLIDE_FRAMES = 5
+SLIDE_FRAMES = 6
+FLASH_FRAMES = 3
 
-INITIAL = {
-    **{(0, r): C.BLUE for r in range(ROWS) if r != 3},
-    **{(1, r): C.GREEN for r in (0, 1, 6, 7)},
-    **{(2, r): C.RED for r in (0, 7)},
-}
-# (cells relative to (col, row), row offset, colour)
+# (cells relative to (col, row), row, colour). Found by search: from an empty
+# well these six land, clear three columns, and leave it empty.
 PIECES = [
-    ([(0, 0), (0, 1), (0, 2), (0, 3)], 2, C.CYAN),           # I, fills column 1
-    ([(1, 0), (0, 1), (1, 1), (1, 2)], 2, C.MAGENTA),        # T, pointing left
-    ([(0, 0), (0, 1), (0, 2), (1, 2)], 4, C.YELLOW),         # L
+    ([(0, 0), (0, 1), (0, 2), (0, 3)], 1, C.CYAN),             # I
+    ([(0, 0), (0, 1), (1, 0), (1, 1)], 5, C.YELLOW),           # O
+    ([(0, 0), (1, 0), (1, 1), (2, 0)], 0, C.MAGENTA),          # T, nub down
+    ([(0, 1), (1, 1), (2, 0), (2, 1)], 6, C.RED),              # L  -> clears 1
+    ([(0, 0), (0, 1), (1, 1), (1, 2)], 3, C.GREEN),            # Z
+    ([(0, 1), (1, 0), (1, 1), (1, 2)], 1, C.BLUE),             # T  -> clears 2
 ]
 
 
@@ -49,8 +53,12 @@ def fits(grid, cells, col, row):
     return True
 
 
+def entry_col(cells):
+    return COLS - 1 - max(dc for dc, _ in cells)
+
+
 def landing_col(grid, cells, row):
-    col = ENTRY_COL
+    col = entry_col(cells)
     while col > 0 and fits(grid, cells, col - 1, row):
         col -= 1
     return col
@@ -70,18 +78,22 @@ def clear(grid, columns):
     return grid
 
 
-def draw(frame, grid, flashing=()):
+def draw(frame, grid, flashing=(), flash_on=True):
     for (c, r), color in grid.items():
-        frame.rect(c * 2, r * 2, 2, 2, C.WHITE if c in flashing else color, fill=True)
+        if c in flashing:
+            color = C.WHITE if flash_on else color
+        frame.rect(c * 2, r * 2, 2, 2, color, fill=True)
 
 
 def build():
     anim = Animation(delay=DELAY)
-    grid = dict(INITIAL)
+    grid = {}
     for cells, row, color in PIECES:
+        start = entry_col(cells)
         target = landing_col(grid, cells, row)
         for step in range(SLIDE_FRAMES):
-            col = round(ENTRY_COL - (ENTRY_COL - target) * (step + 1) / SLIDE_FRAMES) if step < SLIDE_FRAMES - 1 else target
+            t = (step + 1) / SLIDE_FRAMES
+            col = target if step == SLIDE_FRAMES - 1 else round(start - (start - target) * t)
             frame = anim.frame()
             draw(frame, grid)
             draw(frame, {(col + dc, row + dr): color for dc, dr in cells})
@@ -89,12 +101,14 @@ def build():
             grid[(target + dc, row + dr)] = color
         full = full_columns(grid)
         if full:
-            for _ in range(2):
-                draw(anim.frame(), grid, flashing=full)
+            for k in range(FLASH_FRAMES):
+                draw(anim.frame(), grid, flashing=full, flash_on=k != 1)
             grid = clear(grid, full)
         draw(anim.frame(), grid)
+    assert not grid, grid
     while len(anim) < FRAMES:
-        draw(anim.frame(), grid)
+        frame = anim.frame()
+        frame.text("ALL CLEAR", "center", 4, C.GREEN if len(anim) % 2 else C.WHITE)
     assert len(anim) == FRAMES, len(anim)
     return anim
 

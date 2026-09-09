@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """
-Fireworks -- three shells, staggered so one is always doing something.
+Fireworks -- eight shells, staggered so one is always doing something.
 
 Each shell rises as a single yellow spark with a fading tail, bursts at its
 apex into a ring of particles, and the particles fall under gravity while
 cooling: the shell's bright colour for a few frames, then its dim partner,
-then blue embers, then gone. The launches are timed so the last ember of the
-third shell dies on the final frame.
+then blue embers, then gone. Two go up almost together at the end as a
+finale, and the last ember dies on the final frame.
 """
 
 from __future__ import annotations
@@ -20,7 +20,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from jtkit import Animation, colors as C  # noqa: E402
 
-FRAMES = 24
+FRAMES = 53          # device maximum: room for a proper display
 DELAY = 110
 SEED = 7
 
@@ -33,6 +33,11 @@ SHELLS = [
     (0, 22, 6, 4, C.YELLOW, C.RED),
     (5, 66, 6, 3, C.WHITE, C.CYAN),
     (10, 46, 5, 5, C.GREEN, C.YELLOW),
+    (16, 82, 7, 4, C.MAGENTA, C.BLUE),
+    (22, 14, 6, 3, C.CYAN, C.BLUE),
+    (28, 54, 6, 4, C.RED, C.MAGENTA),
+    (34, 32, 6, 3, C.WHITE, C.CYAN),
+    (37, 72, 6, 4, C.YELLOW, C.RED),      # finale pair with the one above
 ]
 
 

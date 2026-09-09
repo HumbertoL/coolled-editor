@@ -3,8 +3,9 @@
 Eyes -- a pair of them, watching the room.
 
 Two white ellipses with cyan irises and black pupils. They glance left, glance
-right, and blink twice -- one full blink and one quick one -- because a face
-that never blinks is unsettling, and a sign that blinks at you is funny.
+right, blink, look up as if thinking, look down, double-blink, and squint
+sideways at whoever is in the room -- because a face that never blinks is
+unsettling, and a sign that side-eyes you is funny.
 
 Blinking is done by shrinking the ellipse's vertical radius, so the lids close
 from both edges toward the middle, the way a cartoon blink does.
@@ -19,7 +20,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from jtkit import Animation, colors as C  # noqa: E402
 
-FRAMES = 24
+FRAMES = 53          # device maximum: a whole routine instead of one glance each way
 DELAY = 120
 
 EYES = [34, 61]
@@ -28,13 +29,18 @@ RX, RY = 7.0, 6.0
 
 # Per frame: (pupil dx, pupil dy, openness 0..1)
 SCRIPT = (
-    [(0, 0, 1.0)] * 5
-    + [(-3, 0, 1.0)] * 4
-    + [(3, 1, 1.0)] * 4
-    + [(0, 0, 0.4), (0, 0, 0.0), (0, 0, 0.5)]
-    + [(0, 0, 1.0)] * 5
-    + [(0, 0, 0.1)]
-    + [(0, 0, 1.0)] * 2
+    [(0, 0, 1.0)] * 6
+    + [(-3, 0, 1.0)] * 5
+    + [(0, 0, 1.0)] * 3
+    + [(3, 1, 1.0)] * 5
+    + [(0, 0, 0.4), (0, 0, 0.0), (0, 0, 0.5)]           # blink
+    + [(0, 0, 1.0)] * 4
+    + [(-2, -2, 1.0)] * 4                                 # up and left, thinking
+    + [(0, 2, 1.0)] * 4                                   # down
+    + [(0, 0, 0.4), (0, 0, 0.0), (0, 0, 0.5), (0, 0, 0.0), (0, 0, 0.5)]   # double blink
+    + [(0, 0, 1.0)] * 6
+    + [(2, 0, 0.5)] * 4                                   # sideways squint
+    + [(0, 0, 1.0)] * 4
 )
 assert len(SCRIPT) == FRAMES
 

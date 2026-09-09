@@ -13,7 +13,9 @@ that has survived a generation is cyan, and anything older is blue. Active
 regions flicker white while settled structures sink to blue, so you can see
 where the computation is still happening.
 
-The loop is deliberately not seamless -- Life does not return to its seed.
+At 53 generations the soup has time to actually settle: the last third is
+mostly blinkers and still lifes in blue with a few white sparks left. The
+loop is deliberately not seamless -- Life does not return to its seed.
 The jump back reads as a reseed, which suits it.
 """
 
@@ -28,9 +30,10 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from jtkit import Animation, colors as C  # noqa: E402
 
 WIDTH, HEIGHT = 96, 16
-FRAMES = 24
-DELAY = 180
-SEED = 11           # fixed so the file is reproducible
+FRAMES = 53         # the measured device maximum; Life earns the room
+DELAY = 150
+SEED = 16           # fixed so the file is reproducible; chosen from a scan of
+                    # seeds 11-39 as the one still busiest at generation 53
 SOUP_DENSITY = 0.32
 
 GLIDER = [(0, 1), (1, 2), (2, 0), (2, 1), (2, 2)]

@@ -7,9 +7,11 @@ onto the x-z plane, which is the view that shows both lobes. The panel is 6x
 wider than it is tall so the wings get squashed, but the two-lobed shape and
 the way the trajectory hops between them survive.
 
-Rather than a short comet, the whole path so far stays lit: the oldest in blue,
-the recent past in cyan, the head white. So over the loop the attractor is
-traced out from nothing, then clears and begins again. Not seamless -- chaos
+Rather than a short comet, a long stretch of path stays lit: the oldest in
+blue, the recent past in cyan, the head white. The attractor is traced out
+from nothing, then the tail is let go at the same rate the head advances, so
+the outline stays readable instead of filling in to a solid slab -- which is
+what happened at the first, longer setting. Not seamless -- chaos
 does not loop -- but the reset reads as a fresh pen stroke.
 """
 
@@ -22,16 +24,17 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from jtkit import Animation, colors as C  # noqa: E402
 
-FRAMES = 24
+FRAMES = 53          # device maximum: a longer trace, worth it here
 DELAY = 90
 
 SIGMA, RHO, BETA = 10.0, 28.0, 8.0 / 3.0
 DT = 0.008
-STEPS_PER_FRAME = 90
+STEPS_PER_FRAME = 70
 SETTLE_STEPS = 2000
 
 HEAD = 12
 RECENT = 90
+EXPIRE = 450         # steps after which the trail is let go
 
 
 def step(x, y, z):
@@ -68,6 +71,8 @@ def build():
         drawn = (index + 1) * STEPS_PER_FRAME
         for i in range(drawn):
             age = drawn - 1 - i
+            if age >= EXPIRE:
+                continue
             if age < HEAD:
                 color = C.WHITE
             elif age < RECENT:
