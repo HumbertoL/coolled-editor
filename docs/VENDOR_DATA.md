@@ -265,3 +265,110 @@ One thing to know reading `OkHttpUtils`: the size in a catalog path is built as
 several fragments call `getMaterialCategoryFromServer` with the row twice
 instead of column-and-row, which is why `16x16` paths exist on a CDN tree whose
 panels are 16x96.
+
+# What else is in the APK
+
+Things found while pulling the catalog out, kept here because they answer
+questions the `.jt` format alone doesn't.
+
+## `mode`, `speed` and `stayTime`
+
+A graffiti `.jt` carries `graffitiType`, `mode`, `speed` and `stayTime`
+alongside the pixels. `mode` is the panel's **display effect**, and the values
+come straight from the app's `mode_string` array:
+
+| `mode` | Effect |
+|-------:|--------|
+| 1 | Static |
+| 2 | Left |
+| 3 | Right |
+| 4 | Up |
+| 5 | Down |
+| 6 | Snowflake |
+| 7 | Picture |
+| 8 | Laser |
+
+Which is exactly `coolledx.Mode` in the driver, arrived at independently.
+
+The app's own defaults for a new graffiti item are `graffitiType 1, mode 1,
+speed 247, stayTime 2`. This editor had `mode` and `speed` transposed --
+`mode: 247` is not a valid effect. Fixed; it never mattered for sending,
+because `create_jt_payload` in the driver reads only the pixel data and
+`delays`, but it does matter if a file is opened in the app.
+
+Brightness and speed are separate BLE commands, not file fields: both are
+0-255, with the app defaulting brightness to 255 and speed to 127.
+
+## BLE command bytes
+
+`Light1696Utils` builds every command as
+`01 <length> <payload...> 03`, where the payload's first byte selects the
+command and any byte in `01..03` inside it is escaped as `02` followed by
+`byte ^ 0x04`:
+
+| Byte | Command |
+|-----:|---------|
+| `01` | music / rhythm data |
+| `02` | text |
+| `03` | draw (graffiti and animation pixels) |
+| `05` | icon |
+| `06` | mode (the table above) |
+| `07` | speed |
+| `08` | brightness |
+| `09` | power on/off |
+| `0a` | begin transfer |
+| `0d` | check password |
+
+The driver already implements this framing; it is recorded here because the
+escaping is easy to miss when reading a capture.
+
+## Bundled bitmap fonts
+
+The app does not download fonts -- `font_url` exists in the config model but
+the live `config.json` omits it. Instead the fonts ship in the APK's `assets/`,
+as flat arrays indexed directly by Unicode code point, with no header and no
+index:
+
+| Asset | Glyph | Bytes/glyph | Offset |
+|-------|-------|------------:|--------|
+| `8_small`, `8_large` | 8x8 | 8 | `cp * 8` |
+| `UNICODE12`, `UNICODE12_BOLD` | 12x16 | 24 | `cp * 24` |
+| `UNICODE16`, `UNICODE16_bold` | 16x16 | 32 | `cp * 32` |
+| `32_16_small`/`_large`, `32_24_*`, `32_32_*` | 32 rows | 32-128 | `cp * n` |
+
+Each covers the whole Basic Multilingual Plane -- `UNICODE16` is exactly
+65536 x 32 bytes -- so CJK, Cyrillic and Greek are all present.
+
+The layout is **the same column-major, MSB-at-top packing the panel uses**:
+for a 16x16 glyph, 16 columns of 2 bytes, first byte rows 0-7, bit 7 topmost.
+Verified by decoding `U+0041` and `U+4E2D`. So glyph bytes drop into a `.jt`
+plane with no transformation, and a 16-row font matches this panel's height
+exactly.
+
+Glyphs are stored full-width; the app trims blank leading and trailing columns
+per glyph to space text proportionally.
+
+Nothing in this repo uses them yet. A text tool is mostly a matter of reading
+the right 32 bytes per character -- worth knowing before writing a rasteriser
+against a TTF instead. The fonts appear to be rasterised from the Noto faces
+that ship alongside them in `assets/`.
+
+## Emoji and icon sets
+
+`assets/emoji_<size>.json` holds small inline icons, in the same `sendData`
+shape as the animation packs (24 zero bytes, frame count, 16-bit delay, then
+planes). `emoji_1696.json` -- the one for this panel -- has 151 single-frame
+entries, but each is **16x16**, not 16x96: 96 bytes of pixel data, three
+planes of 16 columns. They are stamps meant to be placed inline in text, so
+they need positioning on the 96-wide canvas rather than loading as samples.
+
+Each entry also carries a `showData` field: 32 bytes, the same 16x16 glyph
+packing, used for the picker thumbnail.
+
+## Other assets worth knowing about
+
+- `data<size>_static.json` / `data<size>_dynamic.json` for 1248, 1616, 1632,
+  1664, 1696, 3232 and `CooledA` -- the same packs the `animation_update_data`
+  URLs serve, bundled as a fallback. `data1696_*` are byte-identical to what
+  this repo vendors.
+- `coolledu.bin`, and `apphtml/` for the in-app help pages.

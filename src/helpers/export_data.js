@@ -23,15 +23,19 @@ export const buildFile = (imageData, chunks) => {
   return url;
 };
 
+// Matches the defaults the CoolLED1248 app writes (ShareGraffitiItem):
+// graffitiType 1, mode 1 (Static), speed 247, stayTime 2. `mode` is the
+// display effect, 1-8; see docs/VENDOR_DATA.md. The driver reads only the
+// pixel data and `delays`, but the app validates these, so keep them sane.
 const graffitiTemplate = [
   {
     data: {
       graffitiData: [],
       graffitiType: 1,
-      mode: 247,
+      mode: 1,
       pixelHeight: 16,
       pixelWidth: 96,
-      speed: 1,
+      speed: 247,
       stayTime: 2,
     },
     dataType: 1,
