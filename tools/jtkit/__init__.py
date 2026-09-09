@@ -17,8 +17,12 @@ catches packing mistakes.
 from . import colors, font, preview
 from .animation import (
     DEFAULT_DELAY_MS,
+    MAX_DEVICE_FRAMES,
+    MAX_DEVICE_PAYLOAD_BYTES,
     MAX_TESTED_FRAMES,
+    VENDOR_FRAMES,
     Animation,
+    FrameCountWarning,
     load_jt,
     round_trip_ok,
 )
@@ -34,7 +38,11 @@ __all__ = [
     "Animation",
     "Canvas",
     "DEFAULT_DELAY_MS",
+    "FrameCountWarning",
+    "MAX_DEVICE_FRAMES",
+    "MAX_DEVICE_PAYLOAD_BYTES",
     "MAX_TESTED_FRAMES",
+    "VENDOR_FRAMES",
     "colors",
     "font",
     "gradient",

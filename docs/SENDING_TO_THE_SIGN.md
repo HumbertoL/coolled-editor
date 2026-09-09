@@ -141,16 +141,33 @@ Frame-ladder results, from `tools/animations/frame_ladder.py`:
 | 24 | 13,851 | 109 | works reliably |
 | 40 | 23,067 | 181 | works; failed once, succeeded on retry |
 | 52 | 29,979 | 235 | works |
-| 56 | 32,283 | 253 | reports success, sign never applies it |
-| 60 | 34,587 | 271 | reports success, sign never applies it |
-| 113 | 65,115 | 509 | reports success, sign never applies it |
+| **53** | **30,555** | **239** | **works — the maximum** |
+| 54 | 31,131 | 243 | reports success, sign never applies it |
+| 56 | 32,283 | 253 | as 54 |
+| 60 | 34,587 | 271 | as 54 |
+| 113 | 65,115 | 509 | as 54 |
 
-**The hardware limit is between 52 and 56 frames** — roughly 30KB of payload
-— far below the protocol's 113. Treat 24 as the safe working figure, since
-even 40 proved flaky.
+**53 frames is the limit** on a 96x16 panel — far below the protocol's 113.
+Treat 24 as the safe working figure, since 40 proved flaky and needed a
+retry.
 
-A 32KB buffer would have allowed 56 frames, so that is ruled out. 30KB caps
-at 53 frames and 31KB at 55, so the exact boundary distinguishes them.
+### It is a size limit, not a frame limit
+
+The cap falls between 30,555 bytes (53 frames, works) and 31,131 (54, fails).
+**30KB — 30,720 bytes — is the only round number in that window**, and it
+predicts a maximum of exactly 53 frames: `(30720 - 27) // 576 = 53`. A 32KB
+buffer would have allowed 56, which failed, so that is ruled out.
+
+Reading it as a byte cap matters for other hardware: a 16x64 panel uses 384
+bytes per frame, so the same 30KB would hold about 79 frames.
+
+### Distinguishing an accepted transfer from a rejected one
+
+The sign's own percent counter is the tell. On a file it accepts, the counter
+runs after the last chunk as it commits the animation. On an oversized file
+**the counter never appears at all** — the sign discards the data without
+attempting to apply it. That is the only host-visible difference, since the
+BLE traffic reports success either way.
 
 ## The transfer and the apply are separate phases
 

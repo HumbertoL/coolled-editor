@@ -86,12 +86,18 @@ Measured on a CoolLEDX 16x96:
 | --- | --- | --- |
 | 24 | 13.9KB | works reliably |
 | 40 | 23.1KB | works, but failed once and needed a retry |
-| 52 | 30.0KB | works |
-| 56 | 32.3KB | **transfer reports success; the sign never applies it** |
-| 60, 113 | 34.6KB, 65.1KB | same as 56 |
+| **53** | **30,555 B** | **works — the measured maximum** |
+| 54 | 31,131 B | **transfer reports success; the sign never applies it** |
+| 56, 60, 113 | up to 65.1KB | same as 54 |
 
-So the hardware limit sits **between 52 and 56 frames** (~30KB), well under
-the protocol's 113. Stay at or below 24 for anything that matters.
+**53 frames is the hard hardware limit** on a 96x16 sign, well under the
+protocol's 113. `jtkit` warns past it, and warns more mildly past 24.
+
+The real constraint is almost certainly **payload size, not frame count**: the
+cap falls between 30,555 and 31,131 bytes, and 30KB (30,720) is the only round
+number in that window — it predicts exactly 53. So a narrower panel would get
+proportionally more frames. Stay at or below 24 for anything that matters,
+since 40 proved flaky.
 
 The 113 is the protocol's own ceiling: the driver writes the payload length
 in two bytes, so past 65535 bytes it raises `OverflowError` before anything

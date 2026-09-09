@@ -36,7 +36,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from jtkit import Animation, Canvas, colors as C  # noqa: E402
+from jtkit import Animation, Canvas, FrameCountWarning, colors as C  # noqa: E402
 
 # 27-byte header, and the length field that caps the whole payload.
 HEADER_BYTES = 27
@@ -129,10 +129,10 @@ def main():
 
     # Animation.to_jt() warns above 24 frames, which is exactly what this
     # tool exists to exceed -- the warning would be noise on every run.
-    # filterwarnings anchors the pattern at the start of the message.
-    warnings.filterwarnings(
-        "ignore", message=".*exceeds.*vendor packs.*", category=UserWarning
-    )
+    # Exceeding the frame guidance is the whole point of this tool, so the
+    # warning would be noise on every run. Filtered by category rather than
+    # message so rewording the warning cannot silently re-enable it.
+    warnings.filterwarnings("ignore", category=FrameCountWarning)
 
     print(f"{'frames':>7} {'payload':>9} {'loop':>7}  file")
     written = []

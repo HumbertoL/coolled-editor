@@ -124,11 +124,14 @@ sign agrees with you.
 
 ## Limits
 
-- **Keep it to 24 frames.** Measured on hardware: 24 works reliably, 40 works
-  but proved flaky, and 60 and 113 transfer "successfully" while the sign
-  silently fails to apply them. The real limit is between 40 and 60, so 24 is
-  both the vendor's figure and the safe one. `Animation.to_jt()` warns past
-  it.
+- **53 frames is the hard limit; keep it to 24.** Measured on hardware: 24
+  works reliably, 40 works but proved flaky and needed a retry, 53 is the
+  maximum that applies, and 54 upward transfer "successfully" while the sign
+  silently keeps its previous content. `Animation.to_jt()` warns past 53, and
+  more mildly past 24.
+- The cap is really **payload size** — between 30,555 and 31,131 bytes, so
+  almost certainly 30KB. `MAX_DEVICE_PAYLOAD_BYTES` records it. A narrower
+  panel gets proportionally more frames.
 - **Frame-based scrolling is impractical.** A 20-character message is ~119px
   wide, so scrolling it across a 96px panel needs ~215px of travel — 54 frames
   at a smooth 4px per frame, well past the ceiling. This is presumably why the
