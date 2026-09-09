@@ -112,6 +112,16 @@ const SecondaryButton = styled.button`
   }
 `;
 
+// Drawing tools live with the palette under the grid, not in the toolbar at
+// the top -- that row is files and output (upload, export, send), which is a
+// different kind of action from putting pixels down.
+const DrawTools = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 20px;
+`;
+
 const Nav = styled.nav`
   display: flex;
   justify-content: center;
@@ -341,26 +351,12 @@ function App() {
               <Divider />
               <StyledButton onClick={handleDownload}>Export .jt</StyledButton>
               <Divider />
-              <SecondaryButton onClick={() => setShowText((shown) => !shown)}>
-                {showText ? 'Close text' : 'Add text'}
-              </SecondaryButton>
-              <Divider />
               <SecondaryButton onClick={() => setShowDeploy((shown) => !shown)}>
                 {showDeploy ? 'Hide' : 'Send to sign'}
               </SecondaryButton>
             </Toolbar>
 
             {fileError && <ErrorBanner>{fileError}</ErrorBanner>}
-
-            {showText && (
-              <TextTool
-                imageData={imageData}
-                setImageData={setImageData}
-                frame={frame}
-                selectedColor={selectedColor}
-                onClose={() => setShowText(false)}
-              />
-            )}
 
             {showDeploy && (
               <DeployInstructions lastExportedFile={lastExportedFile} />
@@ -395,6 +391,22 @@ function App() {
               setSelectedColor={setSelectedColor}
               selectedColor={selectedColor}
             />
+
+            <DrawTools>
+              <SecondaryButton onClick={() => setShowText((shown) => !shown)}>
+                {showText ? 'Close text' : 'Add text'}
+              </SecondaryButton>
+            </DrawTools>
+
+            {showText && (
+              <TextTool
+                imageData={imageData}
+                setImageData={setImageData}
+                frame={frame}
+                selectedColor={selectedColor}
+                onClose={() => setShowText(false)}
+              />
+            )}
           </>
         )}
       </header>

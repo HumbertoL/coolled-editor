@@ -382,8 +382,9 @@ knowing:
   cost an hour: text laid out as all-missing, with the pages sitting loaded
   in the map.
 
-The **Add text** button in the editor toolbar sets a string and stamps it into
-the current frame. It stamps rather than keeping a text layer, so the pixels
+The **Add text** button sets a string and stamps it into the current frame. It
+sits with the colour palette under the grid rather than in the top toolbar:
+that row is files and output, which is a different kind of action. It stamps rather than keeping a text layer, so the pixels
 stay editable afterwards, which on 96x16 they usually need to be.
 
 Scrolling text is deliberately not part of this. A 20-character message needs

@@ -52,9 +52,9 @@ that aren't upstream yet — without them the driver can't import, can't encode 
 command, and can't write to the characteristic on macOS.
 # Setting text
 
-**Add text** in the toolbar sets a string in the CoolLED1248 app's own 16px
-bitmap font, extracted from its APK -- so accented Latin, Greek, Cyrillic,
-Kana and CJK all work, not just ASCII. Alignment, tracking and a
+**Add text**, under the colour palette, sets a string in the CoolLED1248 app's
+own 16px bitmap font, extracted from its APK -- so accented Latin, Greek,
+Cyrillic, Kana and CJK all work, not just ASCII. Alignment, tracking and a
 monospace/proportional toggle are there, with a live preview and a column
 count so you can see what fits in 96.
 
