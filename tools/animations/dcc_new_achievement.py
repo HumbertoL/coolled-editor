@@ -38,8 +38,12 @@ def star(canvas, cx, cy, color):
 def build():
     anim = Animation(delay=DELAY)
 
-    top_width = Canvas.text_width(TOP)
-    bottom_width = Canvas.text_width(BOTTOM)
+    # Proportional spacing matters here because of the trailing '!': as a
+    # single column of ink in a 5-wide cell, fixed spacing left a 3px hole
+    # before it and 2 dead columns after, which pushed the whole bottom line
+    # 3px off centre.
+    top_width = Canvas.text_width(TOP, proportional=True)
+    bottom_width = Canvas.text_width(BOTTOM, proportional=True)
     top_x = (anim.width - top_width) // 2
     bottom_x = (anim.width - bottom_width) // 2
     top_right = top_x + top_width
@@ -83,8 +87,8 @@ def build():
 
         star_color = C.CYAN if phase in ("wipe", "hold") else C.BLUE
 
-        frame.text(TOP, top_x, TOP_Y, top_color)
-        frame.text(BOTTOM, bottom_x, BOTTOM_Y, bottom_color)
+        frame.text(TOP, top_x, TOP_Y, top_color, proportional=True)
+        frame.text(BOTTOM, bottom_x, BOTTOM_Y, bottom_color, proportional=True)
         for cx, cy in STARS:
             star(frame, cx, cy, star_color)
 

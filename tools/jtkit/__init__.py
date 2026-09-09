@@ -28,6 +28,8 @@ from .animation import (
 )
 from .canvas import (
     Canvas,
+    glyph_ink,
+    layout_text,
     gradient,
     highlight,
     vertical_wipe,
@@ -45,8 +47,10 @@ __all__ = [
     "VENDOR_FRAMES",
     "colors",
     "font",
+    "glyph_ink",
     "gradient",
     "highlight",
+    "layout_text",
     "load_jt",
     "preview",
     "round_trip_ok",

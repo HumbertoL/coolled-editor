@@ -15,6 +15,55 @@ from .font import FONT_5X7, GLYPH_HEIGHT, GLYPH_WIDTH, glyph
 
 DEFAULT_TRACKING = 1
 
+#: Advance for a space when spacing proportionally, since it has no ink.
+BLANK_ADVANCE = 3
+
+
+def glyph_ink(char, fold_case=True):
+    """First and last cell column containing ink, or None for a blank glyph."""
+    bitmap = glyph(char, fold_case=fold_case)
+    columns = [
+        column
+        for column in range(GLYPH_WIDTH)
+        if any(row[column] == "#" for row in bitmap)
+    ]
+    if not columns:
+        return None
+    return columns[0], columns[-1]
+
+
+def layout_text(text, tracking=DEFAULT_TRACKING, proportional=False, fold_case=True):
+    """
+    Work out where each glyph goes, and how wide the string is.
+
+    With ``proportional``, each glyph advances by its own ink width instead of
+    the full 5-pixel cell, and its side bearings are trimmed. That matters for
+    narrow glyphs: '!' is a single column of ink in a 5-wide cell, so fixed
+    spacing leaves a 3px hole before it and 2 dead columns after -- which also
+    throws off centring, since the nominal width counts space that is never
+    inked.
+
+    Returns ``([(char, cell_x)], width)``, where ``cell_x`` is where the
+    glyph's cell origin goes; for a trimmed glyph that is left of its ink.
+    """
+    positions = []
+    x = 0
+    for char in text:
+        ink = glyph_ink(char, fold_case=fold_case) if proportional else None
+        if not proportional:
+            positions.append((char, x))
+            advance = GLYPH_WIDTH
+        elif ink is None:
+            positions.append((char, x))
+            advance = BLANK_ADVANCE
+        else:
+            first, last = ink
+            # Shift the cell so the glyph's ink starts exactly at x.
+            positions.append((char, x - first))
+            advance = last - first + 1
+        x += advance + tracking
+    return positions, max(0, x - tracking)
+
 
 class Canvas:
     """A width x height grid of palette colors. Unset pixels read as black."""
@@ -68,14 +117,14 @@ class Canvas:
     # -- text ------------------------------------------------------------
 
     @staticmethod
-    def text_width(text, tracking=DEFAULT_TRACKING, font=FONT_5X7):
+    def text_width(text, tracking=DEFAULT_TRACKING, font=FONT_5X7, proportional=False):
         del font
         if not text:
             return 0
-        return len(text) * (GLYPH_WIDTH + tracking) - tracking
+        return layout_text(text, tracking, proportional)[1]
 
-    def center_x(self, text, tracking=DEFAULT_TRACKING):
-        return (self.width - self.text_width(text, tracking)) // 2
+    def center_x(self, text, tracking=DEFAULT_TRACKING, proportional=False):
+        return (self.width - self.text_width(text, tracking, proportional=proportional)) // 2
 
     def text(
         self,
@@ -85,21 +134,24 @@ class Canvas:
         color=colors.WHITE,
         tracking=DEFAULT_TRACKING,
         fold_case=True,
+        proportional=False,
     ):
         """
         Draw ``text`` with its top-left at (x, y).
 
         ``x`` may be ``"center"`` to centre the string horizontally.
+        ``proportional`` trims each glyph's side bearings -- see
+        :func:`layout_text`.
         """
         if x == "center":
-            x = self.center_x(text, tracking)
-        step = GLYPH_WIDTH + tracking
-        for index, char in enumerate(text):
+            x = self.center_x(text, tracking, proportional=proportional)
+        positions, _ = layout_text(text, tracking, proportional, fold_case)
+        for char, cell_x in positions:
             bitmap = glyph(char, fold_case=fold_case)
             for row in range(GLYPH_HEIGHT):
                 for col in range(GLYPH_WIDTH):
                     if bitmap[row][col] == "#":
-                        self.pixel(x + index * step + col, y + row, color)
+                        self.pixel(x + cell_x + col, y + row, color)
         return self
 
     # -- shapes ----------------------------------------------------------
