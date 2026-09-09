@@ -211,9 +211,17 @@ chunks had already gone through. And the command hex in the error names
 chunk 0, because `truncated_command()` always prints the first chunk, not the
 one that failed.
 
-The fix is to split on the escaped length rather than the raw length. Content
-that does not escape heavily would chunk identically, so it need not change
-existing behaviour.
+**Fixed** in `f0344b5`: chunks still aim for 128 payload bytes but shrink
+where escaping would push the packet past `MAX_PACKET_BYTES` (180). That
+figure comes from measurement — across 34 image and animation files ordinary
+content peaks at 170 bytes — so nothing that already worked is re-chunked. 33
+of the 34 produce byte-identical chunks, including every file confirmed on
+hardware; only `maxesc_053` re-chunks, 239 chunks to 351, reassembling to
+exactly the original payload.
+
+Not upstream yet, and worth a caveat: `plasma.jt` and `PancakesVWaffles.jt`
+sit at 170-byte packets and have never been sent to a sign. If either fails,
+lowering `MAX_PACKET_BYTES` is the knob — it costs only a few extra chunks.
 
 This is also a third distinct failure mode, alongside the other two:
 
