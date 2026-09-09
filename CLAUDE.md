@@ -80,11 +80,29 @@ reads the data. So:
 
 ## Frame limits
 
-24 frames is the largest the vendor's own packs use, so it is the most that is
-known-good. The protocol's hard ceiling is **113 frames** — the driver writes
-the payload length in two bytes, so past 65535 bytes it raises `OverflowError`
-before anything reaches the sign. What the *hardware* accepts is still
-unmeasured; `tools/animations/frame_ladder.py` exists to measure it.
+Measured on a CoolLEDX 16x96:
+
+| Frames | Payload | Result |
+| --- | --- | --- |
+| 24 | 13.9KB | works reliably |
+| 40 | 23.1KB | works, but failed once and needed a retry |
+| 60 | 34.6KB | **transfer reports success; the sign never applies it** |
+| 113 | 65.1KB | same as 60 |
+
+So the hardware limit sits **between 40 and 60 frames**, well under the
+protocol's 113. Stay at or below 24 for anything that matters.
+
+The 113 is the protocol's own ceiling: the driver writes the payload length
+in two bytes, so past 65535 bytes it raises `OverflowError` before anything
+reaches the sign.
+
+**A successful-looking send does not mean the sign applied it.** The transfer
+and the apply are separate phases — after the last chunk the sign runs its own
+percent counter to commit the animation, and that is where oversized files
+fail. The driver has no visibility into it: `handle_notify` hardcodes
+`ErrorCode.SUCCESS` for every notification and never reads the status byte the
+sign sends back, so "LED sign update completed successfully" means only that
+every chunk was written and acked.
 
 Large sends also need `--command-timeout 8` or so: the per-chunk
 acknowledgement timeout defaults to 1.0s, and a 24-frame animation is 109

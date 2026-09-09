@@ -124,9 +124,11 @@ sign agrees with you.
 
 ## Limits
 
-- **Keep it to 24 frames.** That is the largest frame count in the vendor
-  packs, so it is the most that is known-good; `Animation.to_jt()` warns past
-  it. 24 frames is ~13.8KB, and the sign may refuse or truncate more.
+- **Keep it to 24 frames.** Measured on hardware: 24 works reliably, 40 works
+  but proved flaky, and 60 and 113 transfer "successfully" while the sign
+  silently fails to apply them. The real limit is between 40 and 60, so 24 is
+  both the vendor's figure and the safe one. `Animation.to_jt()` warns past
+  it.
 - **Frame-based scrolling is impractical.** A 20-character message is ~119px
   wide, so scrolling it across a 96px panel needs ~215px of travel — 54 frames
   at a smooth 4px per frame, well past the ceiling. This is presumably why the

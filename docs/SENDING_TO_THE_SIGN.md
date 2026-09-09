@@ -134,13 +134,52 @@ A CoolLEDX 16x96, over CoreBluetooth on macOS:
   Any shift or plane swap is immediately visible.
 - Multi-frame animation — `LFG.jt`, 3 frames, 1755-byte payload.
 
-**That is the whole list.** The largest payload ever confirmed on hardware is
-1755 bytes. Everything above that is untested, including every 24-frame
-animation in `src/sample/` — `dcc_new_achievement.jt`, `plasma.jt`,
-`life.jt` and `rain.jt` are all ~13.8KB and have only been verified by
-decoding the written file, never against the panel.
+Frame-ladder results, from `tools/animations/frame_ladder.py`:
 
-So two things remain unmeasured: the largest payload the sign accepts, and
-the largest frame count. `tools/animations/frame_ladder.py` measures both —
-it prints frames and payload bytes side by side, since the sign more likely
-cares about size than frame count.
+| Frames | Payload | Chunks | Result |
+| --- | --- | --- | --- |
+| 24 | 13,851 | 109 | works reliably |
+| 40 | 23,067 | 181 | works; failed once, succeeded on retry |
+| 60 | 34,587 | 271 | reports success, sign never applies it |
+| 113 | 65,115 | 509 | reports success, sign never applies it |
+
+**The hardware limit is between 40 and 60 frames**, far below the protocol's
+113. Treat 24 as the safe working figure, since even 40 proved flaky.
+
+## The transfer and the apply are separate phases
+
+After the last chunk is acked, the sign runs **its own percent counter** to
+commit the animation. That happens *after* the transfer, not during it. An
+oversized file transfers fine and then fails at that commit step, so the
+panel keeps showing whatever it had before.
+
+The driver cannot see this, and will tell you it worked:
+
+```python
+# client.py, handle_notify
+# TODO:  This isn't entirely accurate.  I just don't know how to
+#        properly interpret the errors from the devices yet.
+self.current_command.set_command_status(CommandStatus.ACKNOWLEDGED)
+self.current_command.error_code = ErrorCode.SUCCESS
+```
+
+Every notification is recorded as success and the status byte the sign
+returns is discarded, even though `ErrorCode` already enumerates
+`TRANSMISSION_FAILED`, `DEVICE_ABNORMALITY`, `DATA_ERROR`,
+`DATA_LENGTH_ERROR`, `DATA_ID_ERROR` and `DATA_CHECKSUM_ERROR`. So
+"LED sign update completed successfully" means only that every chunk was
+written and acked.
+
+The sign is quite possibly reporting `DATA_LENGTH_ERROR` (0x04) on the
+oversized transfers and the driver is throwing it away. The raw bytes are
+already in the debug log, so this is checkable:
+
+```sh
+cd ~/workspace/coolledx-driver && PYTHONPATH=src .venv/bin/python \
+  utils/tweak_sign.py -l DEBUG --command-timeout 8 \
+  -jt ~/workspace/coolled-editor/tools/out/ladder_060.jt 2>&1 | tee /tmp/send60.log
+grep -o 'data: [0-9a-f]*' /tmp/send60.log | sort | uniq -c | sort -rn | head
+```
+
+Comparing the distinct notification payloads from a failing send against a
+working 24-frame one should show which byte carries the status.
