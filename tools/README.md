@@ -167,6 +167,11 @@ demand). Send the largest, then read the highest counter the panel reaches:
 if it cycles but never passes 61, that is your limit. Bisect with `--frames`
 from there.
 
+Pass `--command-timeout 8` when sending these. The default per-chunk ack
+timeout is 1.0s and the largest ladder file is 509 chunks, so a slow ack
+aborts the transfer part way -- which looks exactly like the sign truncating.
+See [../docs/SENDING_TO_THE_SIGN.md](../docs/SENDING_TO_THE_SIGN.md).
+
 Note that frame count and payload size are different questions, and the sign
 more likely cares about the latter; the table the script prints gives both.
 
@@ -174,7 +179,7 @@ more likely cares about the latter; the table the script prints gives both.
 
 ```sh
 cd ~/workspace/coolledx-driver && PYTHONPATH=src .venv/bin/python \
-  utils/tweak_sign.py -jt ~/workspace/coolled-editor/src/sample/plasma.jt
+  utils/tweak_sign.py --command-timeout 8 -jt ~/workspace/coolled-editor/src/sample/plasma.jt
 ```
 
 Force-quit the phone app first, and run it from a terminal that has Bluetooth

@@ -10,7 +10,9 @@ filled in automatically. The pieces:
 
 - This editor exports a `.jt` file (the format documented below).
 - [coolledx-driver](https://github.com/UpDryTwist/coolledx-driver) sends it to
-  the panel over Bluetooth LE, via `utils/tweak_sign.py -jt <file>`.
+  the panel over Bluetooth LE, via `utils/tweak_sign.py -jt <file>`. Pass
+  `--command-timeout 8` for anything past a few frames — the default 1s
+  per-chunk wait can abandon a large transfer part way.
 
 Assuming the driver is checked out at `~/workspace/coolledx-driver` with a venv
 holding `bleak` and `pillow`:
@@ -20,7 +22,7 @@ holding `bleak` and `pillow`:
 cd ~/workspace/coolledx-driver && PYTHONPATH=src .venv/bin/python utils/scan.py -t 15
 
 # Send an exported .jt
-cd ~/workspace/coolledx-driver && PYTHONPATH=src .venv/bin/python utils/tweak_sign.py -jt ~/Downloads/your-export.jt
+cd ~/workspace/coolledx-driver && PYTHONPATH=src .venv/bin/python utils/tweak_sign.py --command-timeout 8 -jt ~/Downloads/your-export.jt
 ```
 
 Things that will otherwise cost you an afternoon:

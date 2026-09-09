@@ -96,7 +96,33 @@ sending a notification are unrelated things, and conflating them was the bug.
 | Connection timeout | Phone reconnected; BLE allows one connection |
 | Image displays but shifted a column | Missing the length-prefix fix |
 | Multi-frame file shows colored fringing | Plane layout misread — see [CLAUDE.md](../CLAUDE.md) |
-| `did not receive a notification within 1.0 seconds` | Sign slow to ack; more likely on large payloads |
+| `did not receive a notification within 1.0 seconds` | Sign slow to ack — raise `--command-timeout`, see below |
+
+## Large files need a longer chunk timeout
+
+A payload is split into chunks, and by default each one waits only **1.0s**
+for the sign to acknowledge it. A 24-frame animation is 109 chunks; the
+protocol maximum of 113 frames is 509. One slow ack anywhere in that sequence
+raises `TimeoutError` and abandons the transfer part way, leaving a partial
+animation on the panel.
+
+So raise it for anything past a few frames:
+
+```sh
+cd ~/workspace/coolledx-driver && PYTHONPATH=src .venv/bin/python \
+  utils/tweak_sign.py --command-timeout 8 -jt ~/workspace/coolled-editor/src/sample/plasma.jt
+```
+
+`--command-timeout` is a local addition (`a7ef7a2`); `Client` always accepted
+`command_timeout` but nothing on the command line could set it. Not upstream
+yet.
+
+**This matters for reading the frame ladder.** A timeout and a genuine size
+limit both leave a short animation on the panel, so they look alike. The
+difference is that a timeout also prints an error, and the driver's handler
+misattributes it as a connection timeout. So: if a ladder file stops early
+*and* the command reported an error, retry with a larger
+`--command-timeout` before concluding you found the sign's limit.
 
 ## Verified on hardware
 

@@ -211,7 +211,7 @@ const DeployInstructions = ({ lastExportedFile }) => {
           Export, then send
         </StepLabel>
         <CommandBlock
-          command={`cd ${DRIVER_PATH} && PYTHONPATH=src .venv/bin/python utils/tweak_sign.py -jt ${jtPath}`}
+          command={`cd ${DRIVER_PATH} && PYTHONPATH=src .venv/bin/python utils/tweak_sign.py --command-timeout 8 -jt ${jtPath}`}
           note={
             lastExportedFile
               ? 'Filled in with the file you just exported.'

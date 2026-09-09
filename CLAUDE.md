@@ -86,6 +86,11 @@ the payload length in two bytes, so past 65535 bytes it raises `OverflowError`
 before anything reaches the sign. What the *hardware* accepts is still
 unmeasured; `tools/animations/frame_ladder.py` exists to measure it.
 
+Large sends also need `--command-timeout 8` or so: the per-chunk
+acknowledgement timeout defaults to 1.0s, and a 24-frame animation is 109
+chunks. A timeout abandons the transfer part way and looks identical to the
+sign truncating.
+
 Frame-based scrolling is impractical: a 20-character message needs ~54 frames
 of travel. The sign has native scroll modes for this, via the `mode` field
 that `coolledx-driver` currently ignores.

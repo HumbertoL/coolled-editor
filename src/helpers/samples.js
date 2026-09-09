@@ -342,5 +342,7 @@ export const downloadJt = (sample) => {
 
 export const sendCommandFor = (sample) => {
   const path = sample.localPath ?? `${DOWNLOADS_PATH}/${sample.downloadName}`;
-  return `cd ${DRIVER_PATH} && PYTHONPATH=src .venv/bin/python utils/tweak_sign.py -jt ${path}`;
+  // --command-timeout raises the per-chunk ack wait from 1s; without it a
+  // multi-frame animation can time out and transfer only part way.
+  return `cd ${DRIVER_PATH} && PYTHONPATH=src .venv/bin/python utils/tweak_sign.py --command-timeout 8 -jt ${path}`;
 };
