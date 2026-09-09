@@ -7,7 +7,6 @@ export const DOWNLOADS_PATH = '~/Downloads';
 
 // Bytes of pixel data for one frame: 3 bits per pixel, packed into 3 planes.
 export const BYTES_PER_FRAME = (GRID_WIDTH * GRID_HEIGHT * 3) / 8;
-const PLANE_BYTES = BYTES_PER_FRAME / 3;
 
 // A vendor payload is 24 zero bytes, a frame count, then a 16-bit speed,
 // before the pixel planes start. Same layout the driver builds.
@@ -31,11 +30,10 @@ export const VENDOR_PACKS = [
 ];
 
 /**
- * Read one pixel out of packed frame data. Each frame holds three planes
- * (red, green, blue) of one bit per pixel, walking down each column in turn.
+ * Read one bit out of the packed pixel data.
  */
-const getBit = (bytes, base, planeOffset, bitIndex) => {
-  const offset = base + planeOffset + (bitIndex >> 3);
+const getBit = (bytes, bitIndex) => {
+  const offset = bitIndex >> 3;
   if (offset >= bytes.length) {
     return 0;
   }
@@ -43,20 +41,34 @@ const getBit = (bytes, base, planeOffset, bitIndex) => {
 };
 
 /**
+ * Bit offset of a pixel within its color plane.
+ *
+ * The three color planes span the WHOLE animation rather than sitting inside
+ * each frame: all frames' red bits, then all frames' green, then all blue.
+ * Within a plane the frames sit side by side, each walking down its columns.
+ * Same layout parse_data.js reads and export_data.js writes.
+ */
+const planeBitIndex = (frameIndex, column, row) =>
+  (frameIndex * GRID_WIDTH + column) * GRID_HEIGHT + row;
+
+/** Bits in one color plane, for an animation of `frameNum` frames. */
+const planeBits = (frameNum) => frameNum * GRID_WIDTH * GRID_HEIGHT;
+
+/**
  * Draw a single frame of packed pixel data onto a 96x16 canvas. Kept
  * deliberately cheap: the samples page renders a couple hundred of these, so
  * it decodes just the one frame it needs rather than the whole animation.
  */
-export const drawFrame = (ctx, pixelBytes, frameIndex) => {
-  const base = frameIndex * BYTES_PER_FRAME;
+export const drawFrame = (ctx, pixelBytes, frameIndex, frameNum) => {
+  const plane = planeBits(frameNum);
   const image = ctx.createImageData(GRID_WIDTH, GRID_HEIGHT);
 
   for (let column = 0; column < GRID_WIDTH; column++) {
     for (let row = 0; row < GRID_HEIGHT; row++) {
-      const bitIndex = column * GRID_HEIGHT + row;
-      const r = getBit(pixelBytes, base, 0, bitIndex);
-      const g = getBit(pixelBytes, base, PLANE_BYTES, bitIndex);
-      const b = getBit(pixelBytes, base, PLANE_BYTES * 2, bitIndex);
+      const bitIndex = planeBitIndex(frameIndex, column, row);
+      const r = getBit(pixelBytes, bitIndex);
+      const g = getBit(pixelBytes, plane + bitIndex);
+      const b = getBit(pixelBytes, plane * 2 + bitIndex);
 
       const target = (row * GRID_WIDTH + column) * 4;
       image.data[target] = r * 255;
@@ -74,12 +86,18 @@ export const drawFrame = (ctx, pixelBytes, frameIndex) => {
  * animations fade in from black, and a blank still preview reads as broken.
  */
 export const firstLitFrame = (pixelBytes, frameNum) => {
+  const planeByteLength = planeBits(frameNum) / 8;
+  const frameByteLength = (GRID_WIDTH * GRID_HEIGHT) / 8;
+
   for (let frame = 0; frame < frameNum; frame++) {
-    const start = frame * BYTES_PER_FRAME;
-    const end = Math.min(start + BYTES_PER_FRAME, pixelBytes.length);
-    for (let i = start; i < end; i++) {
-      if (pixelBytes[i] !== 0) {
-        return frame;
+    // A frame's bits live in three separate stretches, one per plane.
+    for (let plane = 0; plane < 3; plane++) {
+      const start = plane * planeByteLength + frame * frameByteLength;
+      const end = Math.min(start + frameByteLength, pixelBytes.length);
+      for (let i = start; i < end; i++) {
+        if (pixelBytes[i] !== 0) {
+          return frame;
+        }
       }
     }
   }

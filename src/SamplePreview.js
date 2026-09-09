@@ -30,7 +30,7 @@ const SamplePreview = ({ pixelBytes, frameNum, delays, isHovered }) => {
     const poster = firstLitFrame(pixelBytes, frameNum);
 
     if (!isHovered || frameNum <= 1) {
-      drawFrame(ctx, pixelBytes, poster);
+      drawFrame(ctx, pixelBytes, poster, frameNum);
       return undefined;
     }
 
@@ -39,14 +39,14 @@ const SamplePreview = ({ pixelBytes, frameNum, delays, isHovered }) => {
     const interval = setInterval(
       () => {
         frame = (frame + 1) % frameNum;
-        drawFrame(ctx, pixelBytes, frame);
+        drawFrame(ctx, pixelBytes, frame, frameNum);
       },
       Math.max(60, delays),
     );
 
     return () => {
       clearInterval(interval);
-      drawFrame(ctx, pixelBytes, poster);
+      drawFrame(ctx, pixelBytes, poster, frameNum);
     };
   }, [pixelBytes, frameNum, delays, isHovered]);
 

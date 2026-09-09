@@ -242,6 +242,15 @@ function App() {
     }
   };
 
+  // Load a sample from the Samples page straight into the editor.
+  const handleEditSample = (sample) => {
+    setImageData(parseData(JSON.stringify(sample.jt)));
+    setFrame(1);
+    setLastExportedFile(null);
+    setShowDeploy(false);
+    window.location.hash = '#/';
+  };
+
   const handleDownload = () => {
     const filename = downloadJtFile(imageData);
     setLastExportedFile(filename);
@@ -270,7 +279,7 @@ function App() {
           </NavLink>
         </Nav>
 
-        {isSamples && <SamplesPage />}
+        {isSamples && <SamplesPage onEdit={handleEditSample} />}
 
         {!isSamples && (
           <>

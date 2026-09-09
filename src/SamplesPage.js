@@ -220,7 +220,7 @@ const Status = styled.p`
   padding: 24px 0;
 `;
 
-const SampleCard = ({ sample }) => {
+const SampleCard = ({ sample, onEdit }) => {
   const [hovered, setHovered] = useState(false);
   const [copied, setCopied] = useState(false);
   const [downloaded, setDownloaded] = useState(false);
@@ -282,13 +282,16 @@ const SampleCard = ({ sample }) => {
       </Meta>
 
       <CardActions>
+        <SmallButton $primary onClick={() => onEdit(sample)}>
+          Edit
+        </SmallButton>
         {!sample.localPath && (
-          <SmallButton $primary onClick={handleDownload}>
-            {downloaded ? 'Downloaded' : 'Download .jt'}
+          <SmallButton onClick={handleDownload}>
+            {downloaded ? 'Downloaded' : 'Download'}
           </SmallButton>
         )}
         <SmallButton onClick={handleCopy}>
-          {copied ? 'Copied' : 'Copy send command'}
+          {copied ? 'Copied' : 'Copy command'}
         </SmallButton>
       </CardActions>
 
@@ -297,7 +300,7 @@ const SampleCard = ({ sample }) => {
   );
 };
 
-const SamplesPage = () => {
+const SamplesPage = ({ onEdit }) => {
   const [tab, setTab] = useState('bundled');
   const [query, setQuery] = useState('');
   const [cache, setCache] = useState({});
@@ -354,8 +357,9 @@ const SamplesPage = () => {
     <Page>
       <Lede>
         Every sample bundled with this repo, plus the two vendor packs linked in
-        the README. Preview them here, download a <code>.jt</code>, and copy the
-        command that pushes it to the panel. Hover an animation to play it.
+        the README. Preview them here, open one in the editor, download a{' '}
+        <code>.jt</code>, or copy the command that pushes it to the panel. Hover
+        an animation to play it.
       </Lede>
 
       <HowTo>
@@ -418,7 +422,7 @@ const SamplesPage = () => {
       {status === 'ready' && (
         <CardGrid>
           {filtered.map((sample) => (
-            <SampleCard key={sample.id} sample={sample} />
+            <SampleCard key={sample.id} sample={sample} onEdit={onEdit} />
           ))}
         </CardGrid>
       )}
