@@ -64,6 +64,26 @@ columns and green, red in columns 95-96. It has no script in
 `tools/animations/` because it was generated ad hoc to catch plane and column
 misalignment, which is what it was for.
 
+## Claude Opus 4.7
+
+Created 2026-09-09.
+
+### Free choice
+
+| Animation | Preview | Description |
+| --- | --- | --- |
+| `slot_machine` | ![slot_machine](gifs/slot_machine.gif) | Three reels spin random symbols, lock left-to-right onto 7 7 7, then the cabinet border strobes gold/red for the jackpot. |
+| `sunrise` | ![sunrise](gifs/sunrise.gif) | A full day/night cycle: sun arcs across, moon rises on the opposite side, sky flushes red at the horizon at the extremes, water shimmers under whichever body is up. Seamless. 53 frames. |
+| `pipes` | ![pipes](gifs/pipes.gif) | The Windows 95 screensaver on a 96x16: four coloured pipes grow one segment per frame with an 18% turn chance, respawning on collision. Wipes on the last frame so the loop is clean. 53 frames. |
+| `hyperspace` | ![hyperspace](gifs/hyperspace.gif) | Radial starfield with geometric acceleration; each star draws a streak from its previous position to its new one, colour stepping blue → cyan → white with distance. Ends in a warp flash. |
+
+### Text-Em-All and personal
+
+| Animation | Preview | Description |
+| --- | --- | --- |
+| `retro_pager` | ![retro_pager](gifs/retro_pager.gif) | The sign as an amber pager LCD: idle "TEXT-EM-ALL" branding, then a buzz (shake + flashing red LEDs), then "HI HUMBERTO" typed one letter at a time with a blinking cursor, ending on a pulsing heart. A nod to Text-Em-All's roots in mass messaging. |
+| `campaign_sent` | ![campaign_sent](gifs/campaign_sent.gif) | A broadcast counter easing from 0 to 250,000 with a filling progress bar and a "SENDING..." label that flips to "SENT!" with a check when the count settles. |
+
 ## Claude Fable 5.1
 
 Created 2026-09-09.
