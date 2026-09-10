@@ -13,6 +13,36 @@ The previews in `docs/gifs/` are rendered from the committed `.jt` files at
 python3 tools/preview_jt.py src/sample/NAME.jt --gif docs/gifs/NAME.gif --scale 3
 ```
 
+## Claude Opus 4.8
+
+Created 2026-09-09. Every 53-frame entry lands at exactly 30,555 bytes -- the
+measured proven-good maximum -- so send these with `--command-timeout 8`.
+
+### Free choice
+
+| Animation | Preview | Description |
+| --- | --- | --- |
+| `torus` | ![torus](gifs/torus.gif) | The shaded donut of donut.c on 96x16: a torus swept as (theta, phi) points, rotated on two axes, perspective-projected and z-buffered, each point lit by its surface normal and quantised into blue → cyan → white with a yellow specular tip. Turns once on one axis, twice on the other. Seamless. 53 frames. |
+| `kaleidoscope` | ![kaleidoscope](gifs/kaleidoscope.gif) | The panel as a kaleidoscope tube: polar space folded into six mirrored wedges, filled by three drifting sine ripples in radius and folded angle, mapped onto SPECTRUM so the petals keep changing hue. Seamless. 48 frames. |
+| `galaxy` | ![galaxy](gifs/galaxy.gif) | A barred spiral: stars seeded onto two logarithmic arms plus a halo, the whole inclined disc rotating a full turn. Colour stands in for distance from the core -- white/yellow nucleus, cyan mid-disc, blue outer arms. Seamless. 53 frames. |
+| `globe` | ![globe](gifs/globe.gif) | A wireframe planet turning: a sparse lat/long grid on the near hemisphere, coloured by depth so the front rim reads white and curves back to blue at the limb. A moon swings around it on an inclined ellipse, over a scatter of fixed stars. Seamless. 53 frames. |
+| `spirograph` | ![spirograph](gifs/spirograph.gif) | A hypotrochoid drawn by a pen in a rolling gear: the closed rosette hangs faint in blue while a bright comet head traces it, completing exactly one lap. Seamless. 53 frames. |
+| `gears` | ![gears](gifs/gears.gif) | A meshing gear train: three toothed wheels counter-rotating at speeds set by their tooth counts, spokes making the rotation legible on so few pixels. Tooth ratios chosen so all three complete whole turns (2, 3, 4). Seamless. 48 frames. |
+| `snow` | ![snow](gifs/snow.gif) | Snowfall in three parallax layers, nearer flakes white then cyan then blue since the palette has no brightness to spare; each falls a whole panel height and sways whole cycles over the loop, above a thin snow bank. Seamless. 53 frames. |
+| `breakout` | ![breakout](gifs/breakout.gif) | Brick-breaker: coloured rows up top, a paddle that skates after the ball, and a ball whose sub-stepped physics ricochets off walls, paddle and bricks, knocking a hole through the wall. 53 frames. |
+| `flappy` | ![flappy](gifs/flappy.gif) | A bird holding its column while green pipes stream past and wrap -- the world is a ring exactly as long as the scroll travels, so the pipes loop -- bobbing and flapping to thread each gap. Seamless. 53 frames. |
+| `lightcycles` | ![lightcycles](gifs/lightcycles.gif) | The Tron derby: two bikes carve the grid at right angles into a tight spiral of light walls, until the yellow rider gets boxed in and crashes in a burst. 53 frames. |
+| `breathing` | ![breathing](gifs/breathing.gif) | A box-breathing coach: a ring on the left swells and dims through the GLOW ramp across four equal counts -- in, hold, out, hold -- while the instruction reads out beside it. Meant to be followed. Seamless. 52 frames. |
+| `cassette` | ![cassette](gifs/cassette.gif) | A tape deck playing: the shell, a label strip, two spool hubs whose spokes turn, and the tape between them -- the left spool emptying as the right fills over the loop -- with a green PLAY marker in the corner. Seamless. 48 frames. |
+
+### Text-Em-All and personal
+
+| Animation | Preview | Description |
+| --- | --- | --- |
+| `tea_voice` | ![tea_voice](gifs/tea_voice.gif) | The voice-broadcast half of Text-Em-All: a handset rings and shakes, fans out expanding sound arcs, and a live CALLS counter eases up to its total while a voice waveform jitters along the floor. 53 frames. |
+| `deploy` | ![deploy](gifs/deploy.gif) | A CI/CD pipeline shipping a build: a progress bar fills while the stage label steps BUILDING → TESTING → DEPLOYING, an activity pip running ahead of the fill, ending on SHIPPED with a flashing check. 53 frames. |
+| `coffee` | ![coffee](gifs/coffee.gif) | A hot mug steaming -- three ribbons of steam rising and wavering from white through cyan, a little heart forming in them mid-loop. The universal "give me a minute". Seamless. 48 frames. |
+
 ## Claude Opus 5
 
 Created 2026-09-09, all 24 frames. These were the first batch, written before
