@@ -13,6 +13,33 @@ The previews in `docs/gifs/` are rendered from the committed `.jt` files at
 python3 tools/preview_jt.py src/sample/NAME.jt --gif docs/gifs/NAME.gif --scale 3
 ```
 
+## Claude Fable 5
+
+Created 2026-09-09. Sizes are 48 or 53 frames; the 53-frame entries land at
+30,555 bytes -- the measured device maximum -- so send with
+`--command-timeout 8`.
+
+### Free choice
+
+| Animation | Preview | Description |
+| --- | --- | --- |
+| `train` | ![train](gifs/train.gif) | A steam locomotive chuffing along: the engine holds the middle while telegraph poles scroll exactly one panel width, the drive wheels turn whole revolutions, and the chimney puffs smoke that fades white → cyan → blue as it drifts back over the cab. All three periods divide the loop. Seamless. 48 frames. |
+| `eclipse` | ![eclipse](gifs/eclipse.gif) | A total solar eclipse, first contact to last: the moon crosses the disc, stars come out as coverage grows, totality is a black disc in a white-and-cyan corona, and the frames either side get the diamond-ring flash on the rim. Starts and ends on plain sun, so the wrap reads clean. 53 frames. |
+| `lighthouse` | ![lighthouse](gifs/lighthouse.gif) | A banded tower on rocks sweeping a wedge of light through a full circle each loop -- white core, yellow fringe -- washing out the stars where it passes, over a rolling sea. The lamp room flashes yellow as the beam faces out. Seamless. 48 frames. |
+| `pinball` | ![pinball](gifs/pinball.gif) | A ball loose among three bumpers: sub-stepped physics ricochets it off walls and domes at constant speed, a struck bumper flashes white and rings outward, and each hit adds a score pip along the top wall. 53 frames. |
+| `frogger` | ![frogger](gifs/frogger.gif) | One frog, two lanes of traffic: cars stream opposite ways while the frog waits on the verge for gaps, hops lane to lane up to the lily pad, and blinks a lap of honour. The hop frames are found by scanning the same traffic the frames draw, so it provably never shares a pixel with a car. 53 frames. |
+| `popcorn` | ![popcorn](gifs/popcorn.gif) | Kernels over heat: a pan on a flickering element, yellow kernels jiggling and launching on staggered phases, each popping into a white starburst at the top of its arc before dropping back in. Seamless. 48 frames. |
+| `lunar_lander` | ![lunar_lander](gifs/lunar_lander.gif) | A powered descent: gravity integrated every frame, scripted burns flaring under the hull to kill the velocity, touchdown between the pad marker lights, a skirt of dust rolling outward, and a green beacon once down. 53 frames. |
+| `constellation` | ![constellation](gifs/constellation.gif) | The Big Dipper joined up: seven stars kindle one by one over a twinkling sky, cyan lines trace the bowl and handle segment by segment, the finished figure pulses, then fades back through blue to dark for the wrap. 53 frames. |
+
+### Text-Em-All and personal
+
+| Animation | Preview | Description |
+| --- | --- | --- |
+| `tea_poll` | ![tea_poll](gifs/tea_poll.gif) | Live text-poll results: three answer bars (A/B/C in a 3x5 mini-font, since the real font is too tall to stack) filling in bursts as votes arrive, each arrival pinging a white tick at the bar head, a red LIVE dot blinking throughout, and the winner flashing once the votes stop. 53 frames. |
+| `tea_optin` | ![tea_optin](gifs/tea_optin.gif) | The keyword opt-in flow: a green bubble slides out of a phone carrying JOIN, a check draws itself as the message lands, and the subscriber count on the right ticks up and flashes -- twice per loop, so the number visibly climbs. 53 frames. |
+| `bug_hunt` | ![bug_hunt](gifs/bug_hunt.gif) | Acceptance testing, dramatised: a magnifying glass sweeps rows of code line by line, locks onto a red bug scuttling along the middle row, squashes it flat, and the verdict comes up in a cleared window -- a green check and PASS. 53 frames. |
+
 ## Claude Opus 4.8
 
 Created 2026-09-09. Every 53-frame entry lands at exactly 30,555 bytes -- the
