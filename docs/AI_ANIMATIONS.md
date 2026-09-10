@@ -167,3 +167,28 @@ author should list them under their own model.
 | --- | --- | --- |
 | `dcc_new_achievement` | ![dcc_new_achievement](gifs/dcc_new_achievement.gif) | 24 frames at 230ms to 53 at 100ms; yellow-on-blue to red and yellow. |
 | `life` | ![life](gifs/life.gif) | 24 generations to 53; seed 11 to 16, chosen as the one still busiest at the end. |
+
+## Claude Opus 4.6
+
+Created 2026-09-09, all 53 frames.
+
+### Free choice
+
+| Animation | Preview | Description |
+| --- | --- | --- |
+| `aurora` | ![aurora](gifs/aurora.gif) | Northern lights: overlapping sine waves drive curtain height and sway, GLOW brightness from leading edge up, hue drifting across the width via SPECTRUM. Seamless. 53 frames at 120ms. |
+| `maze` | ![maze](gifs/maze.gif) | Recursive backtracker carving a 48×8-cell maze in real time. Blue walls, black passages, white carver head with a cyan trail. 53 frames at 80ms. |
+| `ripples` | ![ripples](gifs/ripples.gif) | Seven staggered water drops sending concentric ring ripples that interfere constructively; brightness quantized through the GLOW ramp. Seamless. 53 frames at 80ms. |
+| `flock` | ![flock](gifs/flock.gif) | ~30 boids with cohesion, separation, and alignment rules swarming as a murmuration; density-based coloring (white clusters, cyan medium, blue sparse). 53 frames at 90ms. |
+| `sand` | ![sand](gifs/sand.gif) | Falling-sand simulation: colored grains drop from random positions and pile up following diagonal-slide physics. 53 frames at 80ms. |
+| `fireflies` | ![fireflies](gifs/fireflies.gif) | ~12 fireflies drifting over an irregular green grass silhouette, each pulsing independently through the GLOW ramp. Seamless. 53 frames at 120ms. |
+| `waveform` | ![waveform](gifs/waveform.gif) | Oscilloscope: a three-sine composite waveform morphing each frame, blue dot grid, dashed center line, phosphor persistence trail fading green → cyan → blue. Seamless. 53 frames at 60ms. |
+| `coral` | ![coral](gifs/coral.gif) | Diffusion-limited aggregation growing branching coral structures from the bottom up; growth front white, recent cyan, established blue. 53 frames at 100ms. |
+
+### Text-Em-All
+
+| Animation | Preview | Description |
+| --- | --- | --- |
+| `tea_heartbeat` | ![tea_heartbeat](gifs/tea_heartbeat.gif) | Company pulse: a beating heart glyph synced with a messages-per-second counter, "TEA" steady in the center. 53 frames at 100ms. |
+| `tea_network` | ![tea_network](gifs/tea_network.gif) | Mass messaging as a network effect: one sender's message cascades exponentially through four columns of recipients, each generation a different color, ending with a synchronized pulse. 53 frames at 90ms. |
+| `tea_uptime` | ![tea_uptime](gifs/tea_uptime.gif) | Service uptime monitor: "99.99%" types in, a 30-day status row fills (mostly green, a couple yellow), then "ALL SYSTEMS GO" wipes in. 53 frames at 100ms. |
