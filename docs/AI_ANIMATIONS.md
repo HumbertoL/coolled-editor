@@ -13,6 +13,57 @@ The previews in `docs/gifs/` are rendered from the committed `.jt` files at
 python3 tools/preview_jt.py src/sample/NAME.jt --gif docs/gifs/NAME.gif --scale 3
 ```
 
+## Claude Opus 5
+
+Created 2026-09-09, all 24 frames. These were the first batch, written before
+the 53-frame device maximum had been measured, so they were all built to the
+24 frames the vendor's own packs use.
+
+### Free choice
+
+| Animation | Preview | Description |
+| --- | --- | --- |
+| `plasma` | ![plasma](gifs/plasma.gif) | Three interfering sine fields banded into the 8-colour palette; the quantization is the point, turning a smooth gradient into moving topography. Seamless. |
+| `rain` | ![rain](gifs/rain.gif) | Three-pixel streaks for motion blur, splashes on the floor, and one lightning strike where the sky fills blue for a single frame behind a white bolt. |
+| `starfield` | ![starfield](gifs/starfield.gif) | Three parallax layers; speed and streak length both carry depth, since the palette has no brightness to spare. Seamless. |
+| `fire` | ![fire](gifs/fire.gif) | Heat field rising and cooling through red-yellow-white, with sparse floor hotspots so tongues form instead of a slab. |
+| `equalizer` | ![equalizer](gifs/equalizer.gif) | Spectrum bars coloured by height like a real VU meter, peak markers on a slower wave so they lag. Seamless. |
+| `sonar` | ![sonar](gifs/sonar.gif) | Rings expanding on a horizontally stretched ellipse, age setting the colour. Seamless. |
+| `matrix` | ![matrix](gifs/matrix.gif) | Font glyphs cascading, each column at its own speed, the character changing as it falls. |
+| `hazard` | ![hazard](gifs/hazard.gif) | Diagonal warning stripes from `(x + y + offset) mod period`, with cyan pinstripes. Seamless. |
+| `helix` | ![helix](gifs/helix.gif) | Two strands a half-period apart; the front one is drawn white and they swap at each crossing, so the ladder reads as twisting. Seamless. |
+| `metaballs` | ![metaballs](gifs/metaballs.gif) | Inverse-square fields summed and thresholded into contour bands, so blobs bulge toward each other and fuse. Seamless. |
+| `snake` | ![snake](gifs/snake.gif) | A serpentine route whose length divides the frame count, so it closes exactly; body fades back from the head, pellet always just ahead. |
+| `wave` | ![wave](gifs/wave.gif) | Two sine components summing into a crest that changes shape rather than sliding, with a reflection above the surface. Seamless. |
+
+### Text-Em-All and personal
+
+| Animation | Preview | Description |
+| --- | --- | --- |
+| `tea_broadcast` | ![tea_broadcast](gifs/tea_broadcast.gif) | One sender, wavefronts sweeping right, recipients turning green as each is reached, then all pulsing together. |
+| `tea_wordmark` | ![tea_wordmark](gifs/tea_wordmark.gif) | TEXT-EM-ALL with a shine passing over it. Deliberately plain — a name is the one thing on a sign that should not be hard to read. |
+| `tea_delivered` | ![tea_delivered](gifs/tea_delivered.gif) | A percentage counting up with a filling bar, then SENT and a tick. |
+| `chaos_corner` | ![chaos_corner](gifs/chaos_corner.gif) | The sign's own name, steady while the margins misbehave: sparks, glitched letters, the odd bad-connection streak. |
+| `konami` | ![konami](gifs/konami.gif) | The code entered one input at a time, then flashing green. Guessed at from the Pac-Man, Animal Well and party parrot files already in the repo. |
+
+### Later reworked by another model
+
+Both were created here and have since been changed; see
+[Reworked, not created](#reworked-not-created) for what changed. Note the
+previews below show the *current* files, since previews are rendered from
+what is committed — not the versions described in the last column.
+
+| Animation | Preview | As created |
+| --- | --- | --- |
+| `dcc_new_achievement` | ![dcc_new_achievement](gifs/dcc_new_achievement.gif) | "Neeewwww achievement" in the narrator's voice, two beats: a highlight sweeps the top line, then the bottom lights up left to right as the payoff. 24 frames at 230ms, yellow on blue. |
+| `life` | ![life](gifs/life.gif) | Conway's Life on a 96x16 torus, four gliders fired into random soup, cells coloured by age so you can see where the computation is still happening. 24 generations, seed 11. |
+
+Not in these tables: `column_markers.jt`, a single-frame diagnostic from the
+same session that renders red, green, blue, white across the first four
+columns and green, red in columns 95-96. It has no script in
+`tools/animations/` because it was generated ad hoc to catch plane and column
+misalignment, which is what it was for.
+
 ## Claude Fable 5.1
 
 Created 2026-09-09.
