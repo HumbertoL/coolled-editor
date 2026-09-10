@@ -12,6 +12,7 @@ route to push files to real hardware over Bluetooth.
 | [tools/README.md](tools/README.md) | Generating `.jt` files in Python, the bit layout, frame limits |
 | [docs/SENDING_TO_THE_SIGN.md](docs/SENDING_TO_THE_SIGN.md) | Driver setup, macOS Bluetooth, error-by-error troubleshooting |
 | [docs/VENDOR_DATA.md](docs/VENDOR_DATA.md) | The vendor's CDN endpoints, material catalog, and the bitmap font behind **Add text** |
+| [docs/AI_ANIMATIONS.md](docs/AI_ANIMATIONS.md) | Which sample animations an AI model made, which model, when. **Add a row when you create one.** |
 
 ## The one rule that will bite you
 
