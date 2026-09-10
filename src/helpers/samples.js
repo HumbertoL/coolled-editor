@@ -58,14 +58,34 @@ const planeBitIndex = (frameIndex, column, row) =>
 /** Bits in one color plane, for an animation of `frameNum` frames. */
 const planeBits = (frameNum) => frameNum * GRID_WIDTH * GRID_HEIGHT;
 
+// Every preview is the same size and drawing is synchronous, so one buffer
+// can be shared. Allocating a fresh ImageData per frame meant ~6KB of garbage
+// per redraw, which adds up fast once previews play unattended.
+let scratchImage = null;
+
+const getScratchImage = (ctx) => {
+  if (!scratchImage) {
+    try {
+      scratchImage = new ImageData(GRID_WIDTH, GRID_HEIGHT);
+    } catch {
+      // Older engines only expose the factory on a context.
+      scratchImage = ctx.createImageData(GRID_WIDTH, GRID_HEIGHT);
+    }
+  }
+  return scratchImage;
+};
+
 /**
  * Draw a single frame of packed pixel data onto a 96x16 canvas. Kept
  * deliberately cheap: the samples page renders a couple hundred of these, so
  * it decodes just the one frame it needs rather than the whole animation.
+ *
+ * Safe to share one buffer: every channel of every pixel is written below, so
+ * nothing carries over from the previous call.
  */
 export const drawFrame = (ctx, pixelBytes, frameIndex, frameNum) => {
   const plane = planeBits(frameNum);
-  const image = ctx.createImageData(GRID_WIDTH, GRID_HEIGHT);
+  const image = getScratchImage(ctx);
 
   for (let column = 0; column < GRID_WIDTH; column++) {
     for (let row = 0; row < GRID_HEIGHT; row++) {

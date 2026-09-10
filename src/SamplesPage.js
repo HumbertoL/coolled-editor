@@ -427,7 +427,7 @@ const SamplesPage = ({ onEdit }) => {
         Every sample bundled with this repo, the two vendor animation packs, and
         the CoolLED1248 app&apos;s own material catalog. Preview them here, open
         one in the editor, download a <code>.jt</code>, or copy the command that
-        pushes it to the panel. Hover an animation to play it.
+        pushes it to the panel. Animations play as you scroll to them.
       </Lede>
 
       <HowTo>
