@@ -121,6 +121,27 @@ columns and green, red in columns 95-96. It has no script in
 `tools/animations/` because it was generated ad hoc to catch plane and column
 misalignment, which is what it was for.
 
+### Round two: characters and cryptids
+
+Created 2026-09-11, all 53 frames at 30,555 bytes -- the measured device
+maximum -- so send these with `--command-timeout 8`.
+
+| Animation | Preview | Description |
+| --- | --- | --- |
+| `john_cena` | ![john_cena](gifs/john_cena.gif) | You can't see me, taken literally: a face waits, a flat palm waves across it, and every pass dithers more of the face away on a fixed shuffle order until there is nothing left behind the hand. The hand drops, AND HIS NAME IS types itself across the full width, and JOHN CENA lands with speed lines blasting out either side of the wordmark on the five beats of the fanfare. 53 frames. |
+| `iron_man` | ![iron_man](gifs/iron_man.gif) | Arc reactor, faceplate, repulsor, in the suit's own order. The reactor kindles alone through blue → cyan → white with rings pushing outward; the helmet drops over it, clanks, and brings the eye slits up inside a black recess so they read against the gold; then the suit slides aside and a gauntlet fires twice down the length of the panel, each shot with a shockwave off the palm. Red and gold is one of the few real liveries this eight-colour palette hits exactly. 53 frames. |
+| `nsync` | ![nsync](gifs/nsync.gif) | Bye Bye Bye: five marionettes, each a quarter-beat behind the last so the move travels down the line, poses snapping between four fixed positions because a puppet has no in-betweens. The strings part in a flash of white, whip up out of frame, and the five dance free before the panel takes the last word -- one BYE per beat. 53 frames. |
+| `thing` | ![thing](gifs/thing.gif) | The Addams Family hand lets itself out of its box and scuttles the width of the panel on procedural fingers, each swinging fore and aft on its own quarter-cycle phase and lifting on the forward half. It stops in the middle to drum them impatiently, then bolts off the right edge -- and the lid shuts itself behind him, which is what closes the loop. 53 frames. |
+
+The cryptids, all of them shot in the same nonexistent documentary:
+
+| Animation | Preview | Description |
+| --- | --- | --- |
+| `bigfoot` | ![bigfoot](gifs/bigfoot.gif) | Frame 352, more or less. A jagged treeline, per-frame handheld jitter applied to every element, film grain and the occasional scratch, and something big striding across the clearing. Halfway over it does the thing the film is famous for and looks back at the lens -- head in yellow, two white eyes, four frames -- then walks behind a foreground fir that is drawn last, which is how it gets away. 53 frames. |
+| `chupacabra` | ![chupacabra](gifs/chupacabra.gif) | A goat grazes in the dark. Two red eyes open at the far left and the body dithers in behind them, pixels chosen by a hash of their offset from the spine so the reveal holds still while the animal moves. Hackles up, then a lunge with its own skipped frames drawn in behind it, one frame of white, and no goat. The eyeshine turns on you, and it backs out into the dark eyes-last. 53 frames. |
+| `mothman` | ![mothman](gifs/mothman.gif) | Point Pleasant: the Silver Bridge in towers, a sagging catenary and hangers down to the deck, and two red eyes above the span -- the eyes first, because that is how every account starts. Wings unfold either side of them and lift it off the bridge, the span doubling as it turns toward the lens until the wings run off both edges of the panel and only the eyes are left. 53 frames. |
+| `nessie` | ![nessie](gifs/nessie.gif) | Three humps break a rippling loch in turn, each pushing out a ring, then the neck comes up on the left and the head turns. That is the cue for the 1934 Surgeon's Photograph: one frame of pure white, then two where the whole scene is flattened to white -- an overexposed plate rather than a picture -- and she sinks in the order she surfaced. The water completes four whole cycles over the loop, so it wraps. 53 frames. |
+
 ## Claude Opus 4.7
 
 Created 2026-09-09.
