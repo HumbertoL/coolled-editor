@@ -215,6 +215,31 @@ All 53 frames.
 | `dnd_dragon` | ![dnd_dragon](gifs/dnd_dragon.gif) | A dragon beats its wings, breathes a cone of fire, then ROLL INITIATIVE! |
 | `dnd_hp` | ![dnd_hp](gifs/dnd_hp.gif) | A hit-point bar taking damage in chunks, one heal, ending at 3/58. |
 
+### Round two
+
+Created 2026-09-10, from a list of prompts treated as inspiration. All 53 frames.
+
+| Animation | Preview | Description |
+| --- | --- | --- |
+| `can_it_run_doom` | ![can_it_run_doom](gifs/can_it_run_doom.gif) | The question, a first-person corridor with an imp closing in, a shotgun blast, and YES. IT RUNS DOOM. |
+| `portal` | ![portal](gifs/portal.gif) | A companion cube slides into the orange portal and out of the blue one; one crossing per loop, seamless. |
+| `eye_of_sauron` | ![eye_of_sauron](gifs/eye_of_sauron.gif) | A wide ellipse of flickering fire with a black slit pupil sweeping side to side; the sweep is seamless. |
+| `amaze` | ![amaze](gifs/amaze.gif) | Rocky from Project Hail Mary taps a leg while notes rise: AMAZE, AMAZE, AMAZE, then FIST MY BUMP. |
+| `peek` | ![peek](gifs/peek.gif) | Dark panel. A cat's outline rises from the bottom edge and looks around; later a ghost drifts in from the right. |
+| `team_name` | ![team_name](gifs/team_name.gif) | DONUT HOLES flips out letter by letter and WAFFLING DONUT$ flips in, the donut icon becoming a waffle. |
+| `dftba` | ![dftba](gifs/dftba.gif) | D F T B A across the top; each lights gold as its word appears below, ending on AWESOME. |
+| `hamilton_shot` | ![hamilton_shot](gifs/hamilton_shot.gif) | The star, I AM NOT / THROWING AWAY word by word, then MY SHOT at double size with sparks. |
+| `hamilton_duel` | ![hamilton_duel](gifs/hamilton_duel.gif) | The count to ten with big digits, two duellists, a white flash, one pistol raised to the sky, THE WORLD WAS WIDE ENOUGH. |
+| `key_quest` | ![key_quest](gifs/key_quest.gif) | A DFS-carved maze; an explorer follows the shortest path to a blinking key, leaving a cyan trail, and the exit door opens. |
+| `triforce` | ![triforce](gifs/triforce.gif) | Three golden triangles spin in from off-panel and lock into the Triforce, pulse white, then a diagonal shine. |
+| `bios` | ![bios](gifs/bios.gif) | A power-on self test two lines at a time: memory counting to 640K OK, keyboard OK, boot to a blinking C:\> prompt. |
+| `pigeon` | ![pigeon](gifs/pigeon.gif) | A pigeon flaps across with an envelope, drops it into a mailbox, and the flag pops up red. |
+| `rooftop` | ![rooftop](gifs/rooftop.gif) | A cosy terrace at night: string lights twinkling, a skyline, moon, chairs, a flickering lantern, swaying plants. Seamless. |
+| `signal` | ![signal](gifs/signal.gif) | Static resolves into a trace with pulses in groups of 2, 3, 5, 7, 11; the numbers appear, then the noise returns. |
+| `the_door` | ![the_door](gifs/the_door.gif) | A door outline in the dark opens slowly, light spilling out around a silhouette; it slams, and two red eyes open. |
+| `riddle` | ![riddle](gifs/riddle.gif) | I HAVE 1536 EYES / AND ONLY 8 COLORS, I SPEAK IN FRAMES / 53 AT A TIME, I NEVER SLEEP / WHAT AM I? Then every colour, then ME. |
+| `waldo` | ![waldo](gifs/waldo.gif) | A crowd in random colours; a magnifying ring pauses on suspects and lands on the one in red and white stripes, who waves. |
+
 ### Reworked, not created
 
 These existed before; Fable 5.1 changed them on 2026-09-09. The original
