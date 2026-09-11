@@ -7,13 +7,14 @@ squashes to a line and vanishes -- and the new one flips in the same way
 behind it, while the team icon turns over from a frosted ring to a waffle
 grid. A shine passes over the new name.
 
-Back: the names sit on a vertical carousel. WAFFLING DONUT$ eases up out of
-the panel while DONUT HOLES eases in from below, like a departure board
-turning over. The loop closes on a hold of DONUT HOLES, so there is no cut.
+Back: the same cascade run in reverse, right to left. WAFFLING DONUT$ flips
+out from its last letter and DONUT HOLES flips in behind it, the waffle
+turning back into a donut. The loop closes on a hold of DONUT HOLES, so
+there is no cut, and the whole thing reads as one mechanism turning over.
 
-MODE picks the return transition: "slide" (the default), "wipe" (an eraser
-bar clears the new name and a reveal bar draws the old one), "dissolve"
-(pixels swap at random) or "flip" (the forward cascade run backwards). Pass a mode on the command line to
+MODE picks the return transition: "flip" (the default), "slide" (a vertical
+carousel), "wipe" (an eraser bar clears the new name and a reveal bar draws
+the old one) or "dissolve" (pixels swap at random). Pass a mode on the command line to
 write that variant to tools/out/ for comparison.
 """
 
@@ -29,7 +30,7 @@ from jtkit import Animation, Canvas, colors as C, font, layout_text  # noqa: E40
 
 FRAMES = 53
 DELAY = 150
-MODE = "slide"
+MODE = "flip"
 
 OLD, NEW = "DONUT HOLES", "WAFFLING DONUT$"
 TEXT_X, TEXT_Y = 9, 4
