@@ -239,6 +239,27 @@ Created 2026-09-10, from a list of prompts treated as inspiration. All 53 frames
 | `riddle` | ![riddle](gifs/riddle.gif) | I HAVE 1536 EYES / AND ONLY 8 COLORS, I SPEAK IN FRAMES / 53 AT A TIME, I NEVER SLEEP / WHAT AM I? No answer given. |
 | `waldo` | ![waldo](gifs/waldo.gif) | A crowd in random colours; a magnifying ring pauses on suspects and lands on the one in red and white stripes, who waves. |
 
+### Round three: nerdy, geeky, funny
+
+Created 2026-09-10. The first five are about how a language model works; the rest are for the nerds. All 53 frames.
+
+| Animation | Preview | Description |
+| --- | --- | --- |
+| `spicy_autocomplete` | ![spicy_autocomplete](gifs/spicy_autocomplete.gif) | A sentence grows a word at a time; for each, three candidates flick past with probability bars and the winner jumps up. It ends on AUTOCOMPLETE. |
+| `temperature` | ![temperature](gifs/temperature.gif) | CAT SAT ON THE... completed at rising temperature: MAT, RUG, SOFA, ROOF, MOON, TUESDAY, then noise that changes every frame. |
+| `attention` | ![attention](gifs/attention.gif) | One attention head reading THE SIGN IS READING ITS OWN MIND: the query moves along the tokens and lines reach back, brighter where the weight is stronger. |
+| `neural_net` | ![neural_net](gifs/neural_net.gif) | A 4-6-6-3 network doing forward passes: inputs light, activation pours along the edges layer by layer, one output wins. Fixed random weights. |
+| `gradient_descent` | ![gradient_descent](gifs/gradient_descent.gif) | A ball rolls down a loss curve into a local minimum, then a warm restart kicks it over the ridge to the true one. LOSS falls in the corner. |
+| `turing_machine` | ![turing_machine](gifs/turing_machine.gif) | The 3-state busy beaver on a tape: read, write, move for fourteen steps, then HALT with six ones. |
+| `glider_gun` | ![glider_gun](gifs/glider_gun.gif) | Gosper's glider gun in Life, simulated on an unbounded world with the panel as a window; a glider leaves every fifteen frames. |
+| `sierpinski` | ![sierpinski](gifs/sierpinski.gif) | The chaos game: random halfway hops toward three corners accumulate into the Sierpinski gasket, coloured by corner. |
+| `bifurcation` | ![bifurcation](gifs/bifurcation.gif) | The logistic map's bifurcation diagram drawn two columns a frame, r from 3.3 to 4.0: doublings piling into chaos, with windows of order. |
+| `collatz` | ![collatz](gifs/collatz.gif) | The hailstone path of 27 on a log scale, revealed with the running value; it hits 1 with a frame to spare, 111 STEPS. |
+| `git_log` | ![git_log](gifs/git_log.gif) | A commit graph growing: main in white, a feature branch in cyan forking and merging in gold, messages FIX, FIX FIX, REVERT, FINAL, FINAL2. |
+| `hello_world` | ![hello_world](gifs/hello_world.gif) | Hello world typed out in seven languages, name on top, code below. |
+| `captcha` | ![captcha](gifs/captcha.gif) | A cursor glides in and ticks I'M NOT A ROBOT; the box spins, a green tick lands, and the text changes to BEEP BOOP. |
+| `eta` | ![eta](gifs/eta.gif) | A progress bar that reaches 99% and stays there while the estimate wanders from 3 SEC to 1 YEAR to ???. |
+
 ### Reworked, not created
 
 These existed before; Fable 5.1 changed them on 2026-09-09. The original
