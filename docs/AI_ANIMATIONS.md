@@ -260,6 +260,27 @@ Created 2026-09-10. The first five are about how a language model works; the res
 | `captcha` | ![captcha](gifs/captcha.gif) | A cursor glides in and ticks I'M NOT A ROBOT; the box spins, a green tick lands, and the text changes to BEEP BOOP. |
 | `eta` | ![eta](gifs/eta.gif) | A progress bar that reaches 99% and stays there while the estimate wanders from 3 SEC to 1 YEAR to ???. |
 
+### Round four: memes
+
+Created 2026-09-10, one per era from 2001 to 2019. All 53 frames.
+
+| Animation | Preview | Description |
+| --- | --- | --- |
+| `all_your_base` | ![all_your_base](gifs/all_your_base.gif) | (2001) CATS flickers in and the lines type out: HOW ARE YOU GENTLEMEN, ALL YOUR BASE ARE BELONG TO US (full width, face cut away), YOU HAVE NO CHANCE TO SURVIVE MAKE YOUR TIME, HA HA HA HA. |
+| `pb_jelly_time` | ![pb_jelly_time](gifs/pb_jelly_time.gif) | (2002) The dancing banana sways with its arms up while the chant cycles: PEANUT BUTTER JELLY TIME, WHERE HE AT, THERE HE GO. A second banana joins. |
+| `badger_badger` | ![badger_badger](gifs/badger_badger.gif) | (2003) A row of badgers bounce to BADGER BADGER, a mushroom rises for MUSHROOM, badgers again, then SNAKE! A SNAKE! |
+| `loss` | ![loss](gifs/loss.gif) | (2008) The four panels reduced to their strokes -- | || ||- |_ -- drawn one at a time. If you know, you know. |
+| `deal_with_it` | ![deal_with_it](gifs/deal_with_it.gif) | (2010) Sunglasses drop from the top of the panel onto a face, land with a flash, and DEAL WITH IT slides in from the right. |
+| `nyan_cat` | ![nyan_cat](gifs/nyan_cat.gif) | (2011) Pop-Tart cat bobbing with a six-stripe rainbow rippling behind and stars streaming past. Seamless. |
+| `grumpy_cat` | ![grumpy_cat](gifs/grumpy_cat.gif) | (2012) Tardar Sauce blinks and flicks an ear under I HAD FUN ONCE. / IT WAS AWFUL. Then the caption goes and she just looks at you. |
+| `doge` | ![doge](gifs/doge.gif) | (2013) A Shiba with working eyebrows while captions pop in around the panel in meme colours: WOW, SUCH PIXEL, VERY LED, MUCH SIGN, SO BRIGHT, WOW. |
+| `this_is_fine` | ![this_is_fine](gifs/this_is_fine.gif) | (2013) The dog in the hat with a mug while flames climb and creep closer; THIS IS FINE. He takes a sip. |
+| `harlem_shake` | ![harlem_shake](gifs/harlem_shake.gif) | (2013) Eight figures stand still while one in a helmet bobs alone; the drop flashes white and everyone flails in random poses until the cut. |
+| `road_work_ahead` | ![road_work_ahead](gifs/road_work_ahead.gif) | (2014) The orange diamond reads ROAD WORK AHEAD? then the reply: UH YEAH, I SURE HOPE IT DOES. |
+| `wednesday_frog` | ![wednesday_frog](gifs/wednesday_frog.gif) | (2016) The frog blinks under IT'S WEDNESDAY, MY DUDES, then screams: mouth open, AAAAAAA growing, the whole panel shaking. |
+| `is_this_a_pigeon` | ![is_this_a_pigeon](gifs/is_this_a_pigeon.gif) | (2018) A butterfly flutters in, a pointing arrow comes for it, IS THIS A PIGEON? It is not. |
+| `stonks` | ![stonks](gifs/stonks.gif) | (2019) Meme Man in his suit watches a jagged line climb the chart; when it clears, STONKS with the up arrow. |
+
 ### Reworked, not created
 
 These existed before; Fable 5.1 changed them on 2026-09-09. The original
