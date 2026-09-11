@@ -225,7 +225,7 @@ Created 2026-09-10, from a list of prompts treated as inspiration. All 53 frames
 | `eye_of_sauron` | ![eye_of_sauron](gifs/eye_of_sauron.gif) | A wide ellipse of flickering fire with a black slit pupil sweeping side to side; the sweep is seamless. |
 | `amaze` | ![amaze](gifs/amaze.gif) | Rocky from Project Hail Mary taps a leg while notes rise: AMAZE, AMAZE, AMAZE, then FIST MY BUMP. |
 | `peek` | ![peek](gifs/peek.gif) | Dark panel. A cat's outline rises from the bottom edge, looks left and right, and sinks; later it does it again somewhere else. |
-| `team_name` | ![team_name](gifs/team_name.gif) | DONUT HOLES flips out letter by letter and WAFFLING DONUT$ flips in, the donut icon becoming a waffle. |
+| `team_name` | ![team_name](gifs/team_name.gif) | DONUT HOLES flips out letter by letter and WAFFLING DONUT$ flips in, the donut icon becoming a waffle; an eraser bar wipes it away and a reveal bar draws DONUT HOLES back, so it loops without a cut. |
 | `dftba` | ![dftba](gifs/dftba.gif) | D F T B A across the top; each lights gold as its word appears below, ending on AWESOME. |
 | `hamilton_shot` | ![hamilton_shot](gifs/hamilton_shot.gif) | The star, I AM NOT / THROWING AWAY word by word, then MY SHOT at double size with sparks. |
 | `hamilton_duel` | ![hamilton_duel](gifs/hamilton_duel.gif) | The count to ten on the left with the two duellists on the right; TEN PACES, FIRE, one shoots a pixel at the other, who falls. |
