@@ -66,10 +66,13 @@ def build():
 
         frame.hline(0, DECK_Y + 1, 96, C.WHITE)
         # Chairs, table, lantern.
-        for cx in (34, 58):
-            frame.vline(cx, DECK_Y - 4, 5, C.CYAN)
+        # Both chairs face the table: back on the outside, front leg inside.
+        for cx, facing in ((34, 1), (58, -1)):
+            back = cx if facing > 0 else cx + 3
+            front = cx + 3 if facing > 0 else cx
+            frame.vline(back, DECK_Y - 4, 5, C.CYAN)
             frame.hline(cx, DECK_Y - 1, 4, C.CYAN)
-            frame.pixel(cx + 3, DECK_Y, C.CYAN)
+            frame.pixel(front, DECK_Y, C.CYAN)
         frame.hline(43, DECK_Y - 2, 9, C.CYAN)
         frame.vline(47, DECK_Y - 1, 2, C.CYAN)
         flicker = (index * 7) % 5 == 0
