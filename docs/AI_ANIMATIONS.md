@@ -72,9 +72,10 @@ measured proven-good maximum -- so send these with `--command-timeout 8`.
 
 ## Claude Opus 5
 
-Created 2026-09-09, all 24 frames. These were the first batch, written before
-the 53-frame device maximum had been measured, so they were all built to the
-24 frames the vendor's own packs use.
+Two rounds. The first, on 2026-09-09, is 24 frames throughout: it was written
+before the 53-frame device maximum had been measured, so everything was built
+to the 24 frames the vendor's own packs use. The second, on 2026-09-17, is at
+the full 53.
 
 ### Free choice
 
@@ -115,11 +116,30 @@ what is committed — not the versions described in the last column.
 | `dcc_new_achievement` | ![dcc_new_achievement](gifs/dcc_new_achievement.gif) | "Neeewwww achievement" in the narrator's voice, two beats: a highlight sweeps the top line, then the bottom lights up left to right as the payoff. 24 frames at 230ms, yellow on blue. |
 | `life` | ![life](gifs/life.gif) | Conway's Life on a 96x16 torus, four gliders fired into random soup, cells coloured by age so you can see where the computation is still happening. 24 generations, seed 11. |
 
-Not in these tables: `column_markers.jt`, a single-frame diagnostic from the
-same session that renders red, green, blue, white across the first four
+Not in these tables: `column_markers.jt`, a single-frame diagnostic from that
+first session that renders red, green, blue, white across the first four
 columns and green, red in columns 95-96. It has no script in
 `tools/animations/` because it was generated ad hoc to catch plane and column
 misalignment, which is what it was for.
+
+### Round two: the Star Wars prequels
+
+Created 2026-09-17, all 53 frames, so send these with `--command-timeout 8`.
+Each one is built the same way: the words own the top rows and the scene owns
+the bottom band, because two lines of the 5x7 font and a drawing cannot share
+16 rows.
+
+| Animation | Preview | Description |
+| --- | --- | --- |
+| `high_ground` | ![high_ground](gifs/high_ground.gif) | The duel on Mustafar, in four beats and then one move. IT'S OVER, ANAKIN / I HAVE THE HIGH GROUND in cyan, UNDERESTIMATE MY POWER in yellow, DON'T TRY IT -- and he tries it: a crouch, a leap in a parabola over the ledge, one white stroke of a sabre, and the pieces drop, one onto the rock and one into the lava. Obi-Wan never moves from where he was standing, which is the whole joke. |
+| `hello_there` | ![hello_there](gifs/hello_there.gif) | HELLO THERE, and the only correct answer to it. Obi-Wan walks in and raises a hand; Grievous slides in from the right, four blades igniting one per frame and winding up into the windmill, and the panel answers GENERAL KENOBI! |
+| `order_66` | ![order_66](gifs/order_66.gif) | Ten clone helmets stand white and dutiful while EXECUTE ORDER 66 types out. Then a cyan pulse runs down the line and every visor it passes goes red, one after another, until they all answer at once: IT WILL BE DONE. |
+| `i_dont_like_sand` | ![i_dont_like_sand](gifs/i_dont_like_sand.gif) | Anakin's attempt at flirting, line by line, while grains stream across the panel and a dune builds underneath. By EVERYWHERE the sand has the whole thing -- words included. |
+| `fun_begins` | ![fun_begins](gifs/fun_begins.gif) | THIS IS WHERE / THE FUN BEGINS. Two starfighters hold the lower band through the star streaks, the line lands one half at a time, and then two streams of cannon fire close on a droid fighter and open it into a ring of debris. |
+| `i_am_the_senate` | ![i_am_the_senate](gifs/i_am_the_senate.gif) | THE SENATE WILL DECIDE YOUR FATE -- I AM THE SENATE -- NOT YET. The Chancellor's eyes come up yellow on his line, and on IT'S TREASON THEN both blades light: magenta for Mace, red from the sleeve of a frail old politician. |
+| `unlimited_power` | ![unlimited_power](gifs/unlimited_power.gif) | Forked lightning redrawn every frame, white at the hands and cooling to blue as it branches, with the Jedi on the right lifted off his feet and thrown back. UNLIMITED lands first; POWER! arrives with the panel already crackling. |
+| `chosen_one` | ![chosen_one](gifs/chosen_one.gif) | The shouting match after the high ground, and its companion piece. YOU WERE THE CHOSEN ONE / YOU WERE MY BROTHER in cyan from the bank, I HATE YOU! in yellow from the fire, which climbs all loop until there is nothing but flame under the words. |
+
 
 ## Claude Opus 4.7
 
