@@ -31,7 +31,7 @@ const pages = new Map();
 const pagePromises = new Map();
 
 const fontUrl = (file) =>
-  `${process.env.PUBLIC_URL}/${FONT_DIR}/${FONT_NAME}/${file}`;
+  `${import.meta.env.BASE_URL}${FONT_DIR}/${FONT_NAME}/${file}`;
 
 export const loadManifest = () => {
   if (!manifestPromise) {

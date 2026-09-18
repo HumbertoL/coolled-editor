@@ -2,6 +2,20 @@
 
 This app was created to preview and edit data on a 16x96 LED panel
 
+# Running it locally
+
+A Vite + React app. `yarn install` once, then:
+
+```sh
+yarn start    # dev server on http://localhost:3000
+yarn test     # Vitest
+yarn lint     # ESLint
+yarn build    # production bundle into build/
+yarn preview  # serve that bundle, to check it before deploying
+```
+
+`yarn deploy` builds and pushes `build/` to Firebase hosting.
+
 # Sending to the sign from your machine
 
 You don't need the phone or the CoolLED1248 app. Click **Send to sign** in the
