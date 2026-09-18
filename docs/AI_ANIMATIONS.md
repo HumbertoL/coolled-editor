@@ -158,7 +158,6 @@ Created 2026-09-09.
 
 | Animation | Preview | Description |
 | --- | --- | --- |
-| `retro_pager` | ![retro_pager](gifs/retro_pager.gif) | The sign as an amber pager LCD: idle "TEXT-EM-ALL" branding, then a buzz (shake + flashing red LEDs), then "HI HUMBERTO" typed one letter at a time with a blinking cursor, ending on a pulsing heart. A nod to Text-Em-All's roots in mass messaging. |
 | `campaign_sent` | ![campaign_sent](gifs/campaign_sent.gif) | A broadcast counter easing from 0 to 250,000 with a filling progress bar and a "SENDING..." label that flips to "SENT!" with a check when the count settles. |
 
 ## Claude Fable 5.1
@@ -194,21 +193,17 @@ Created 2026-09-09.
 | `newtons_cradle` | ![newtons_cradle](gifs/newtons_cradle.gif) | One sine drives both end balls; the middle three hold and flash on the click. 53 frames. |
 | `sorting` | ![sorting](gifs/sorting.gif) | Bubble sort on 24 bars, swaps sampled to fit, then the green done-sweep. 53 frames. |
 | `donut_dvd` | ![donut_dvd](gifs/donut_dvd.gif) | The bouncing DVD logo as a donut; triangle-wave path so it loops seamlessly despite 53 being prime, grazing a corner by one pixel. 53 frames. |
-| `clawd` | ![clawd](gifs/clawd.gif) | The Claude Code mascot trots in, blinks at a prompt with a blinking cursor, trots off. 53 frames. |
 
 ### Text-Em-All and desk statuses
 
 | Animation | Preview | Description |
 | --- | --- | --- |
-| `rebrand` | ![rebrand](gifs/rebrand.gif) | CALL-EM-ALL flips letter by letter into TEXT-EM-ALL, then a shine. |
 | `sms_bubbles` | ![sms_bubbles](gifs/sms_bubbles.gif) | A texting thread: outgoing green, incoming blue, typing dots, scroll. |
 | `tests_passing` | ![tests_passing](gifs/tests_passing.gif) | Sixteen specs run; one fails red, retries, passes; ALL 16 PASS. |
-| `pairing` | ![pairing](gifs/pairing.gif) | Bluetooth SEARCHING... then CONNECTED with a tick. |
 | `status_on_a_call` | ![status_on_a_call](gifs/status_on_a_call.gif) | Rattling handset, ON A CALL in red, blinking dot. |
 | `status_focus` | ![status_focus](gifs/status_focus.gif) | Headphones with a small equaliser, FOCUS MODE with a shine. |
 | `status_brb` | ![status_brb](gifs/status_brb.gif) | BE RIGHT BACK while a stick figure walks off the right edge. |
 | `humberto` | ![humberto](gifs/humberto.gif) | The name at 2x font, letters dropping in, then a rainbow ripple. |
-| `sgla_welcome` | ![sgla_welcome](gifs/sgla_welcome.gif) | For the Small Giants Leadership Academy graduation visit: WELCOME / SGLA, CONGRATS, / Y'ALL! with a tossed mortarboard, CLASS OF 2026, under confetti. 53 frames. |
 
 ### Dungeon Crawler Carl
 
@@ -287,18 +282,14 @@ Created 2026-09-10, one per era from 2001 to 2019. All 53 frames.
 | Animation | Preview | Description |
 | --- | --- | --- |
 | `all_your_base` | ![all_your_base](gifs/all_your_base.gif) | (2001) CATS flickers in and the lines type out: HOW ARE YOU GENTLEMEN, ALL YOUR BASE ARE BELONG TO US (full width, face cut away), YOU HAVE NO CHANCE TO SURVIVE MAKE YOUR TIME, HA HA HA HA. |
-| `pb_jelly_time` | ![pb_jelly_time](gifs/pb_jelly_time.gif) | (2002) The dancing banana sways with its arms up while the chant cycles: PEANUT BUTTER JELLY TIME, WHERE HE AT, THERE HE GO. A second banana joins. |
-| `badger_badger` | ![badger_badger](gifs/badger_badger.gif) | (2003) A row of badgers bounce to BADGER BADGER, a mushroom rises for MUSHROOM, badgers again, then SNAKE! A SNAKE! |
 | `loss` | ![loss](gifs/loss.gif) | (2008) The four panels reduced to their strokes -- | || ||- |_ -- drawn one at a time. If you know, you know. |
 | `deal_with_it` | ![deal_with_it](gifs/deal_with_it.gif) | (2010) Sunglasses drop from the top of the panel onto a face, land with a flash, and DEAL WITH IT slides in from the right. |
 | `nyan_cat` | ![nyan_cat](gifs/nyan_cat.gif) | (2011) Pop-Tart cat bobbing with a six-stripe rainbow rippling behind and stars streaming past. Seamless. |
 | `grumpy_cat` | ![grumpy_cat](gifs/grumpy_cat.gif) | (2012) Tardar Sauce blinks and flicks an ear under I HAD FUN ONCE. / IT WAS AWFUL. Then the caption goes and she just looks at you. |
 | `doge` | ![doge](gifs/doge.gif) | (2013) A Shiba with working eyebrows while captions pop in around the panel in meme colours: WOW, SUCH PIXEL, VERY LED, MUCH SIGN, SO BRIGHT, WOW. |
 | `this_is_fine` | ![this_is_fine](gifs/this_is_fine.gif) | (2013) The dog in the hat with a mug while flames climb and creep closer; THIS IS FINE. He takes a sip. |
-| `harlem_shake` | ![harlem_shake](gifs/harlem_shake.gif) | (2013) Eight figures stand still while one in a helmet bobs alone; the drop flashes white and everyone flails in random poses until the cut. |
 | `road_work_ahead` | ![road_work_ahead](gifs/road_work_ahead.gif) | (2014) The orange diamond reads ROAD WORK AHEAD? then the reply: UH YEAH, I SURE HOPE IT DOES. |
 | `wednesday_frog` | ![wednesday_frog](gifs/wednesday_frog.gif) | (2016) The frog blinks under IT'S WEDNESDAY, MY DUDES, then screams: mouth open, AAAAAAA growing, the whole panel shaking. |
-| `is_this_a_pigeon` | ![is_this_a_pigeon](gifs/is_this_a_pigeon.gif) | (2018) A butterfly flutters in, a pointing arrow comes for it, IS THIS A PIGEON? It is not. |
 | `stonks` | ![stonks](gifs/stonks.gif) | (2019) Meme Man in his suit watches a jagged line climb the chart; when it clears, STONKS with the up arrow. |
 
 ### Reworked, not created
@@ -322,8 +313,6 @@ Created 2026-09-09, all 53 frames.
 | `aurora` | ![aurora](gifs/aurora.gif) | Northern lights: overlapping sine waves drive curtain height and sway, GLOW brightness from leading edge up, hue drifting across the width via SPECTRUM. Seamless. 53 frames at 120ms. |
 | `maze` | ![maze](gifs/maze.gif) | Recursive backtracker carving a 48×8-cell maze in real time. Blue walls, black passages, white carver head with a cyan trail. 53 frames at 80ms. |
 | `ripples` | ![ripples](gifs/ripples.gif) | Seven staggered water drops sending concentric ring ripples that interfere constructively; brightness quantized through the GLOW ramp. Seamless. 53 frames at 80ms. |
-| `flock` | ![flock](gifs/flock.gif) | ~30 boids with cohesion, separation, and alignment rules swarming as a murmuration; density-based coloring (white clusters, cyan medium, blue sparse). 53 frames at 90ms. |
-| `sand` | ![sand](gifs/sand.gif) | Falling-sand simulation: colored grains drop from random positions and pile up following diagonal-slide physics. 53 frames at 80ms. |
 | `fireflies` | ![fireflies](gifs/fireflies.gif) | ~12 fireflies drifting over an irregular green grass silhouette, each pulsing independently through the GLOW ramp. Seamless. 53 frames at 120ms. |
 | `waveform` | ![waveform](gifs/waveform.gif) | Oscilloscope: a three-sine composite waveform morphing each frame, blue dot grid, dashed center line, phosphor persistence trail fading green → cyan → blue. Seamless. 53 frames at 60ms. |
 | `coral` | ![coral](gifs/coral.gif) | Diffusion-limited aggregation growing branching coral structures from the bottom up; growth front white, recent cyan, established blue. 53 frames at 100ms. |
