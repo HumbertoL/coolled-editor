@@ -2,8 +2,8 @@
 """
 This Is Fine, with Hellmo -- the dog at the centre of a summoning circle.
 
-Two memes in one room. KC Green's dog sits at the middle of the panel in his
-hat with his mug, and five Hellmos -- Elmo, arms raised, in the flames --
+Two memes in one room. KC Green's dog sits at the middle of the panel in
+profile, as in the comic -- bowler hat, long snout, floppy ear, mug held out, and five Hellmos -- Elmo, arms raised, in the flames --
 circle him like a carousel. The ring is an ellipse seen from slightly above:
 a Hellmo on the far half is drawn small and high and passes *behind* the dog,
 one on the near half is full size and low and passes *in front of* him, and
@@ -34,20 +34,23 @@ SEED = 666
 COUNT = 5
 CX, RADIUS = 48, 40
 
-# Dog from this_is_fine.py: hat (white) over a yellow body, mug in hand.
+# The dog in profile, facing right as in the comic: h bowler hat, y fur,
+# e the floppy ear, k eye / nose, a the arm holding the mug out. The mug
+# itself is drawn separately so it can rise for a sip.
 DOG = [
-    ".####....",
-    "..##.....",
-    ".#####...",
-    "#.###.#..",
-    ".#####...",
-    "..###....",
-    ".#####.#.",
-    "#.....##.",
-    "#######..",
-    "#.....#..",
+    "...hhhh.....",
+    "..hhhhhh....",
+    ".hhhhhhhhh..",
+    "..yyyyyyy...",
+    ".eyyyykyyyyy",
+    "eeyyyyyyyyy.",
+    "ee.yyyyy....",
+    "e..yyyyyaa..",
+    "...yyyy.....",
+    "..yyyyyyy...",
 ]
-DOG_X, DOG_Y = 44, 6
+DOG_PAINT = {"h": C.WHITE, "y": C.YELLOW, "e": C.RED, "k": C.BLACK, "a": C.YELLOW}
+DOG_X, DOG_Y = 42, 6
 
 # r fur, W eye white, K pupil / mouth, Y nose. Two arm poses, swapped on a
 # beat so the circle looks like it is chanting.
@@ -147,18 +150,22 @@ def draw_sprite(frame, sprite, x, y):
 def draw_dog(frame, index):
     blink = index in BLINKS
     sip = SIP_AT <= index < SIP_AT + 6
-    cells = [(DOG_X + c, DOG_Y + r) for r, line in enumerate(DOG)
-             for c, ch in enumerate(line) if ch == "#" and not (r == 6 and c == 7)]
-    for px, py in cells:
+    cells = [(DOG_X + c, DOG_Y + r, ch) for r, line in enumerate(DOG)
+             for c, ch in enumerate(line) if ch != "." and not (sip and ch == "a")]
+    mug_x, mug_y = (DOG_X + 9, DOG_Y + 6) if sip else (DOG_X + 9, DOG_Y + 7)
+    mug = [(mug_x + dx, mug_y + dy) for dx in (0, 1) for dy in (0, 1)] + [(mug_x + 2, mug_y)]
+    # Black halo round the whole figure, as for the Hellmos.
+    for px, py in [(x, y) for x, y, _ in cells] + mug:
         for dx in (-1, 0, 1):
-            frame.pixel(px + dx, py, C.BLACK)
-    for px, py in cells:
-        frame.pixel(px, py, C.WHITE if py - DOG_Y < 2 else C.YELLOW)
-    for ex in (2, 4):
-        frame.pixel(DOG_X + ex, DOG_Y + 3, C.YELLOW if blink else C.BLACK)
-    mug_y = DOG_Y + 3 if sip else DOG_Y + 6
-    frame.rect(DOG_X + 7, mug_y, 2, 2, C.CYAN, fill=True)
-    frame.pixel(DOG_X + 9, mug_y, C.CYAN)
+            for dy in (-1, 0, 1):
+                frame.pixel(px + dx, py + dy, C.BLACK)
+    for px, py, ch in cells:
+        color = DOG_PAINT[ch]
+        if ch == "k" and px == DOG_X + 6 and blink:
+            color = C.YELLOW
+        frame.pixel(px, py, color)
+    for px, py in mug:
+        frame.pixel(px, py, C.CYAN)
 
 
 def build():
