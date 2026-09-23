@@ -6,9 +6,11 @@ Two memes in one room. KC Green's dog sits at the middle of the panel in
 profile, as in the comic -- bowler hat, long snout, floppy ear, mug held out, and five Hellmos -- Elmo, arms raised, in the flames --
 circle him like a carousel. The ring is an ellipse seen from slightly above:
 a Hellmo on the far half is drawn small and high and passes *behind* the dog,
-one on the near half is full size and low and passes *in front of* him, and
-the switch happens at the ends of the ellipse where it is hardest to see. So
-the sort order does the work of 3D. One revolution per loop, seamless.
+one on the near half is full size and low and passes *in front of* him. At
+the ends of the ellipse a middle-sized sprite bridges the two, and each
+Hellmo's feet glide between the far and near floor lines with its depth, so
+it grows over several frames rather than popping. The sort order does the
+work of 3D. One revolution per loop, seamless.
 
 Everything sits in rows 5-15, which leaves the top five rows for the caption:
 THIS IS FINE. types out in a 3x5 mini-font, since the 5x7 font would collide
@@ -82,6 +84,14 @@ HELLMO_FAR = [
     ["r...r", "rWrWr", ".rYr.", ".rKr.", "..r..", ".r.r."],
     [".r.r.", "rWrWr", ".rYr.", ".rKr.", "..r..", ".r.r."],
 ]
+# The in-between size, shown near the ends of the ellipse so a Hellmo grows
+# small -> medium -> large over several frames instead of popping.
+HELLMO_MID = [
+    ["r.....r", "rWWrWWr", "rWKrKWr", ".rrYrr.", ".rKKKr.", "..rrr..", ".rr.rr.", ".r...r."],
+    [".r...r.", "rWWrWWr", "rWKrKWr", ".rrYrr.", ".rKKKr.", "..rrr..", ".rr.rr.", ".r...r."],
+]
+# |depth| below this is the side of the ellipse, drawn at the middle size.
+SIDE = 0.4
 PAINT = {"r": C.RED, "W": C.WHITE, "K": C.BLACK, "Y": C.YELLOW}
 NEAR_BOTTOM, FAR_BOTTOM = 15, 11
 
@@ -181,11 +191,13 @@ def build():
         for i in range(COUNT):
             theta = 2 * math.pi * (index / FRAMES + i / COUNT)
             depth = math.sin(theta)  # > 0: near side, in front of the dog
-            near = depth > 0
-            sprite = (HELLMO_NEAR if near else HELLMO_FAR)[(pose + i) % 2]
+            size = HELLMO_NEAR if depth > SIDE else HELLMO_FAR if depth < -SIDE else HELLMO_MID
+            sprite = size[(pose + i) % 2]
             width, height = len(sprite[0]), len(sprite)
             x = round(CX + RADIUS * math.cos(theta)) - width // 2
-            bottom = NEAR_BOTTOM if near else FAR_BOTTOM
+            # Feet glide between the far and near floor lines with depth,
+            # rather than jumping when the sprite changes size.
+            bottom = round(FAR_BOTTOM + (NEAR_BOTTOM - FAR_BOTTOM) * (depth + 1) / 2)
             ring.append((depth, sprite, x, bottom - height + 1))
 
         ring.sort(key=lambda item: item[0])
