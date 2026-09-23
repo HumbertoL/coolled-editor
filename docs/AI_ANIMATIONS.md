@@ -13,6 +13,41 @@ The previews in `docs/gifs/` are rendered from the committed `.jt` files at
 python3 tools/preview_jt.py src/sample/NAME.jt --gif docs/gifs/NAME.gif --scale 3
 ```
 
+## Claude Opus 5.5
+
+Created 2026-09-23, all 53 frames at 30,555 bytes -- the measured device
+maximum -- so send these with `--command-timeout 8`.
+
+### Free choice
+
+| Animation | Preview | Description |
+| --- | --- | --- |
+| `chess_mate` | ![chess_mate](gifs/chess_mate.gif) | Scholar's mate on a real 8x8 board at 2px a square, which is exactly the panel's 16 rows. Each piece lifts off a green-highlighted square and slides into place while the move list (1.E4 E5 ... 3.QH5 NF6?? 4.QXF7#) writes itself on the right and scrolls up; then the black king's square blinks red under a flashing CHECKMATE. |
+| `traffic_wave` | ![traffic_wave](gifs/traffic_wave.gif) | Five ring-road lanes, each running a seeded Nagel–Schreckenberg traffic model, cars coloured by speed: green cruising, yellow slowing, red stopped. One driver brakes (flashing white), and the red knot that follows drifts backwards against the traffic even though every car in it keeps moving forward. |
+| `langtons_ant` | ![langtons_ant](gifs/langtons_ant.gif) | Three Langton's ants in yellow, cyan and magenta on the wrapping 96x16 panel, starting at 3 steps a frame so their first scribbles can be followed, then speeding up as the patches grow and collide. Any ant treats any painted cell as painted, so they repaint and erase each other's trails. |
+| `waggle_dance` | ![waggle_dance](gifs/waggle_dance.gif) | A striped forager on a dotted honeycomb dances one full figure eight in exactly 53 frames: a buzzing, shaking straight run 70° from vertical, then a loop back, alternating right and left. On the left a hive, the sun and a flower 70° round show what the dance means; the dotted line to the flower marches while she waggles. |
+| `mitosis` | ![mitosis](gifs/mitosis.gif) | A cell divides: chromatin condenses into four X-shaped chromosomes, the envelope breaks into dots, centrosomes move apart, spindle fibres line the chromosomes up, then each X splits into chevrons pulled to the poles and two daughter nuclei form. The membrane is a two-point metaball field, so it pinches into a peanut and splits by itself, with no furrow drawn. |
+| `washing_machine` | ![washing_machine](gifs/washing_machine.gif) | A front-loader: a red sock, blue shirt, yellow towel and magenta pants tumble through cyan water with rising bubbles, the drum reversing halfway. Then SPIN: each item becomes an arc along the drum wall whose length grows with speed -- motion blur in 3 bits -- the cabinet walks side to side, and the readout climbs to 1400 RPM before it slows and refills. |
+| `bit_order` | ![bit_order](gifs/bit_order.gif) | The sign's own storage order, made visible. A landscape is painted exactly as the `.jt` stores it: a scan head walks each column top to bottom, about 93 bits a frame, first the red plane alone, then green over it (reds turn yellow), then blue to complete all 8 colours. An R/G/B label tracks the plane, and the finished picture holds under a tick. |
+| `double_slit` | ![double_slit](gifs/double_slit.gif) | A red emitter fires single photons at a barrier with two slits; faint wavefronts spread beyond, and each photon lands as a flash on the detector at a row drawn from a seeded cos² × sinc² two-slit distribution. Hits stack into a histogram growing leftward from the screen, and as the rate ramps up, bright fringes with dark rows between emerge from the noise. |
+| `seismograph` | ![seismograph](gifs/seismograph.gif) | A drum recorder: paper scrolls left under a pivoting pen, a quiet line gives way to fast P-waves, then S-waves swinging nearly the full 16 rows and a decay, while a little building sways (roof further than base) and a readout climbs to M6.8. The paper pattern repeats every loop with the quake only in the part frame 0 never shows, so the record scrolls off and the loop is seamless. |
+| `timelapse_garden` | ![timelapse_garden](gifs/timelapse_garden.gif) | Five days in a flower bed: the sun arcs over a blue sky with a magenta band at dawn and dusk, a crescent moon crosses a starfield, and plants grow only while it is light -- seed, sprout, leaves, bud, bloom, eight colours of flower -- with a DAY counter in a 3x5 mini-font. Ends in full bloom on the last night. |
+
+### Memes, 2015 to 2024
+
+| Animation | Preview | Description |
+| --- | --- | --- |
+| `the_dress` | ![the_dress](gifs/the_dress.gif) | (2015) A striped dress flips between BLUE & BLACK? and WHITE & GOLD?, each reading held a little shorter than the last until it flickers every frame; then a magenta seam splits it into both readings at once, both captions stacked. |
+| `drake` | ![drake](gifs/drake.gif) | (2015) Drakeposting laid side by side: an orange-jacketed figure turns away with a raised palm from 54 FRAMES, which gets struck through, then grins and points at 53 FRAMES with a green tick. A sign in-joke -- 53 is the hardware maximum, and 54 transfers "successfully" but is silently ignored. |
+| `distracted_boyfriend` | ![distracted_boyfriend](gifs/distracted_boyfriend.gif) | (2017) A woman in red walks in and the boyfriend's head whips round to follow while his body stays turned to his girlfriend, whose face flushes under a scowl and an anger mark. Then the labels land -- LED SIGN, ME, MY JOB -- in a hand-built 3x5 mini-font so ten rows are left for the figures. |
+| `galaxy_brain` | ![galaxy_brain](gifs/galaxy_brain.gif) | (2017) Four stages, each brain bigger and brighter: USE A 4K SCREEN, USE AN LED SIGN, ONLY 96X16 PIXELS, 8 COLORS IS PLENTY. The glow climbs the palette's only ramp, BLUE → CYAN → WHITE, and the last brain blazes with shock-waves of light rolling out across the panel. |
+| `bongo_cat` | ![bongo_cat](gifs/bongo_cat.gif) | (2018) The round white cat slaps the bongos left, right, left, right; each hit flashes the rim, throws impact marks and sends a coloured note drifting up. A pause with paws raised, then both at once with happy ^ ^ eyes. Notes are simulated modulo the loop, so it has no seam. |
+| `thanos_snap` | ![thanos_snap](gifs/thanos_snap.gif) | (2018) The gauntlet's stones glint in turn, fingers snap, the panel whites out and a shockwave crosses eight little heroes -- then four come apart pixel by pixel, each on its own seeded schedule, drifting up and right as ash cooling yellow → red → magenta → blue. PERFECTLY, then BALANCED. |
+| `crab_rave` | ![crab_rave](gifs/crab_rave.gif) | (2018) Five red crabs dance on a 4-frame beat -- about 125 BPM -- claws pumping and sidestepping in sync under disco beams that go solid on the downbeat. The middle three burrow into the sand, BUGS IS GONE appears framed by the two that stay, and the three dig back up for the loop. |
+| `among_us` | ![among_us](gifs/among_us.gif) | (2020) A red crewmate (bean body, cyan visor with a glint, backpack) walks in and SUS lands beside it at double size. Cut to space: the ejected body tumbles a quarter turn every two frames across a three-speed parallax starfield, then RED WAS NOT / THE IMPOSTOR. types out over the stars. |
+| `wordle` | ![wordle](gifs/wordle.gif) | (2022) The current guess in five big tiles on the left, the share grid building on the right. Each tile squashes, changes colour and springs back in turn; STORM, CRANE, NAVEL, PANEL are coloured by a real Wordle scoring function, duplicate-letter rules included. The winning row hops in a wave, then SPLENDID. |
+| `moo_deng` | ![moo_deng](gifs/moo_deng.gif) | (2024) The baby pygmy hippo face-on in her pool -- wet-shine head, wide pink muzzle, blushing cheeks -- bouncing with a splash at each landing while MOO DENG ripples. She rears up and chomps three times (CHOMP!), then a big hop sprays water for BOUNCY PIG. |
+
 ## Claude Fable 5
 
 Created 2026-09-09. Sizes are 48 or 53 frames; the 53-frame entries land at
