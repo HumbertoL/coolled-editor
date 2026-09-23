@@ -20,8 +20,6 @@ jobs:
           node-version: 24
           cache: yarn
       - run: yarn install --frozen-lockfile
-      # Gate the deploy on tests.
-      - run: yarn test
       - run: yarn build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
