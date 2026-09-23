@@ -48,6 +48,24 @@ maximum -- so send these with `--command-timeout 8`.
 | `wordle` | ![wordle](gifs/wordle.gif) | (2022) The current guess in five big tiles on the left, the share grid building on the right. Each tile squashes, changes colour and springs back in turn; STORM, CRANE, NAVEL, PANEL are coloured by a real Wordle scoring function, duplicate-letter rules included. The winning row hops in a wave, then SPLENDID. |
 | `moo_deng` | ![moo_deng](gifs/moo_deng.gif) | (2024) The baby pygmy hippo face-on in her pool -- wet-shine head, wide pink muzzle, blushing cheeks -- bouncing with a splash at each landing while MOO DENG ripples. She rears up and chomps three times (CHOMP!), then a big hop sprays water for BOUNCY PIG. |
 
+### Joy
+
+Created 2026-09-23 for a request for something that makes people want to run
+through a wall -- the feeling `wednesday_frog` got when it went up on a
+Wednesday. Not all share its build-up-then-shake shape; the brief was the
+delight, not the structure.
+
+| Animation | Preview | Description |
+| --- | --- | --- |
+| `oh_yeah` | ![oh_yeah](gifs/oh_yeah.gif) | A brick wall trembles in rumbles while cracks spread white-hot from one point. A white flash, the grinning red pitcher bursts through, and each brick holds until the shockwave from the impact reaches it, then flies off as its own particle. OH YEAH! slams in at double size, strobing, the whole panel shaking. |
+| `over_9000` | ![over_9000](gifs/over_9000.gif) | (2006) A spiky-haired fighter powers up as the scouter climbs from POWER LEVEL 1000, his aura going BLUE → CYAN → WHITE → YELLOW with rocks floating up; the hair turns gold as the reading hits exactly 9001. The scouter pops in a white flash and IT'S OVER, then 9000!!!, scream in at double size. The aura keeps a one-pixel black gap round him so he reads whatever its colour. |
+| `leeroy_jenkins` | ![leeroy_jenkins](gifs/leeroy_jenkins.gif) | (2005) Four adventurers huddle while the plan types out -- 32.3333... running off the panel, (REPEATING) -- then a gold paladin wanders in late: OK LET'S / DO THIS. He charges across the panel in seven frames trailing dust, ! marks pop over the party, the name stretches out a letter a frame to LEEEEROY, and JENKINS!!! slams in shaking. |
+| `this_is_sparta` | ![this_is_sparta](gifs/this_is_sparta.gif) | (2007) A red-crested Spartan faces a messenger at the edge of a pit: MADNESS?, then THIS, then IS. A white flash, the kick, and the messenger hangs over the pit for a cartoon beat beside a "!" before he drops -- then SPARTA!!! fills the panel at double size, strobing red, yellow and white, the Spartan bobbing in triumph. |
+| `hype_meter` | ![hype_meter](gifs/hype_meter.gif) | A segmented HYPE gauge climbs through MEH, OK, HYPED and UNHINGED, green to yellow to red, rattling harder as it rises until segments burst out past the end of the box. A white flash, a spark blast, then LET'S drops in at double size and bounces, and GOOOO!!! follows an O at a time under a rain of sparks. |
+| `zoomies` | ![zoomies](gifs/zoomies.gif) | A yellow dog wagging in the middle of the panel gets a "!" and bolts: edge to edge and back, faster every lap (7 up to 23 px a frame), skidding at each wall in a spray of dust, trailing blue and cyan motion-blur copies while ZOOMIES! strobes overhead. Then it flops on its belly, tongue out, tail going, and hearts float up. |
+| `letters_dance` | ![letters_dance](gifs/letters_dance.gif) | HAVE A NICE DAY in plain white, the most boring sign in the building -- until the C twitches, the Y glances over its shoulder, and they all break loose: a travelling wave, then a rainbow conga line that snakes off one edge and back in the other, each letter pirouetting. They scramble home and freeze, perfectly still, except the A, which landed upside down. No shake; the surprise is the joke. |
+| `high_five` | ![high_five](gifs/high_five.gif) | Two hands wind up; the left swings, the right yanks away -- too slow -- leaving it hanging beside a lonely ?. Second try, a trembling wind-up, and it lands: a one-frame white flash, a starburst, sparks falling under gravity, a fading shake, and HIGH FIVE! bursts out of the point of contact letter by letter while the hands bob in celebration. |
+
 ## Claude Fable 5
 
 Created 2026-09-09. Sizes are 48 or 53 frames; the 53-frame entries land at
