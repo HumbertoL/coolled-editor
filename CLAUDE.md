@@ -12,7 +12,7 @@ route to push files to real hardware over Bluetooth.
 | [tools/README.md](tools/README.md) | Generating `.jt` files in Python, the bit layout, frame limits |
 | [docs/SENDING_TO_THE_SIGN.md](docs/SENDING_TO_THE_SIGN.md) | Driver setup, macOS Bluetooth, error-by-error troubleshooting |
 | [docs/VENDOR_DATA.md](docs/VENDOR_DATA.md) | The vendor's CDN endpoints, material catalog, and the bitmap font behind **Add text** |
-| [docs/AI_ANIMATIONS.md](docs/AI_ANIMATIONS.md) | Which sample animations an AI model made, which model, when. **Add a row when you create one.** |
+| [docs/AI_ANIMATIONS.md](docs/AI_ANIMATIONS.md) | Which sample animations an AI model made, which model, when. **Add a row when you create one**, then show the GIFs -- see [Showing new animations](#showing-new-animations) |
 
 ## The one rule that will bite you
 
@@ -132,6 +132,28 @@ sign truncating.
 Frame-based scrolling is impractical: a 20-character message needs ~54 frames
 of travel. The sign has native scroll modes for this, via the `mode` field
 that `coolledx-driver` currently ignores.
+
+## Showing new animations
+
+**When you create animations, always show the user the final GIFs.** Render
+them from the written `.jt` (`preview_jt.py FILE --gif docs/gifs/NAME.gif
+--scale 3`), not from anything in memory.
+
+Sending GIFs as chat files is not enough: the chat often shows only the first
+frame, so they arrive as stills. The workaround is a web page that plays them.
+Build it with `tools/gallery.py`, then publish it as an Artifact:
+
+```sh
+python3 tools/gallery.py --section "Opus 5.5" --title "Twenty for the sign"
+python3 tools/gallery.py chess_mate wordle      # or name them
+```
+
+It writes `tools/out/gallery/index.html` (gitignored) and prints a
+`{"gifs/NAME.gif": "docs/gifs/NAME.gif"}` map. Publish that HTML with the map
+as the Artifact tool's `files`, so each GIF ships next to the page, and give
+the user the link. Captions come from `docs/AI_ANIMATIONS.md`, so add the rows
+first. Where no Artifact tool is available, send the GIFs as files anyway and
+say they may only show one frame in chat.
 
 ## Working with the user
 
