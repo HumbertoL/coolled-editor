@@ -4,11 +4,15 @@
     {
       "name": "coolled-editor",
       "runtimeExecutable": "npx",
-      "runtimeArgs": [
-        "react-scripts",
-        "start"
-      ],
+      "runtimeArgs": ["vite"],
       "port": 3000,
+      "autoPort": true
+    },
+    {
+      "name": "coolled-editor-build",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["vite", "preview"],
+      "port": 4173,
       "autoPort": true
     }
   ]

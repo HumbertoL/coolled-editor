@@ -208,7 +208,7 @@ export const materialEntryToJt = (entry) => [
 
 /** Which material packs have been vendored, and how big each one is. */
 export const loadMaterialIndex = async () => {
-  const url = `${process.env.PUBLIC_URL}/${MATERIAL_DIR}/index.json`;
+  const url = `${import.meta.env.BASE_URL}${MATERIAL_DIR}/index.json`;
 
   try {
     const response = await fetch(url);
@@ -225,7 +225,7 @@ export const loadMaterialIndex = async () => {
 };
 
 export const loadMaterialPack = async (pack) => {
-  const url = `${process.env.PUBLIC_URL}/${MATERIAL_DIR}/${pack.file}`;
+  const url = `${import.meta.env.BASE_URL}${MATERIAL_DIR}/${pack.file}`;
   const response = await fetch(url);
   if (!response.ok) {
     throw new Error(`Could not load ${pack.file} (${response.status})`);
@@ -264,24 +264,24 @@ export const safeFilename = (name, fallback) => {
 };
 
 /**
- * The .jt and .json samples committed alongside the editor. Unknown
- * extensions come back from webpack as a URL, .json as a parsed object.
+ * The .jt and .json samples committed alongside the editor. The glob is
+ * resolved at build time, so dropping a file into src/sample is enough --
+ * but it must stay a literal, since Vite rewrites it statically. Every
+ * match comes back as a URL and is fetched and parsed the same way.
  */
+const BUNDLED_SAMPLE_URLS = import.meta.glob('../sample/*.{jt,json}', {
+  query: '?url',
+  import: 'default',
+  eager: true,
+});
+
 export const loadBundledSamples = async () => {
-  const context = require.context('../sample', false, /\.(jt|json)$/);
-
   const samples = await Promise.all(
-    context.keys().map(async (key) => {
-      const name = key.replace(/^\.\//, '');
-      const asset = context(key);
+    Object.entries(BUNDLED_SAMPLE_URLS).map(async ([key, url]) => {
+      const name = key.replace(/^.*\//, '');
 
-      let jt;
-      if (typeof asset === 'string') {
-        const response = await fetch(asset);
-        jt = JSON.parse(await response.text());
-      } else {
-        jt = asset;
-      }
+      const response = await fetch(url);
+      const jt = JSON.parse(await response.text());
 
       return {
         id: `bundled:${name}`,
@@ -300,7 +300,7 @@ export const loadBundledSamples = async () => {
 
 /** Fetch and unpack one of the vendor packs from the README. */
 export const loadVendorPack = async (pack) => {
-  const url = `${process.env.PUBLIC_URL}/samples/${pack.file}`;
+  const url = `${import.meta.env.BASE_URL}samples/${pack.file}`;
   const response = await fetch(url);
   if (!response.ok) {
     throw new Error(`Could not load ${pack.file} (${response.status})`);

@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-Editor and preview tool for a 16x96 CoolLEDX LED panel. React (CRA) app for
+Editor and preview tool for a 16x96 CoolLEDX LED panel. React (Vite) app for
 drawing, plus a Python toolkit in `tools/` for generating animations, plus a
 route to push files to real hardware over Bluetooth.
 
@@ -57,11 +57,20 @@ reads the data. So:
 - **Prettier: always pass `--single-quote`.** There is no Prettier config, so
   its default is double quotes while the codebase uses single. Running it bare
   reformats every string in the file you touch.
-- **Build with `npx react-scripts build`, not `CI=true`.** There are
-  pre-existing lint warnings (`FrameControls.js`, `SamplesPage.js`); `CI=true`
-  promotes warnings to errors, so the build fails for reasons unrelated to
-  your change. Check that you added no *new* warnings.
-- No router: routing is a small hash router in `App.js`, so static hosting
+- **Vite, not CRA.** `yarn start` (dev, port 3000, honours `PORT`),
+  `yarn build` (writes `build/`, not `dist/`, because firebase.json serves
+  `build/`), `yarn test` (Vitest, jsdom), `yarn lint` (ESLint flat config).
+  The build does **not** lint, so run `yarn lint` yourself: there are
+  pre-existing warnings (`FrameControls.jsx`, `SamplesPage.jsx`,
+  `TextTool.jsx`, `SamplePreview.jsx`, `App.jsx`), so check that you added no
+  *new* ones rather than expecting a clean run.
+- **Components carrying JSX are `.jsx`.** Vite's esbuild does not transform
+  JSX inside `.js`. Helpers in `src/helpers/` stay `.js`. Imports are
+  extensionless, so moving a file between the two needs no import changes.
+- **jsdom has no canvas.** `src/setupTests.js` stubs `getContext('2d')` with
+  no-ops so canvas components mount; a test asserting on pixels needs a real
+  canvas instead.
+- No router: routing is a small hash router in `App.jsx`, so static hosting
   needs no rewrite rules. New views go through the same `route` check.
 - Palette is **3 bits per pixel** — 8 colors, no brightness levels.
   `BLUE -> CYAN -> WHITE` is the only available dim-to-bright ramp and is what
@@ -70,8 +79,10 @@ reads the data. So:
 ## Repo layout worth knowing
 
 - `src/sample/*.jt` — samples. The Samples page enumerates this directory at
-  build time via `require.context`, so **dropping a `.jt` file in is enough**;
-  no registration. Files without a `.jt`/`.json` extension are ignored.
+  build time via `import.meta.glob` in `src/helpers/samples.js`, so **dropping
+  a `.jt` file in is enough**; no registration. The glob pattern must stay a
+  literal — Vite rewrites it statically and a computed path silently matches
+  nothing. Files without a `.jt`/`.json` extension are ignored.
 - `public/samples/` — the vendor packs and material catalog, fetched at
   runtime rather than bundled. Keeps a few MB out of the JS bundle.
   Regenerate the catalog with `yarn fetch-material`.
