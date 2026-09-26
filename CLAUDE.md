@@ -171,6 +171,14 @@ say they may only show one frame in chat.
 
 ## Working with the user
 
+- **Pushing to `main` deploys to production.** The user wants finished work
+  pushed to `main`, and
+  `.github/workflows/firebase-hosting-merge.yml` then builds and deploys it to
+  the live Firebase site (project `coolled-editor`) on every push -- there is
+  no separate deploy step. So run `yarn lint`, `yarn test` and `yarn build`
+  before pushing: a broken `main` is a broken live site. Pull requests get a
+  preview channel from `firebase-hosting-pull-request.yml` instead. Other
+  sessions push to `main` too, so fetch and merge it first.
 - **This repo often has uncommitted work in flight.** Stage your own files by
   path; never `git add -A` or `git commit -a`. Deletions and edits you did not
   make show up mid-task — surface them, don't absorb them into your commit.
