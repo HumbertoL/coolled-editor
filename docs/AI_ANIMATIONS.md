@@ -67,6 +67,25 @@ delight, not the structure.
 | `high_five` | ![high_five](gifs/high_five.gif) | Two hands wind up; the left swings, the right yanks away -- too slow -- leaving it hanging beside a lonely ?. Second try, a trembling wind-up, and it lands: a one-frame white flash, a starburst, sparks falling under gravity, a fading shake, and HIGH FIVE! bursts out of the point of contact letter by letter while the hands bob in celebration. |
 | `hellmo_ring` | ![hellmo_ring](gifs/hellmo_ring.gif) | (2013 + 2016) Two memes in one room: the This Is Fine dog sits mid-panel in profile, as in the comic -- bowler hat, long snout, floppy ear, mug held out -- while five Hellmos, arms raised in the flames, circle him like a carousel. The ring is an ellipse seen from slightly above -- far-side Hellmos are drawn small and high and pass behind the dog, near-side ones full size and low and pass in front, with a middle size at the ends of the ellipse and feet that glide a row at a time with depth, so each grows over several frames instead of popping -- and draw order does the work of 3D. One revolution per loop, seamless; a black halo cuts each red Hellmo out of the red fire. THIS IS FINE. types out in a 3x5 mini-font above. |
 
+### Simulations and demos
+
+Created 2026-09-26 for a request for "really cool animations". Most are a
+real algorithm running rather than a drawing -- a raycaster, boids, a
+reaction-diffusion system, an agent-based slime mold, RK4 chaos -- picked
+because nothing in the collection did them yet. All 53 frames at 30,528
+bytes.
+
+| Animation | Preview | Description |
+| --- | --- | --- |
+| `raycaster` | ![raycaster](gifs/raycaster.gif) | A Wolfenstein-style first-person walk round a ring corridor: every view column casts a DDA ray into a 12x8 map, walls shade WHITE-CYAN-BLUE with distance and one step darker on east-west faces, mortar lines slide past, and floor-grid dots mark the ground. Each leg ends at a coloured banner, the camera turns on the spot at every corner, and a minimap on the right tracks a blinking player dot. Seamless. |
+| `murmuration` | ![murmuration](gifs/murmuration.gif) | Sixty starlings as black specks against a sunset -- blue sky, a magenta band, a red horizon, a yellow sun sinking into a treeline -- flocking on Reynolds' three boid rules alone. Halfway through, a hawk (a larger black chevron) cuts across and the flock tears open around it and seals behind. |
+| `turing_patterns` | ![turing_patterns](gifs/turing_patterns.gif) | The word TURING seeds a Gray-Scott reaction-diffusion system on the wrapping panel. The letters swell into blobs, bud and split, and worms branch out until a fingerprint labyrinth fills the panel -- the patterns Turing predicted in 1952. Activator concentration drawn through BLUE, CYAN and WHITE; the simulation speeds up as it goes. |
+| `asteroids` | ![asteroids](gifs/asteroids.gif) | The 1979 vector game with an autopilot that never misses: a yellow outline ship at the centre turns to the nearest rock, leads its drift, and fires. White polygon rocks split big to medium to small, small ones burst into red and yellow sparks, everything wraps at the edges, and a green score ticks up in the corner. |
+| `copper_bars` | ![copper_bars](gifs/copper_bars.gif) | An Amiga demoscene intro: three shaded raster bars (blue-cyan-white, magenta-red-yellow, green-yellow-white) orbit an invisible cylinder, passing in front of and behind each other, over a three-speed starfield, while GREETZ rides a travelling sine letter by letter in white with a black keyline. Seamless. |
+| `slime_mold` | ![slime_mold](gifs/slime_mold.gif) | Physarum as 260 agents that sniff, turn toward the strongest trail and deposit more. Scattered blue noise knits into a mesh of veins within a few frames, the veins touching the six red oat flakes thicken to yellow and white, and dead ends fade as the network consolidates. |
+| `stained_glass` | ![stained_glass](gifs/stained_glass.gif) | A Voronoi window: fourteen seeds drift on Lissajous paths, each pixel takes its nearest seed's colour and near-ties become black lead came, so panes swell, pinch off and trade territory while the leading redraws itself. A diagonal glint of sunlight sweeps across once a loop. Seamless. |
+| `double_pendulum` | ![double_pendulum](gifs/double_pendulum.gif) | Three double pendulums on one pivot, red, green and blue, released 0.001 rad apart. They overlap as one white pendulum (the channels add to white), then colour fringes appear and each flails on its own. A strip chart on the left shows the three lower-arm traces forking; on the right their spread in degrees climbs from green through yellow to red. |
+
 ## Claude Fable 5
 
 Created 2026-09-09. Sizes are 48 or 53 frames; the 53-frame entries land at
