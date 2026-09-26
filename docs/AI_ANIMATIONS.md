@@ -67,6 +67,22 @@ delight, not the structure.
 | `high_five` | ![high_five](gifs/high_five.gif) | Two hands wind up; the left swings, the right yanks away -- too slow -- leaving it hanging beside a lonely ?. Second try, a trembling wind-up, and it lands: a one-frame white flash, a starburst, sparks falling under gravity, a fading shake, and HIGH FIVE! bursts out of the point of contact letter by letter while the hands bob in celebration. |
 | `hellmo_ring` | ![hellmo_ring](gifs/hellmo_ring.gif) | (2013 + 2016) Two memes in one room: the This Is Fine dog sits mid-panel in profile, as in the comic -- bowler hat, long snout, floppy ear, mug held out -- while five Hellmos, arms raised in the flames, circle him like a carousel. The ring is an ellipse seen from slightly above -- far-side Hellmos are drawn small and high and pass behind the dog, near-side ones full size and low and pass in front, with a middle size at the ends of the ellipse and feet that glide a row at a time with depth, so each grows over several frames instead of popping -- and draw order does the work of 3D. One revolution per loop, seamless; a black halo cuts each red Hellmo out of the red fire. THIS IS FINE. types out in a 3x5 mini-font above. |
 
+### Satisfying
+
+Created 2026-09-26 for a request for animations that are visually pleasing or
+satisfying to watch: things clicking into place, sorting, filling, weaving.
+
+| Animation | Preview | Description |
+| --- | --- | --- |
+| `ball_sort` | ![ball_sort](gifs/ball_sort.gif) | The tube puzzle: five colours, four balls each, dealt at random into five of seven tubes. A breadth-first search finds the shortest solve -- 13 moves -- and each move lifts the top ball clear, carries it over and drops it in. A finished tube lights up in its colour; when all five are done the rack flashes white. |
+| `bubble_wrap` | ![bubble_wrap](gifs/bubble_wrap.gif) | A sheet of cyan bubbles with white glints, popped by a front that wanders left to right with seeded jitter, so a few run ahead and a few hold out. Each pop is a one-frame yellow burst, then a crinkled blue scrap; the sheet reinflates from the left to start again. |
+| `flip_disc` | ![flip_disc](gifs/flip_disc.gif) | A 48x8 flip-dot board of yellow discs, each 2x2 pixels, flipping through rings, checks, hearts and diagonals. Every flip shows one frame edge-on as a blue sliver, and each change travels differently: a sweep, a ripple from the centre, a diagonal, a random scatter. Seamless. |
+| `loom` | ![loom](gifs/loom.gif) | A white shuttle races back and forth weaving one row per pass: yellow and red warp stripes, blue then magenta weft, and wherever the pattern lifts the warp over the weft its colour shows, so nested diamonds grow out of bare threads. The finished cloth rolls off the top. |
+| `sand_art` | ![sand_art](gifs/sand_art.gif) | A falling-sand automaton: a spout visits seven spots, pouring a new colour at each, and every pour heaps into a mound that avalanches down over the ones before -- layered sand in a bottle. The stream wiggles as the spout drifts. |
+| `stack_tower` | ![stack_tower](gifs/stack_tower.gif) | The stacking game: rainbow slabs slide in from alternate sides and stop over the tower. Overhangs are sliced off and tumble away under gravity; dead-on drops flash white. The view scrolls as the tower climbs. |
+| `tusi_couple` | ![tusi_couple](gifs/tusi_couple.gif) | Dots that only move in straight lines, drawing a circle: each slides along its own line through the centre, phase-shifted by the line's angle, and together they roll round as a circle half the size. Four lines, then eight, then the same eight with the lines hidden, where it just looks like a wheel. Seamless. |
+| `zipper` | ![zipper](gifs/zipper.gif) | A white slider eases along the panel meshing interlocking yellow teeth; ahead of it the blue tapes splay into a V over a red lining. It closes, pauses and eases back open, so the loop is seamless. |
+
 ### Simulations and demos
 
 Created 2026-09-26 for a request for "really cool animations". Most are a
