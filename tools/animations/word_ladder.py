@@ -1,19 +1,19 @@
 #!/usr/bin/env python3
 """
-Word Ladder -- get from COLD to WARM changing one letter at a time.
+Word Ladder -- turn LEAD into GOLD, one letter at a time.
 
-The challenge holds for most of the loop: a big icy-CYAN COLD on the left, a
-big RED WARM on the right, and between them a little ladder of three empty
-rungs, each a question mark that lights up in turn like someone thinking it
-through. Underneath, the rule: ONE LETTER AT A TIME.
+The alchemist's puzzle holds for most of the loop: a big CYAN LEAD on the
+left, a big YELLOW GOLD on the right, and between them a little ladder of
+three empty rungs, each a question mark that lights up in turn like someone
+thinking it through. Underneath, the rule: ONE LETTER AT A TIME.
 
-Then the answer. The panel cuts to the whole ladder in small type, rails
-and all, with COLD and WARM at either end, and the rungs fill in one by one:
-CORD, WORD, WORM, WARM. On each rung the letter that changed scrambles
-through a couple of random letters and lands in YELLOW, so the path of
-changes stays traced across the finished ladder -- and each of the four
-letters changes exactly once. A green shine runs along the solved ladder
-before the loop returns to the question.
+Then the answer. The panel cuts to the whole ladder in small type, rails,
+end posts and all, with LEAD and GOLD at either end, and the rungs fill in
+one by one: HEAD, HELD, HOLD, GOLD. On each rung the letter that changed
+scrambles through a couple of random letters in MAGENTA and lands in GREEN,
+so the path of changes stays traced across the finished ladder. Once GOLD
+is reached the transmutation sweeps left to right, turning every word gold
+while the changed letters stay GREEN, and the rails blink YELLOW.
 """
 
 from __future__ import annotations
@@ -30,8 +30,8 @@ FRAMES = 53
 DELAY = 150
 W, H = 96, 16
 
-LADDER = ["COLD", "CORD", "WORD", "WORM", "WARM"]
-START_C, END_C, MID_C, CHANGE_C = C.CYAN, C.RED, C.WHITE, C.YELLOW
+LADDER = ["LEAD", "HEAD", "HELD", "HOLD", "GOLD"]
+START_C, END_C, MID_C, CHANGE_C = C.CYAN, C.YELLOW, C.WHITE, C.GREEN
 RAIL_C = C.BLUE
 
 CHALLENGE_END = 27  # frames 0..26: the question
@@ -61,6 +61,7 @@ def word_positions():
         x += Canvas.small_text_width(word) + GAP
     total = x - GAP
     offset = (W - total) // 2
+    assert offset >= 2, "ladder too wide for end posts"
     return [p + offset for p in xs], total
 
 
@@ -77,19 +78,19 @@ def small_word(frame, word, x, colors):
 
 
 def draw_ladder(frame, rail=RAIL_C):
-    left = WORD_X[0] - 1
-    right = WORD_X[-1] + Canvas.small_text_width(LADDER[-1])
+    left = WORD_X[0] - 2
+    right = WORD_X[-1] + Canvas.small_text_width(LADDER[-1]) + 1
     frame.hline(left, RAIL_TOP, right - left + 1, rail)
     frame.hline(left, RAIL_BOT, right - left + 1, rail)
-    for i in range(1, len(LADDER)):
-        post = WORD_X[i] - 2
+    posts = [left, right] + [WORD_X[i] - 2 for i in range(1, len(LADDER))]
+    for post in posts:
         frame.vline(post, RAIL_TOP, RAIL_BOT - RAIL_TOP + 1, rail)
 
 
 def challenge(frame, index):
     # Big start and goal words.
-    frame.text("COLD", 1, 1, START_C)
-    frame.text("WARM", W - 24, 1, END_C)
+    frame.text(LADDER[0], 1, 1, START_C)
+    frame.text(LADDER[-1], W - 24, 1, END_C)
     # Mini ladder of three empty rungs between them.
     left, right = 27, 68
     frame.hline(left, 0, right - left + 1, RAIL_C)
@@ -106,8 +107,8 @@ def challenge(frame, index):
 
 def reveal(frame, index, rnd):
     solved = index >= SOLVED_AT
-    shine = (index - SOLVED_AT) * 24 - 4 if solved else None
-    draw_ladder(frame, C.CYAN if solved and index % 2 else RAIL_C)
+    shine = (index - SOLVED_AT) * 20 + 4 if solved else None  # sweep front
+    draw_ladder(frame, C.YELLOW if solved and index % 2 else RAIL_C)
     for i, word in enumerate(LADDER):
         base = START_C if i == 0 else END_C if i == len(LADDER) - 1 else MID_C
         colors = [base] * 4
@@ -126,13 +127,14 @@ def reveal(frame, index, rnd):
         if i > 0 and index < appear + 2 and index >= appear:
             # The changing letter scrambles before it lands.
             k = CHANGES[i - 1]
-            shown = word[:k] + rnd.choice("ABEHKLNPSTUXZ") + word[k + 1:]
+            shown = word[:k] + rnd.choice("ABEFKPRSTUXZ") + word[k + 1:]
             colors[k] = C.MAGENTA
         if i == len(LADDER) - 1 and index < appear:
             colors = [END_C] * 4  # the goal sits plain until reached
         if shine is not None:
+            # Behind the sweep front everything is gold but the changed letters.
             colors = [
-                C.GREEN if abs(WORD_X[i] + 4 * n - shine) < 7 else c
+                END_C if WORD_X[i] + 4 * n < shine and c != CHANGE_C else c
                 for n, c in enumerate(colors)
             ]
         small_word(frame, shown, WORD_X[i], colors)

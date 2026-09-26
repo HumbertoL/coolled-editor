@@ -266,7 +266,7 @@ def main():
         frame = anim.frame()
         bezel(frame)
         lit = {}
-        hearts_full = 1
+        hearts_full = 3
 
         if f < 10:
             # Egg wobbles, harder as it goes, and cracks.
@@ -305,7 +305,7 @@ def main():
                 lit["call"] = C.RED
                 lit["food"] = C.WHITE
             # A rumble: the pet shivers.
-            hearts_full = 0
+            hearts_full = 1
             if f % 2 == 0:
                 frame.pixel(PET_X - 2, FLOOR - 4, C.WHITE)
                 frame.pixel(PET_X + 11, FLOOR - 4, C.WHITE)
@@ -330,7 +330,7 @@ def main():
         elif f < 41:
             # Full... then a little pile appears.
             k = f - 34
-            hearts_full = 2
+            hearts_full = 5
             if k < 2:
                 pet(frame, "happy", PET_X)
             else:
@@ -345,7 +345,7 @@ def main():
             # Flush: a wave with a duck riding it sweeps left to right.
             k = f - 41
             lit["duck"] = C.YELLOW
-            hearts_full = 2
+            hearts_full = 5
             front = LCD_X0 + 1 + k * 13
             if front < PET_X + 12:
                 sprite(frame, POOP, PET_X + 12, FLOOR - 3)
@@ -367,7 +367,7 @@ def main():
             # Joy: hearts float up, the meter fills, the pet bounces.
             k = f - 46
             lit["heart"] = C.RED
-            hearts_full = min(4, 2 + k // 2)
+            hearts_full = min(7, 5 + k // 2)
             lift = BOUNCE[k % len(BOUNCE)]
             pet(frame, "happy", PET_X, lift)
             for hx, start in ((PET_X - 9, 0), (PET_X + 13, 2), (PET_X - 16, 3), (PET_X + 20, 1)):
