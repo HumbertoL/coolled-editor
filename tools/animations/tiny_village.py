@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """
-Tiny Village -- one day in a miniature village, midnight to midnight.
+Tiny Village -- one day in a miniature village, night to night.
 
-A row of cottages, a bakery with a striped awning, a church with a copper
+A row of cottages, a pink bakery with a striped awning, a church with a copper
 spire and a clock, trees and two street lamps sit along the whole panel. The
 sky runs night -> dawn -> day -> dusk -> night: stars and a crescent moon
-give way to a red-and-magenta sunrise, the sun arcs across a blue sky, and it
-sets in yellow, red and magenta before the stars come back. The church clock's
+give way to a magenta-and-yellow sunrise, the sun arcs across a blue sky, and it
+sets in yellow and magenta before the stars come back. The church clock's
 hand turns with the hours; after dark the walls go blue, the lamps and the
 windows light up yellow one by one, and go out again late at night.
 
@@ -276,14 +276,13 @@ def draw_sky(frame, f):
         p = (f - SUNRISE) / (SUNSET - SUNRISE)
         # faster in the morning so it is well clear of the cross by noon
         sx = 4 + 108 * p if p < 0.5 else 58 + 70 * (p - 0.5)
-        sy = 9.5 - 8.5 * math.sin(math.pi * p)
-        low = f <= SUNRISE + 2 or f >= SUNSET - 2  # a red sun near the horizon
+        sy = 9.5 - 8.5 * math.sin(math.pi * p) ** 0.6
         draw_sprite(
             frame,
             [" ## ", "####", "####", " ## "],
             int(sx) - 2,
             int(sy) - 2,
-            {"#": C.RED if low else C.YELLOW},
+            {"#": C.YELLOW},
         )
     # moon
     m = (f - MOON_START) % FRAMES
