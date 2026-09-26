@@ -102,6 +102,24 @@ bytes.
 | `stained_glass` | ![stained_glass](gifs/stained_glass.gif) | A Voronoi window: fourteen seeds drift on Lissajous paths, each pixel takes its nearest seed's colour and near-ties become black lead came, so panes swell, pinch off and trade territory while the leading redraws itself. A diagonal glint of sunlight sweeps across once a loop. Seamless. |
 | `double_pendulum` | ![double_pendulum](gifs/double_pendulum.gif) | Three double pendulums on one pivot, red, green and blue, released 0.001 rad apart. They overlap as one white pendulum (the channels add to white), then colour fringes appear and each flails on its own. A strip chart on the left shows the three lower-arm traces forking; on the right their spread in degrees climbs from green through yellow to red. |
 
+### The sign has a life
+
+Created 2026-09-26 from a brainstorm with the user, who picked these for
+fun: a sign that stares back, hides ghosts and fights its own frame, plus
+two puzzles for passers-by and a Marauder's Map. Each was drafted by a
+helper agent and reviewed against rendered frames of the written file.
+
+| Animation | Preview | Description |
+| --- | --- | --- |
+| `marauders_map` | ![marauders_map](gifs/marauders_map.gif) | I SOLEMNLY SWEAR / I AM UP TO NO GOOD writes itself, then yellow ink spreads from the centre into a Hogwarts floor plan. Named footprint trails walk the corridor, older prints fading: HARRY (red) creeps in, SNAPE (green) sweeps the other way, Harry ducks through a doorway just in time and Snape's banner blinks SNAPE? before he stalks off; RON (magenta) joins Harry. The ink drains away and MISCHIEF MANAGED writes itself. |
+| `tamagotchi` | ![tamagotchi](gifs/tamagotchi.gif) | The toy's LCD in a blue bezel with icon bays that light when used, and a heart meter that fills. A spotted egg wobbles and hatches a cyan blob that bounces, turns sad as the "!" flashes, eats a burger in three chomps, leaves a pile with green stink lines, gets it washed away by a duck riding a wave, and ends in floating red hearts. |
+| `staring_contest` | ![staring_contest](gifs/staring_contest.gif) | STARING CONTEST, GO!, then a huge pair of eyes stares out of the panel. They widen, a lid twitches, red veins creep in, tears well along the bottom lids and a lid quivers lower -- until they squeeze shut into > < with tears squirting. Payoff: small bloodshot eyes looking at the floor beside YOU WIN. and BEST OF 3? |
+| `ghost_in_the_machine` | ![ghost_in_the_machine](gifs/ghost_in_the_machine.gif) | A sober NO GHOSTS sign glitches, and a little pixel ghost floats in, grabs the N and O and drags them off, so the sign reads just GHOSTS while it giggles HEE HEE. A red "!" -- it rushes the letters back, fades out, and the sign is normal again, except the O went back one pixel too high. |
+| `tiny_village` | ![tiny_village](gifs/tiny_village.gif) | A day in a miniature village across the whole panel: cottages, a bakery with an awning, a church whose clock hand turns through the day. Night, dawn, noon and dusk; the baker opens up and waves, the noon bell scares a bird off the steeple, a woman walks her dog to the bakery and home with a loaf, a car drives through, and windows and street lamps light one by one after dark. Seamless. |
+| `stick_fight` | ![stick_fight](gifs/stick_fight.gif) | A Xiao Xiao-style brawl between white and red stick figures on joint-angle skeletons: a blocked punch, a jab, a side kick with yellow sparks, then a flying kick that sends red cartwheeling out of the panel. White celebrates, then tries to leave: bonks face-first into the right edge (it flashes like glass), headbutts the ceiling, sprints left with speed lines into the other edge, and sits slumped under a little rain cloud. |
+| `word_ladder` | ![word_ladder](gifs/word_ladder.gif) | An alchemist's word ladder: big cyan LEAD and yellow GOLD wait either side of three rungs of thinking question marks under ONE LETTER AT A TIME, for about four seconds. Then the ladder fills rung by rung -- HEAD, HELD, HOLD, GOLD -- each changed letter scrambling in magenta and landing in green, before a sweep turns the whole ladder gold. |
+| `spot_the_difference` | ![spot_the_difference](gifs/spot_the_difference.gif) | SPOT THE / 3 DIFFERENCES, then two copies of a cottage scene (sun, cat, fence, apple tree) either side of a timer bar draining green to red. When time runs out, the three differences -- a lit window, a missing chimney, an extra bird -- are bracketed in flashing magenta on both halves as the divider counts 1, 2, 3. |
+
 ## Claude Fable 5
 
 Created 2026-09-09. Sizes are 48 or 53 frames; the 53-frame entries land at
