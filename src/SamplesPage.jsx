@@ -420,6 +420,11 @@ const SamplesPage = ({ onEdit }) => {
 
   const activePack = VENDOR_PACKS.find((pack) => pack.id === tab);
   const activeMaterial = materialPacks.find((pack) => pack.id === tab);
+  // The catalog comes from the vendor's app, so it sits under the vendor tabs.
+  // It stays up while one of its own tabs is selected, too.
+  const showCatalog =
+    materialPacks.length > 0 &&
+    (Boolean(activePack) || Boolean(activeMaterial));
 
   return (
     <Page>
@@ -479,7 +484,7 @@ const SamplesPage = ({ onEdit }) => {
         )}
       </Controls>
 
-      {materialPacks.length > 0 && (
+      {showCatalog && (
         <CatalogRow>
           <CatalogLabel>Material catalog</CatalogLabel>
           {materialPacks.map((pack) => (
