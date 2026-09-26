@@ -42,7 +42,7 @@ The scripts are executable and carry a `python3` shebang, so this works too:
 tools/
   jtkit/            the library
     colors.py       the 8-color palette, quantizing, ramps
-    font.py         5x7 bitmap font, editable as ASCII art
+    font.py         5x7 and 3x5 bitmap fonts, editable as ASCII art
     canvas.py       one frame: pixels, text, shapes, effect helpers
     animation.py    frames <-> .jt bytes, and loading files back
     preview.py      ASCII, GIF and contact-sheet rendering
@@ -140,6 +140,9 @@ sign agrees with you.
   `tweak_sign.py -t "text"` and a `-m` mode instead of building frames.
 - The font is uppercase only; lowercase input is folded automatically. Add
   glyphs to `FONT_5X7` as 7 rows of 5 characters.
+- For labels and counters, `canvas.small_text(text, x, y, color)` sets a
+  3x5 font (`FONT_3X5`): three lines fit in 16 rows. Glyphs vary in width
+  (M, N and W are wider), so measure with `Canvas.small_text_width(text)`.
 
 ## How many frames will the sign take?
 

@@ -11,7 +11,7 @@ differently each frame.
 from __future__ import annotations
 
 from . import colors
-from .font import FONT_5X7, GLYPH_HEIGHT, GLYPH_WIDTH, glyph
+from .font import FONT_5X7, GLYPH_HEIGHT, GLYPH_WIDTH, SMALL_HEIGHT, glyph, small_glyph
 
 DEFAULT_TRACKING = 1
 
@@ -153,6 +153,30 @@ class Canvas:
                     if bitmap[row][col] == "#":
                         self.pixel(x + cell_x + col, y + row, color)
         return self
+
+    @staticmethod
+    def small_text_width(text, tracking=1):
+        """Width in pixels of ``text`` set in the 3x5 font."""
+        if not text:
+            return 0
+        return sum(len(small_glyph(ch)[0]) for ch in text) + tracking * (len(text) - 1)
+
+    def small_text(self, text, x=0, y=0, color=colors.WHITE, tracking=1):
+        """
+        Draw ``text`` in the 3x5 font with its top-left at (x, y). Glyphs
+        vary in width, so each advances by its own. ``x`` may be
+        ``"center"``. Returns the x just past the last glyph.
+        """
+        if x == "center":
+            x = (self.width - self.small_text_width(text, tracking)) // 2
+        for ch in text:
+            bitmap = small_glyph(ch)
+            for row in range(SMALL_HEIGHT):
+                for col, cell in enumerate(bitmap[row]):
+                    if cell == "#":
+                        self.pixel(x + col, y + row, color)
+            x += len(bitmap[0]) + tracking
+        return x - tracking
 
     def glyph(self, name, x=0, y=0, color=colors.WHITE, fold_case=True):
         """
