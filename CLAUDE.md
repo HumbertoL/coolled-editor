@@ -174,7 +174,8 @@ say they may only show one frame in chat.
 - **Pushing to `main` deploys to production.** The user wants finished work
   pushed to `main`, and
   `.github/workflows/firebase-hosting-merge.yml` then builds and deploys it to
-  the live Firebase site (project `coolled-editor`) on every push -- there is
+  the live site, https://coolled-editor.web.app (Firebase project
+  `coolled-editor`), on every push -- there is
   no separate deploy step. So run `yarn lint`, `yarn test` and `yarn build`
   before pushing: a broken `main` is a broken live site. Pull requests get a
   preview channel from `firebase-hosting-pull-request.yml` instead. Other
