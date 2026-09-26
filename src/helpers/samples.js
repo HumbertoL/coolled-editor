@@ -1,5 +1,6 @@
 import { GRID_HEIGHT, GRID_WIDTH } from './constants.js';
 import { inflateJson } from './gzip.js';
+import { categoryOf, descriptionOf, keywordsOf } from './sampleCategories.js';
 
 // Where the driver lives, for the send commands shown next to each sample.
 export const DRIVER_PATH = '~/workspace/coolledx-driver';
@@ -283,9 +284,13 @@ export const loadBundledSamples = async () => {
       const response = await fetch(url);
       const jt = JSON.parse(await response.text());
 
+      const base = name.replace(/\.(jt|json)$/, '');
       return {
         id: `bundled:${name}`,
-        name: name.replace(/\.(jt|json)$/, ''),
+        name: base,
+        category: categoryOf(base),
+        description: descriptionOf(base),
+        keywords: keywordsOf(base),
         source: 'bundled',
         // Already on disk, so the command can point straight at the repo.
         localPath: `${EDITOR_PATH}/src/sample/${name}`,

@@ -82,7 +82,10 @@ reads the data. So:
   build time via `import.meta.glob` in `src/helpers/samples.js`, so **dropping
   a `.jt` file in is enough**; no registration. The glob pattern must stay a
   literal — Vite rewrites it statically and a computed path silently matches
-  nothing. Files without a `.jt`/`.json` extension are ignored.
+  nothing. Files without a `.jt`/`.json` extension are ignored. A new
+  sample shows under **Other** until its name is added to a category in
+  `src/helpers/sampleCategories.js`; its search text is its row in
+  `docs/AI_ANIMATIONS.md`, read at build time.
 - `public/samples/` — the vendor packs and material catalog, fetched at
   runtime rather than bundled. Keeps a few MB out of the JS bundle.
   Regenerate the catalog with `yarn fetch-material`.

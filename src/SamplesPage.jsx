@@ -12,6 +12,12 @@ import {
   readJt,
   sendCommandFor,
 } from './helpers/samples';
+import {
+  CATEGORIES,
+  OTHER_CATEGORY,
+  categoryLabel,
+  matchesQuery,
+} from './helpers/sampleCategories';
 
 const Page = styled.div`
   width: 100%;
@@ -112,7 +118,8 @@ const SmallTab = styled.button`
     $active ? 'rgba(122, 92, 255, 0.28)' : 'rgba(255, 255, 255, 0.05)'};
   color: ${({ $active }) => ($active ? '#d8d0ff' : '#8a8aa0')};
   border: 1px solid
-    ${({ $active }) => ($active ? 'rgba(122,92,255,0.5)' : 'rgba(255,255,255,0.1)')};
+    ${({ $active }) =>
+      $active ? 'rgba(122,92,255,0.5)' : 'rgba(255,255,255,0.1)'};
   border-radius: 999px;
   font-size: 11.5px;
   font-weight: 600;
@@ -188,6 +195,37 @@ const Meta = styled.div`
   font-size: 11px;
   color: #7a7a90;
   margin-bottom: 12px;
+`;
+
+const Description = styled.p`
+  margin: -6px 0 12px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #9a9ab0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+`;
+
+const Section = styled.section`
+  margin-bottom: 36px;
+`;
+
+const SectionTitle = styled.h2`
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin: 0 0 14px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #e0e0ea;
+
+  span {
+    font-size: 12px;
+    font-weight: 600;
+    color: #6a6a80;
+  }
 `;
 
 const Badge = styled.span`
@@ -322,6 +360,11 @@ const SampleCard = ({ sample, onEdit }) => {
         {decoded.frameNum > 1 && ` · ${decoded.delays}ms per frame`}
         {sample.localPath && ' · already in the repo'}
       </Meta>
+      {sample.description && (
+        <Description title={sample.description}>
+          {sample.description}
+        </Description>
+      )}
 
       <CardActions>
         <SmallButton $primary onClick={() => onEdit(sample)}>
@@ -345,6 +388,7 @@ const SampleCard = ({ sample, onEdit }) => {
 const SamplesPage = ({ onEdit }) => {
   const [tab, setTab] = useState('bundled');
   const [query, setQuery] = useState('');
+  const [category, setCategory] = useState('all');
   const [cache, setCache] = useState({});
   const [status, setStatus] = useState('loading');
   const [error, setError] = useState(null);
@@ -410,13 +454,39 @@ const SamplesPage = ({ onEdit }) => {
   }, [tab, cache, materialPacks]);
 
   const samples = cache[tab] ?? [];
-  const filtered = useMemo(() => {
-    const needle = query.trim().toLowerCase();
-    if (!needle) return samples;
-    return samples.filter((sample) =>
-      sample.name.toLowerCase().includes(needle),
-    );
-  }, [samples, query]);
+  const filtered = useMemo(
+    () => samples.filter((sample) => matchesQuery(sample, query)),
+    [samples, query],
+  );
+
+  // Categories only exist for the repo's own samples. Counts follow the
+  // search, so the chips show where the matches are.
+  const isBundled = tab === 'bundled';
+  const categoryCounts = useMemo(() => {
+    const counts = {};
+    for (const sample of filtered) {
+      counts[sample.category] = (counts[sample.category] ?? 0) + 1;
+    }
+    return counts;
+  }, [filtered]);
+  const categoryTabs = [
+    ...CATEGORIES,
+    { id: OTHER_CATEGORY, label: categoryLabel(OTHER_CATEGORY) },
+  ].filter((entry) => categoryCounts[entry.id]);
+
+  const visible =
+    isBundled && category !== 'all'
+      ? filtered.filter((sample) => sample.category === category)
+      : filtered;
+
+  // "All" in the repo tab is grouped under headings, in category order.
+  const groups =
+    isBundled && category === 'all'
+      ? categoryTabs.map((entry) => ({
+          ...entry,
+          samples: visible.filter((sample) => sample.category === entry.id),
+        }))
+      : null;
 
   const activePack = VENDOR_PACKS.find((pack) => pack.id === tab);
   const activeMaterial = materialPacks.find((pack) => pack.id === tab);
@@ -472,17 +542,44 @@ const SamplesPage = ({ onEdit }) => {
           </Tab>
         ))}
         <Search
+          type="search"
           value={query}
           onChange={(event) => setQuery(event.target.value)}
-          placeholder="Filter by name…"
+          placeholder={
+            isBundled ? 'Search names and descriptions…' : 'Filter by name…'
+          }
+          aria-label="Search samples"
         />
         {status === 'ready' && (
           <Count>
-            {filtered.length}
-            {filtered.length !== samples.length && ` of ${samples.length}`}
+            {visible.length}
+            {visible.length !== samples.length && ` of ${samples.length}`}
           </Count>
         )}
       </Controls>
+
+      {isBundled && status === 'ready' && categoryTabs.length > 0 && (
+        <CatalogRow>
+          <CatalogLabel>Category</CatalogLabel>
+          <SmallTab
+            $active={category === 'all'}
+            onClick={() => setCategory('all')}
+          >
+            All
+            <span>{filtered.length}</span>
+          </SmallTab>
+          {categoryTabs.map((entry) => (
+            <SmallTab
+              key={entry.id}
+              $active={category === entry.id}
+              onClick={() => setCategory(entry.id)}
+            >
+              {entry.label}
+              <span>{categoryCounts[entry.id]}</span>
+            </SmallTab>
+          ))}
+        </CatalogRow>
+      )}
 
       {showCatalog && (
         <CatalogRow>
@@ -520,13 +617,32 @@ const SamplesPage = ({ onEdit }) => {
 
       {status === 'loading' && <Status>Loading samples…</Status>}
       {status === 'error' && <Status>Could not load samples: {error}</Status>}
-      {status === 'ready' && filtered.length === 0 && (
-        <Status>Nothing matches “{query}”.</Status>
+      {status === 'ready' && visible.length === 0 && (
+        <Status>
+          Nothing matches “{query}”
+          {isBundled && category !== 'all' && ` in ${categoryLabel(category)}`}.
+        </Status>
       )}
 
-      {status === 'ready' && (
+      {status === 'ready' &&
+        groups &&
+        groups.map((group) => (
+          <Section key={group.id}>
+            <SectionTitle>
+              {group.label}
+              <span>{group.samples.length}</span>
+            </SectionTitle>
+            <CardGrid>
+              {group.samples.map((sample) => (
+                <SampleCard key={sample.id} sample={sample} onEdit={onEdit} />
+              ))}
+            </CardGrid>
+          </Section>
+        ))}
+
+      {status === 'ready' && !groups && (
         <CardGrid>
-          {filtered.map((sample) => (
+          {visible.map((sample) => (
             <SampleCard key={sample.id} sample={sample} onEdit={onEdit} />
           ))}
         </CardGrid>
