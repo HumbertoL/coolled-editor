@@ -13,6 +13,45 @@ The previews in `docs/gifs/` are rendered from the committed `.jt` files at
 python3 tools/preview_jt.py src/sample/NAME.jt --gif docs/gifs/NAME.gif --scale 3
 ```
 
+## Claude Sonnet 5.5
+
+Created 2026-09-30 for a request for 10-15 memes plus 5-10 animations of
+free choice, worth putting on a wall. Frame counts run 40 to 53; `rickroll`,
+`change_my_mind`, `woman_yelling_cat`, `clippy` and `cat_laser` are 53 frames
+(30,528 bytes), just under the measured device maximum, so send those with
+`--command-timeout 8`. Each was drafted by a helper agent and reviewed
+against rendered frames of the written file; none has been tried on hardware.
+
+### Memes, 1998 to 2019
+
+| Animation | Preview | Description |
+| --- | --- | --- |
+| `rickroll` | ![rickroll](gifs/rickroll.gif) | (2007) A blue-bordered "FREE WIFI" dialog fills its progress bar while a cursor arrives to click it. The panel glitches into an ERROR flicker, then a quiffed, trench-coated dancer strikes four alternating poses on the left while NEVER / GONNA / GIVE / YOU / UP lands one word per beat, with the full lyric scrolling below in magenta. A second glitch drops back to the loading bar for the loop. |
+| `keyboard_cat` | ![keyboard_cat](gifs/keyboard_cat.gif) | (2007) A cat sits behind a white keyboard and bounces his paws in alternation, each struck key lighting cyan while coloured music notes drift up both sides. PLAY HIM OFF then flashes red and yellow as a cane hooks from the right and drags him, flipped upside down, off the left edge, leaving the empty keyboard before the loop. |
+| `harlem_shake` | ![harlem_shake](gifs/harlem_shake.gif) | (2013) A lone green-suited dancer in a white visor helmet flails in the middle of the panel while four dim blue bystanders stand motionless beside him. A white flash and a "DROP" frame follow, then five costumed dancers with spike, cone, wide-brim, headband and horn hats thrash under strobing blue, magenta and green backgrounds. |
+| `hampster_dance` | ![hampster_dance](gifs/hampster_dance.gif) | (1998) Six yellow hamsters with white muzzles sway in a row over a drifting blue-dot tiled background, alternating between a paws-up pose and a dropped, arms-out pose so neighbours always move in opposition. A black marquee bar with a pulsing magenta and blue rule scrolls HAMPSTER DANCE in yellow and cyan, looping seamlessly. |
+| `surprised_pikachu` | ![surprised_pikachu](gifs/surprised_pikachu.gif) | (2018) STUDY FOR EXAM? types out on two lines and NAH blinks in yellow while a content yellow mouse face with red cheeks and dark-tipped ears watches from the right. Then the text flips to red FAILED THE EXAM, the eyes swell, the ears jolt and the mouth stretches into a wide O with a red tongue. |
+| `press_f` | ![press_f](gifs/press_f.gif) | (2014) A white tombstone with a blue cross stands under a rippling red flag, with PRESS F TO PAY RESPECTS in the middle and a big keycap F on the right. The key then starts getting hammered, dipping and flashing cyan and yellow on each press. Tiny blue Fs drift upward and a RESPECTS counter climbs, speeding up until it reaches 99. |
+| `mocking_text` | ![mocking_text](gifs/mocking_text.gif) | (2017) I LOVE MONDAYS types out in plain white, then every second letter flips upside down and turns yellow, one letter per frame, since the font has no lowercase to alternate. The flipped letters then bob against the plain ones while a square yellow sponge-style face with buck teeth rocks from side to side in a slouch. |
+| `two_buttons` | ![two_buttons](gifs/two_buttons.gif) | (2016) A worried yellow head in a blue cap sweats on the left, with cyan drops flying off him, while a shaky white hand hovers back and forth between two red buttons labelled GYM and PIZZA. His pupils follow the hand. Then two hands slam both buttons at once, the domes flash magenta, and his mouth opens wide. |
+| `roll_safe` | ![roll_safe](gifs/roll_safe.gif) | (2017) A grinning, half-lidded man on the left taps his temple with one finger on an 8-frame beat, the fist darting away and back with a bob of the head. On the right a left-to-right wipe reveals YOU CAN'T BE BROKE, then adds IF YOU DON'T, then slides up to IF YOU DON'T / CHECK YOUR ACCOUNT, which blinks white at the end. |
+| `kermit_tea` | ![kermit_tea](gifs/kermit_tea.gif) | (2014) A green frog with goggling white eyes and a red mouth lifts a cup of tea for a slow sip, with cyan steam wisps curling off it. His pupils slide sideways as BUT THAT'S NONE / OF MY BUSINESS wipes in on the right, and he sips a second time before the loop. |
+| `change_my_mind` | ![change_my_mind](gifs/change_my_mind.gif) | (2018) A man behind a yellow table lifts a mug beside a big white sign reading CHANGE MY MIND in red. A take is typed above it one letter per frame with a blinking cursor, PINEAPPLE ON PIZZA first, then CEREAL IS A SOUP. After each take he lifts the mug for a sip. |
+| `woman_yelling_cat` | ![woman_yelling_cat](gifs/woman_yelling_cat.gif) | (2019) Two panels split by a blue line. On the left a woman with her arm thrust out yells and shakes, with red anger marks and "!!" flickering. On the right a white green-eyed cat sits behind a plate of vegetables and stares back, blinking slowly. They alternate twice, then the table tilts and the plate and greens fly up while the cat stays put. |
+
+### Free choice
+
+| Animation | Preview | Description |
+| --- | --- | --- |
+| `ufo_abduction` | ![ufo_abduction](gifs/ufo_abduction.gif) | A saucer glides in over a starry night field, switches on a cyan-and-blue tractor beam and lifts a white cow with black patches, which turns from side to front to side to back as sparkles drift up the beam. The cow slips into the saucer, which gives a yellow BURP with a green puff, then zips off right trailing a dashed cyan-to-blue streak. A fresh cow is standing there when the loop restarts. |
+| `cat_laser` | ![cat_laser](gifs/cat_laser.gif) | A ginger cat with green eyes sits at the left edge, its head and pupils following a red laser dot that hops around the panel on quick, jittery seeded paths (with a magenta blur between hops) while its tail twitches. The dot parks on the floor, the cat crouches and wiggles, pounces across the panel and lands on nothing, with a "?" over its head. It backs home and looks around innocently while the dot reappears far away. |
+| `rubber_duck` | ![rubber_duck](gifs/rubber_duck.gif) | A yellow rubber duck bobs on cyan and blue waves, tilting with each swell that passes under it, while bubbles rise through the water and pop into little white sparks above the surface. The duck blinks and gives a SQUEAK, and a small foam pile on the right grows as the bubbles multiply into a bubble bath. The wave and bubble phases wrap, so the loop is seamless. |
+| `sushi_conveyor` | ![sushi_conveyor](gifs/sushi_conveyor.gif) | A kaiten belt scrolls plates of tuna, salmon and shrimp nigiri, a fat maki roll and a tamago slice left along a ticking cyan-and-blue belt, each on a different coloured rim. A pair of yellow and white chopsticks drops in, pinches the tuna off one plate and whisks it away upward, leaving the empty rice to sail off the left edge. The belt moves exactly one pattern width per loop, so it repeats seamlessly. |
+| `clippy` | ![clippy](gifs/clippy.gif) | A bent cyan paperclip with googly eyes and yellow eyebrows bounces in from the left and a yellow speech box opens beside him, typing out IT LOOKS LIKE YOU'RE WRITING A LETTER... in 3x5 text. Two options (WRITE THE LETTER in red, JUST TYPE, THANKS in blue) appear below, the user picks the second, and the box shuts. Clippy winks and shrinks to nothing before the loop restarts. |
+| `hypno_spiral` | ![hypno_spiral](gifs/hypno_spiral.gif) | Two mirrored spirals, one centred in each half of the panel, turn in opposite directions. Each is computed per pixel from angle and radius, and the eight-colour palette flows through the arms while a slow pulse squeezes the arm spacing. The palette laps exactly once per loop, so there is no seam. |
+| `campfire` | ![campfire](gifs/campfire.gif) | Red flames with a yellow mid and a white-hot core dance over crossed logs, their heights a sum of seeded sine waves that wrap perfectly. Sparks rise and drift, stars twinkle, and a yellow crescent moon hangs over a blue-and-magenta tent. On the right a marshmallow on a stick slowly turns from white to gold as it roasts. |
+| `stadium_wave` | ![stadium_wave](gifs/stadium_wave.gif) | A row of 19 little fans in mismatched shirts rises in a wave that rolls left to right across the panel. Each fan goes from slumped to standing with both arms up, and a beach ball rides the crest while one fan waves a red foam finger. A HOME 3-2 AWAY scoreboard sits up top, and the ball passes behind it. The wave enters and leaves the panel completely, so the loop is seamless. |
+
 ## Claude Opus 5.5
 
 Created 2026-09-23, all 53 frames at 30,555 bytes -- the measured device
