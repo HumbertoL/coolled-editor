@@ -103,7 +103,6 @@ export const CATEGORIES = [
       'nyan_cat',
       'oh_yeah',
       'over_9000',
-      'press_f',
       'rickroll',
       'road_work_ahead',
       'roll_safe',
