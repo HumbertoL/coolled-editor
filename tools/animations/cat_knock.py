@@ -7,8 +7,8 @@ up from it. It eyes the mug, then turns and stares straight out of the panel
 with huge green eyes, and without once looking away pushes the mug toward
 the edge with one paw, a pixel at a time. A long beat with the mug on the
 very lip of the table. One more nudge: it tips, tumbles, and smashes on the
-floor -- CRASH!, shards skittering, coffee spreading. The cat keeps staring,
-licks its paw, blinks slowly, and OOPS. appears.
+floor -- CRASH!, shards skittering, coffee spreading. Zero remorse: the cat
+keeps staring, licks its paw and blinks slowly.
 """
 
 from __future__ import annotations
@@ -47,7 +47,6 @@ HOLD_END = 31            # first frame after the held beat at the edge
 IMPACT = 35
 LICK = range(42, 47)
 BLINK = {47: "half", 48: "shut", 49: "shut", 50: "half"}
-CAPTION_FROM = 46
 SHIFT = -14              # scene is drawn at x 27..90, then slid left
 
 
@@ -212,8 +211,6 @@ def build():
                                 C.RED if t % 2 else C.YELLOW)
 
         text_layer.blit(frame, SHIFT)
-        if index >= CAPTION_FROM:
-            text_layer.text("OOPS.", 64, 2, C.WHITE)
     return anim
 
 
