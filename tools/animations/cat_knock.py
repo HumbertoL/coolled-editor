@@ -8,9 +8,7 @@ with huge green eyes, and without once looking away pushes the mug toward
 the edge with one paw, a pixel at a time. A long beat with the mug on the
 very lip of the table. One more nudge: it tips, tumbles, and smashes on the
 floor -- CRASH!, shards skittering, coffee spreading. Zero remorse: the cat
-keeps staring, blinks slowly, glances at the pen that has been lying at the
-other end of the table all along, looks back at you, and starts pushing that
-toward the edge too.
+keeps staring, licks its paw and blinks slowly.
 """
 
 from __future__ import annotations
@@ -47,16 +45,12 @@ PUSH_START = 11
 PUSH = [54, 54, 55, 55, 55, 56, 56, 57, 57, 57, 58, 58, 59, 59]
 HOLD_END = 31            # first frame after the held beat at the edge
 IMPACT = 35
-BLINK = {43: "half", 44: "shut", 45: "shut", 46: "half"}
-GLANCE = 47              # eyes flick to the pen, then back to you
-# The pen at the left end of the table: x by frame (its left end), and where
-# the reaching paw ends. It sits at PEN_X until the cat goes for it.
-PEN_X = 32
-PEN_PUSH = {48: (32, 36), 49: (31, 35), 50: (31, 35), 51: (30, 34), 52: (29, 33)}
+LICK = range(42, 47)
+BLINK = {47: "half", 48: "shut", 49: "shut", 50: "half"}
 SHIFT = -14              # scene is drawn at x 27..90, then slid left
 
 
-def draw_cat(frame, cx, eyes, paw_to=None, paw_left=None, tail=0):
+def draw_cat(frame, cx, eyes, paw_to=None, lick=None, tail=0):
     for r, line in enumerate(CAT):
         for c, ch in enumerate(line):
             if ch == "#":
@@ -93,13 +87,6 @@ def draw_cat(frame, cx, eyes, paw_to=None, paw_left=None, tail=0):
             for c in cols:
                 frame.pixel(cx + c, 4, C.GREEN)
             frame.pixel(cx + cols[1], 4, C.BLACK)
-    elif eyes == "left":
-        for cols in (left, right):
-            for c in cols:
-                for r in (2, 3, 4):
-                    frame.pixel(cx + c, r, C.GREEN)
-            frame.pixel(cx + cols[0], 3, C.BLACK)
-            frame.pixel(cx + cols[0], 4, C.BLACK)
     elif eyes == "shut":
         for cols in (left, right):
             for c in cols:
@@ -110,21 +97,12 @@ def draw_cat(frame, cx, eyes, paw_to=None, paw_left=None, tail=0):
         if paw_to >= start:
             frame.hline(start, 8, paw_to - start + 1, FUR)
             frame.pixel(paw_to, 8, C.WHITE)
-    if paw_left is not None:
-        # The other way: a leg along the table toward the pen.
-        frame.hline(paw_left, 8, cx - paw_left, FUR)
-        frame.pixel(paw_left, 8, C.WHITE)
-
-
-def draw_pen(frame, x):
-    # Lying on the table, cap to the right; past the edge it starts to tip.
-    if x < TABLE_X0:
-        frame.pixel(x, 9, C.MAGENTA)
-        frame.hline(x + 1, 8, 2, C.MAGENTA)
-        frame.pixel(x + 3, 8, C.WHITE)
-    else:
-        frame.hline(x, 8, 3, C.MAGENTA)
-        frame.pixel(x + 3, 8, C.WHITE)
+    if lick is not None:
+        # Paw raised to the chin, tongue flicking.
+        frame.rect(cx + 7, 6, 2, 2, C.WHITE, fill=True)
+        frame.pixel(cx + 6, 6, FUR)
+        if lick:
+            frame.pixel(cx + 6, 6, C.MAGENTA)
 
 
 def draw_table(frame):
@@ -187,15 +165,14 @@ def build():
         eyes = "side" if index < 6 else "front" if index == 6 else "big"
         if index in BLINK:
             eyes = BLINK[index]
-        if index == GLANCE:
-            eyes = "left"
         paw = None
         if PUSH_START <= index <= HOLD_END:
             paw = mx - 1 if index < HOLD_END else mx
-        pen_x, paw_left = PEN_PUSH.get(index, (PEN_X, None))
+        lick = None
+        if index in LICK:
+            lick = (index - LICK.start) % 2 == 0
         tail = 1 if (index // 3) % 4 == 0 else 0
-        draw_pen(frame, pen_x)
-        draw_cat(frame, cx, eyes, paw, paw_left, tail)
+        draw_cat(frame, cx, eyes, paw, lick, tail)
 
         # The mug.
         if index < HOLD_END:
