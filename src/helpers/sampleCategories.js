@@ -55,6 +55,7 @@ export const CATEGORIES = [
       'team_name',
       'typewriter',
       'welcome_to_chaos_corner',
+      'metronome',
     ],
   },
   {
@@ -222,6 +223,8 @@ export const CATEGORIES = [
       'traffic_wave',
       'turing_patterns',
       'waggle_dance',
+      'mandelbrot',
+      'cyclic_automaton',
     ],
   },
   {
@@ -242,6 +245,7 @@ export const CATEGORIES = [
       'stack_tower',
       'tusi_couple',
       'zipper',
+      'elevator',
     ],
   },
   {
@@ -274,6 +278,7 @@ export const CATEGORIES = [
       'tunnel',
       'wave',
       'waveform',
+      'vinyl_record',
     ],
   },
   {
@@ -313,6 +318,10 @@ export const CATEGORIES = [
       'train',
       'ufo_abduction',
       'washing_machine',
+      'windmill',
+      'rain_window',
+      'seasons_tree',
+      'cuckoo_clock',
     ],
   },
   {
@@ -323,7 +332,13 @@ export const CATEGORIES = [
   {
     id: 'antics',
     label: 'Sign antics',
-    names: ['ghost_in_the_machine', 'peek', 'staring_contest', 'stick_fight'],
+    names: [
+      'ghost_in_the_machine',
+      'peek',
+      'staring_contest',
+      'stick_fight',
+      'magic_8_ball',
+    ],
   },
   {
     id: 'tests',

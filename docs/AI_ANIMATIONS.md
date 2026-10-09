@@ -49,6 +49,27 @@ against rendered frames of the written file; none has been tried on hardware.
 | `campfire` | ![campfire](gifs/campfire.gif) | Red flames with a yellow mid and a white-hot core dance over crossed logs, their heights a sum of seeded sine waves that wrap perfectly. Sparks rise and drift, stars twinkle, and a yellow crescent moon hangs over a blue-and-magenta tent. On the right a marshmallow on a stick slowly turns from white to gold as it roasts. |
 | `stadium_wave` | ![stadium_wave](gifs/stadium_wave.gif) | A row of 19 little fans in mismatched shirts rises in a wave that rolls left to right across the panel. Each fan goes from slumped to standing with both arms up, and a beach ball rides the crest while one fan waves a red foam finger. A HOME 3-2 AWAY scoreboard sits up top, and the ball passes behind it. The wave enters and leaves the panel completely, so the loop is seamless. |
 
+### Round two: ten more, free choice
+
+Created 2026-10-09 for a request for ten animations of free choice. Six are
+53 frames (30,528 bytes), `windmill`, `metronome` and `rain_window` are 52 and
+`vinyl_record` is 48, so send the large ones with `--command-timeout 8`. Each
+file was verified by round-trip and previewed from the written `.jt`; none has
+been tried on hardware.
+
+| Animation | Preview | Description |
+| --- | --- | --- |
+| `mandelbrot` | ![mandelbrot](gifs/mandelbrot.gif) | A dive into Seahorse Valley: every pixel runs the z -> z^2 + c escape loop and takes its colour from how many steps it needed, so filaments and spirals come out as bands of the palette. The iteration cap climbs as the view tightens (about 270x deeper at the bottom) and the zoom follows a cosine in and back out, so the loop is seamless. |
+| `cyclic_automaton` | ![cyclic_automaton](gifs/cyclic_automaton.gif) | Eight states, each hungry for the next: a cell advances as soon as one of its four neighbours is one step ahead. Seeded noise, run on the wrapping panel for 150 unseen steps, organises into interlocking spirals and travelling fronts that walk the whole palette. One automaton step per frame. |
+| `elevator` | ![elevator](gifs/elevator.gif) | A lift: the doors rest open on L1 with a rider inside, slide shut, and the red floor numeral counts 1 to 5 under a blinking up arrow. Then DING, the doors part on a lit yellow interior and the rider steps forward and out. |
+| `windmill` | ![windmill](gifs/windmill.gif) | A red tapering Dutch windmill with a white cap and four turning sails on a green hill, tulips nodding in a gust and clouds drifting across a blue sky. The sails are four-fold symmetric and the clouds travel exactly one panel width, so the loop is seamless. |
+| `metronome` | ![metronome](gifs/metronome.gif) | A red pyramid ticking at 60 BPM: a white rod swings either side of vertical with a yellow weight riding it, and the TICK and TOCK lamps light green at the extremes beside a 60 BPM / ANDANTE legend. One loop is a full there-and-back. |
+| `rain_window` | ![rain_window](gifs/rain_window.gif) | Night bus, wet glass: out-of-focus city lights pulse as 3x3 blobs behind a misted pane while 18 droplets slide down it, white heads with cyan-then-blue trails. Each drop travels a whole number of panel heights per loop, so the loop is seamless. |
+| `vinyl_record` | ![vinyl_record](gifs/vinyl_record.gif) | A black record with blue grooves and a red-and-yellow label spins at 33 RPM, two cyan sheens sweeping round it and a white marker proving the direction. The tonearm rides the groove with a tiny wobble, and green-yellow-red equaliser bars bounce beside it. |
+| `seasons_tree` | ![seasons_tree](gifs/seasons_tree.gif) | Four fractal trees (binary recursion, 0.72x per fork) grow bough by bough, burst into magenta blossom and shed petals, turn summer green, then autumn yellow and red with leaves falling, and stand bare under white snow. Each sways on its own phase of the breeze. |
+| `magic_8_ball` | ![magic_8_ball](gifs/magic_8_ball.gif) | WILL IT / LOOP? types out in yellow beside a black 8-ball with the 8 in its window. The ball shakes on jittered offsets as question marks fly, then settles with a cyan triangle and SIGNS POINT / TO YES fades up, blinking green and yellow. |
+| `cuckoo_clock` | ![cuckoo_clock](gifs/cuckoo_clock.gif) | A red-roofed chalet clock with a yellow case, a swinging pendulum and chain weights. Three times the little door opens and a cyan bird lunges out beak first while CUCK and OO flash on opposite sides, alternating each strike. |
+
 ## Claude Opus 5.5
 
 Created 2026-09-23, all 53 frames at 30,555 bytes -- the measured device
