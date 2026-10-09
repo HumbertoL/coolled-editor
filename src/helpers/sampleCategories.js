@@ -353,6 +353,7 @@ export const CATEGORIES = [
       'roomba_stuck',
       'snail_race',
       'toaster',
+      'on_mute',
     ],
   },
   {

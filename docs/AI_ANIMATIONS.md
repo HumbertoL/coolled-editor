@@ -499,6 +499,21 @@ Created 2026-09-10, one per era from 2001 to 2019. All 53 frames.
 | `wednesday_frog` | ![wednesday_frog](gifs/wednesday_frog.gif) | (2016) The frog blinks under IT'S WEDNESDAY, MY DUDES, then screams: mouth open, AAAAAAA growing, the whole panel shaking. |
 | `stonks` | ![stonks](gifs/stonks.gif) | (2019) Meme Man in his suit watches a jagged line climb the chart; when it clears, STONKS with the up arrow. |
 
+### Round five: ten more to laugh at
+
+Made 2026-10-09 for a second request for ten animations that would make the
+user laugh, after the Opus 5.5 Gags set the same day. Ten were made; this is
+the one the user picked to ship first, and the other nine are tabled on a
+branch. 53 frames (30,528 bytes), so send with `--command-timeout 8`. Same
+shape as the Gags: setup, a held beat, a payoff and a dry button, ending on
+the final joke rather than looping. Drafted by a helper agent from a brief,
+then every frame of the written file reviewed on a contact sheet. Not tried
+on hardware.
+
+| Animation | Preview | Description |
+| --- | --- | --- |
+| `on_mute` | ![on_mute](gifs/on_mute.gif) | A video call: a big tile on the left with a round yellow face, mouth going and hands gesturing, a white mic with a red slash in its corner, and a column of three tiny participant tiles on the right. The face talks away at an empty bubble of cycling ... while the little tiles chime in one at a time, each lighting green: YOU'RE ON MUTE, then MUTE, then ON MUTE!! in red. The face keeps going, oblivious, then stops: a red !, its eyes drop to the mic, a cursor slides in and clicks it, and the icon turns green. In big letters: CAN YOU / HEAR ME? The tiles answer YES. YES. YES. The face starts SO AS I / WAS SAYING and the whole panel cuts to a blue RECONNECTING... screen with a spinner. Button: the big tile sits empty and the three little tiles say ... one after another. 53 frames at 130ms. |
+
 ### Reworked, not created
 
 These existed before; Fable 5.1 changed them on 2026-09-09. The original
