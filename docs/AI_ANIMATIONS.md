@@ -467,3 +467,25 @@ Created 2026-09-09, all 53 frames.
 | `tea_heartbeat` | ![tea_heartbeat](gifs/tea_heartbeat.gif) | Company pulse: a beating heart glyph synced with a messages-per-second counter, "TEA" steady in the center. 53 frames at 100ms. |
 | `tea_network` | ![tea_network](gifs/tea_network.gif) | Mass messaging as a network effect: one sender's message cascades exponentially through four columns of recipients, each generation a different color, ending with a synchronized pulse. 53 frames at 90ms. |
 | `tea_uptime` | ![tea_uptime](gifs/tea_uptime.gif) | Service uptime monitor: "99.99%" types in, a 30-day status row fills (mostly green, a couple yellow), then "ALL SYSTEMS GO" wipes in. 53 frames at 100ms. |
+
+## Claude Haiku 5.5
+
+Created 2026-10-09, all 53 frames at 30,528 bytes except `ferris_wheel` (24
+frames), so send the 53-frame ones with `--command-timeout 8`. Each was drafted
+and checked by decoding the written file to text frames and reading them;
+none has been tried on hardware.
+
+### Free choice
+
+| Animation | Preview | Description |
+| --- | --- | --- |
+| `ferris_wheel` | ![ferris_wheel](gifs/ferris_wheel.gif) | A night fairground wheel turning over a seeded skyline: eight cabins in yellow, magenta, cyan, red, green and white, moving one cabin-spacing per loop with each cabin kept upright. White bulbs chase round the rim and stars twinkle over the city. 24 frames at 90ms. Seamless. |
+| `morse_code` | ![morse_code](gifs/morse_code.gif) | HELLO sent by a signal lamp in real Morse timing: a dot is one frame lit, a dash three, one frame dark between symbols and three between letters. Dots flash yellow and dashes white, and each letter appears in the readout as its last symbol is sent. 53 frames at 110ms. |
+| `lava_lamp` | ![lava_lamp](gifs/lava_lamp.gif) | Three wax blobs as metaballs, the field r² over distance² quantized into RED, MAGENTA and YELLOW from edge to hot core, rising and sinking over a blue heater glow. Each blob's height and sway follow the loop's one period. 53 frames at 90ms. Seamless. |
+| `typewriter` | ![typewriter](gifs/typewriter.gif) | HELLO WORLD and then LOOK AT ME, typed a character a frame with a yellow underline cursor. Each line feed rings the bell, flashing the border red, then the page rolls up and away one row a frame. 53 frames at 110ms. Not seamless: the page is blank at both ends. |
+| `paper_plane` | ![paper_plane](gifs/paper_plane.gif) | A white paper plane flying a figure eight, turning to face its direction of travel, with a trail of its last eight positions fading cyan to blue. Clouds drift past at a rate that wraps exactly once per loop. 53 frames at 80ms. Seamless. |
+| `hot_air_balloon` | ![hot_air_balloon](gifs/hot_air_balloon.gif) | A red and yellow striped balloon, shaded at its edge in magenta, drifting and bobbing on one loop period above a blue basket on ropes. White clouds pass over rolling green hills. 53 frames at 110ms. Seamless. |
+| `binary_clock` | ![binary_clock](gifs/binary_clock.gif) | The time as BCD: each decimal digit is a column of four squares, weight 8 at the top to 1 at the bottom, lit cyan for a one and dim blue for a zero. It counts from 10:59:00 at one real second a frame, with the colon dots blinking on even seconds, so the loop is 53 seconds long and wraps to 10:59:00. 53 frames at 1000ms. |
+| `jellyfish` | ![jellyfish](gifs/jellyfish.gif) | Two jellies, a large and a small, pulsing their magenta-rimmed bells and drifting on their own phases, each with four cyan tentacles that travel in waves. White bubbles climb a full panel per loop. 53 frames at 100ms. Seamless. |
+| `coin_flip` | ![coin_flip](gifs/coin_flip.gif) | A yellow coin tossed from the ground, spinning four times in the air with its width scaled by the cosine of its angle, then resting heads up as HEADS and 4 SPINS appear. The loop resets to the coin on the ground. 53 frames at 80ms. |
+| `tic_tac_toe` | ![tic_tac_toe](gifs/tic_tac_toe.gif) | A drawn game played out on the board: each move shows a yellow cursor on its cell for two frames, then places a red X or a cyan O. Once the board fills, DRAW blinks in the margin. 53 frames at 260ms. |
