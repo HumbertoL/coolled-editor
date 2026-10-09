@@ -177,6 +177,27 @@ helper agent and reviewed against rendered frames of the written file.
 | `word_ladder` | ![word_ladder](gifs/word_ladder.gif) | An alchemist's word ladder: big cyan LEAD and yellow GOLD wait either side of three rungs of thinking question marks under ONE LETTER AT A TIME, for about four seconds. Then the ladder fills rung by rung -- HEAD, HELD, HOLD, GOLD -- each changed letter scrambling in magenta and landing in green, before a sweep turns the whole ladder gold. |
 | `spot_the_difference` | ![spot_the_difference](gifs/spot_the_difference.gif) | SPOT THE / 3 DIFFERENCES, then two copies of a cottage scene (sun, cat, fence, apple tree) either side of a timer bar draining green to red. When time runs out, the three differences -- a lit window, a missing chimney, an extra bird -- are bracketed in flashing magenta on both halves as the divider counts 1, 2, 3. |
 
+### Ten more, free choice
+
+Created 2026-10-09 for a request for ten animations of free choice. All are
+53 frames at 30,555 bytes except `piano` (52, one Fur Elise phrase), so send
+them with `--command-timeout 8`. Each file was verified by round-trip and
+reviewed as frames rendered from the written `.jt`; none has been tried on
+hardware.
+
+| Animation | Preview | Description |
+| --- | --- | --- |
+| `sandpile` | ![sandpile](gifs/sandpile.gif) | The abelian sandpile: grains poured on three spots, any cell with four or more toppling one to each neighbour and grains lost off the edge. The stable piles grow nested diamond patterns coloured by height -- black, blue, magenta, yellow -- until they press against the top and bottom edges. |
+| `galton_board` | ![galton_board](gifs/galton_board.gif) | A bean machine on its side: 128 yellow balls bounce up or down at each of seven peg columns and run along one of eight rows to stack against the right wall, so the cyan stacks grow into a binomial bell curve. Red markers then blink at the expected heights. |
+| `hilbert_curve` | ![hilbert_curve](gifs/hilbert_curve.gif) | Six order-3 Hilbert curves, one per 16x16 tile at a 2px pitch, chained into one 384-point path that a white head draws across the panel. Then rainbow bands stream along the finished curve. |
+| `fourier` | ![fourier](gifs/fourier.gif) | Four epicycles for the first odd harmonics of a square wave spin on the left, each riding the last; the tip's height feeds a yellow trace scrolling right, where four sines add up to a square wave with Gibbs ripples at the corners. One turn per loop, seamless. |
+| `a_star` | ![a_star](gifs/a_star.gif) | A* on a 48x8 grid of blue walls, from a cyan start to a white goal: the green frontier advances and red cells close one expansion at a time, then the shortest path traces back in yellow and blinks. |
+| `sieve` | ![sieve](gifs/sieve.gif) | The Sieve of Eratosthenes on 1 to 384, eight rows of 48 dots. Each prime up to 19 blinks and sweeps out its multiples in its own colour; with 48 to a row, multiples of 2 and 3 fall in columns and 5 and 7 in diagonals. Then the struck numbers clear and only the white primes are left. |
+| `bowling` | ![bowling](gifs/bowling.gif) | A strike from above: a magenta ball rolls past the aiming arrows and hooks into the pocket, each pin starting to tumble when the shock reaches it and sliding off into the gutters and pit. A cyan sweep bar clears the deck and STRIKE! flashes with sparkles. |
+| `crosswalk` | ![crosswalk](gifs/crosswalk.gif) | A pedestrian signal beside a side view of the street: steady red hand while a walker taps a foot at the kerb, the white walking figure while they stroll across, then a flashing hand counting down 9 to 0 as a latecomer in yellow sprints over. On the steady hand a red car rushes through. |
+| `piano` | ![piano](gifs/piano.gif) | The opening of Fur Elise, Synthesia style: notes fall as bars onto a keyboard of 22 white keys, right hand cyan and left hand green, and each key lights while held. The phrase ends on D#5 and the piece returns to E5, so the loop is seamless. |
+| `rube_goldberg` | ![rube_goldberg](gifs/rube_goldberg.gif) | A machine for switching on a light: a marble rolls down a ramp into five dominoes, the last lands on a seesaw that flicks a ball into a hanging bucket, the bucket's weight hauls a rope over two pulleys to throw a switch, and a spark runs down the wire to light the bulb. |
+
 ### Gags
 
 Made 2026-10-09 for a request for ten animations that would make the user

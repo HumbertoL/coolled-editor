@@ -78,6 +78,7 @@ export const CATEGORIES = [
       'temperature',
       'tests_passing',
       'turing_machine',
+      'a_star',
     ],
   },
   {
@@ -190,6 +191,7 @@ export const CATEGORIES = [
       'triforce',
       'waldo',
       'wordle',
+      'bowling',
     ],
   },
   {
@@ -225,6 +227,11 @@ export const CATEGORIES = [
       'waggle_dance',
       'mandelbrot',
       'cyclic_automaton',
+      'sandpile',
+      'galton_board',
+      'hilbert_curve',
+      'fourier',
+      'sieve',
     ],
   },
   {
@@ -246,6 +253,7 @@ export const CATEGORIES = [
       'tusi_couple',
       'zipper',
       'elevator',
+      'rube_goldberg',
     ],
   },
   {
@@ -322,6 +330,8 @@ export const CATEGORIES = [
       'rain_window',
       'seasons_tree',
       'cuckoo_clock',
+      'crosswalk',
+      'piano',
     ],
   },
   {
