@@ -177,6 +177,28 @@ helper agent and reviewed against rendered frames of the written file.
 | `word_ladder` | ![word_ladder](gifs/word_ladder.gif) | An alchemist's word ladder: big cyan LEAD and yellow GOLD wait either side of three rungs of thinking question marks under ONE LETTER AT A TIME, for about four seconds. Then the ladder fills rung by rung -- HEAD, HELD, HOLD, GOLD -- each changed letter scrambling in magenta and landing in green, before a sweep turns the whole ladder gold. |
 | `spot_the_difference` | ![spot_the_difference](gifs/spot_the_difference.gif) | SPOT THE / 3 DIFFERENCES, then two copies of a cottage scene (sun, cat, fence, apple tree) either side of a timer bar draining green to red. When time runs out, the three differences -- a lit window, a missing chimney, an extra bird -- are bracketed in flashing magenta on both halves as the divider counts 1, 2, 3. |
 
+### Gags
+
+Made 2026-10-09 for a request for ten animations that would make the user
+laugh. Each is 53 frames (30,528 bytes), so send with `--command-timeout 8`.
+Each is built as setup, a held beat and a payoff, and none loops seamlessly:
+each ends on its final joke and cuts back to the start. They were drafted by
+helper agents and checked by rendering frames of the written files. None has
+been tried on hardware.
+
+| Animation | Preview | Description |
+| --- | --- | --- |
+| `cat_knock` | ![cat_knock](gifs/cat_knock.gif) | A yellow cat on a red table beside a steaming white mug. It glances at the mug, turns to stare straight at you with wide green eyes, and, holding eye contact, pushes the mug to the edge a pixel at a time. A held beat on the brink, one more nudge, and it smashes: CRASH!, shards and a blue puddle. The cat licks its paw, blinks slowly, OOPS. 53 frames at 120ms. |
+| `banana_slip` | ![banana_slip](gifs/banana_slip.gif) | A stick figure strides in staring at a cyan phone, whistling green and magenta notes, toward a yellow banana peel. Foot meets peel: the phone flies, the body hangs flat in midair for a six-frame beat, then slams down with OOF! and stars circling. The peel spins up and lands draped over their face; one leg twitches. 53 frames at 110ms. |
+| `fake_sneeze` | ![fake_sneeze](gifs/fake_sneeze.gif) | A big yellow face builds to a sneeze -- AH... AHH... AHHHH... -- head tipping back, nostrils flaring, eyes squeezed into > <, quivering on the brink. Then it fades: ...NEVERMIND. Three quiet frames. Then a white flash and a giant red CHOO!! as the head snaps forward and spray covers all 96 columns, drips sliding down the glass. Button: a blush and a magenta ...EXCUSE ME. 53 frames at 130ms. |
+| `toaster` | ![toaster](gifs/toaster.gif) | A chrome toaster ticks (TICK / TOCK) with glowing red slots. DING! Both slices rocket off the top of the panel. A long wait as ". . ." fills in, a red !, then the toast whistles back down charred and on fire, lands exactly in the slots with a squash and a smoke puff: NAILED IT. 53 frames at 120ms. |
+| `reply_all` | ![reply_all](gifs/reply_all.gif) | BOB: LUNCH? A cursor hesitates over REPLY ALL, clicks -- TO: ALL / 4812! -- and the unread badge doubles 2, 4, 16, 128, 512, 999+ while RE: RE: RE: stacks off the edge and envelopes pile up. The panel shakes as REMOVE ME!!, STOP REPLYING ALL, UNSUBSCRIBE, +1 and WHO IS BOB?? flash. A white-out, silence, then one last email: FROM: BOB, RE: RE: RE: THANKS! -- and a green +1. 53 frames at 120ms. |
+| `dad_joke` | ![dad_joke](gifs/dad_joke.gif) | Two skeletons flank the setup, WHY DON'T SKELETONS / FIGHT EACH OTHER?, held long enough to read. Three dots tick in, then THEY DON'T HAVE / THE GUTS. A little drum kit plays BA, DUM, a wind-up, TSS! with the cymbal flashing and rocking. A green cricket chirps into the silence; GROAN. 53 frames at 150ms. |
+| `goose_chase` | ![goose_chase](gifs/goose_chase.gif) | A man in a red hat strolls along the lawn eating a sandwich (CHOMP). A white goose looks up -- ?, then a red ! held as eye contact -- and HONK! He freezes, then sprints off screaming AAA! as it chases him out flapping, snatching his hat. The empty park, a distant AAAAAAA. The goose struts back wearing the hat with the sandwich in its beak and gives one smug HONK. 53 frames at 120ms. |
+| `snail_race` | ![snail_race](gifs/snail_race.gif) | A sports broadcast: three snails on a three-lane track, the finish line far off at the right. READY... GO! AND THEY'RE OFF! The crowd jumps, cameras flash, nobody moves. WHAT A START! NECK AND NECK. DAY 1... DAY 47 as sun and moon trade places. The magenta snail edges one pixel: HE'S MAKING HIS MOVE! A REPLAY at 1/10 SPEED with a telestrator ring: +1PX. Ends on LAP 1 OF 500. 53 frames at 150ms. |
+| `roomba_stuck` | ![roomba_stuck](gifs/roomba_stuck.gif) | A robot vacuum with a loafing cat on top drives into a chair leg: BONK. Backs up, turns a few degrees, BONK, faster each time, its light going green, yellow, red, #@%!, its clean stripe barely longer than itself. A sulky ... beat, then it spins and races away -- FREE! -- straight into the wall. BONK! The cat is tossed, hops off, says MEH. and naps under the chair. 53 frames at 130ms. |
+| `chicken_road` | ![chicken_road](gifs/chicken_road.gif) | WHY DID THE CHICKEN / CROSS THE ROAD? A chicken leaves its egg on the verge and dashes across two lanes of traffic, each car missing by a pixel, feathers flying. YAY! Then ?... WAIT. MY EGG! It runs back and a yellow taxi hits it: HONK!, feathers everywhere, a plucked magenta chicken under spinning stars. Button: the egg hatches and a chick strolls across the jammed road. PEEP! 53 frames at 140ms. |
+
 ## Claude Fable 5
 
 Created 2026-09-09. Sizes are 48 or 53 frames; the 53-frame entries land at

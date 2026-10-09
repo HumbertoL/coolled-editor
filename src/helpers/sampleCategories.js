@@ -330,6 +330,22 @@ export const CATEGORIES = [
     names: ['spot_the_difference', 'word_ladder'],
   },
   {
+    id: 'gags',
+    label: 'Gags',
+    names: [
+      'banana_slip',
+      'cat_knock',
+      'chicken_road',
+      'dad_joke',
+      'fake_sneeze',
+      'goose_chase',
+      'reply_all',
+      'roomba_stuck',
+      'snail_race',
+      'toaster',
+    ],
+  },
+  {
     id: 'antics',
     label: 'Sign antics',
     names: [
