@@ -344,6 +344,11 @@ export const CATEGORIES = [
     label: 'Gags',
     names: [
       'banana_slip',
+      'brisk_cart',
+      'brisk_jog',
+      'brisk_marathon',
+      'brisk_meter',
+      'brisk_treadmill',
       'cat_knock',
       'chicken_road',
       'dad_joke',

@@ -514,6 +514,23 @@ on hardware.
 | --- | --- | --- |
 | `on_mute` | ![on_mute](gifs/on_mute.gif) | A video call: a big tile on the left with a round yellow face, mouth going and hands gesturing, a white mic with a red slash in its corner, and a column of three tiny participant tiles on the right. The face talks away at an empty bubble of cycling ... while the little tiles chime in one at a time, each lighting green: YOU'RE ON MUTE, then MUTE, then ON MUTE!! in red. The face keeps going, oblivious, then stops: a red !, its eyes drop to the mic, a cursor slides in and clicks it, and the icon turns green. In big letters: CAN YOU / HEAR ME? The tiles answer YES. YES. YES. The face starts SO AS I / WAS SAYING and the whole panel cuts to a blue RECONNECTING... screen with a spinner. Button: the big tile sits empty and the three little tiles say ... one after another. 53 frames at 130ms. |
 
+### Round six: a brisk jog
+
+Made 2026-10-23 for an office running joke: leadership calls the expected
+pace of work "a brisk jog", so five jokes on that. Same shape as the Gags:
+setup, a held beat, a payoff and a dry button. `brisk_jog` is 50 frames and
+the rest 53 (30,528 bytes), so send with `--command-timeout 8`. Every frame
+of each written file was reviewed on a contact sheet; none has been tried on
+hardware.
+
+| Animation | Preview | Description |
+| --- | --- | --- |
+| `brisk_jog` | ![brisk_jog](gifs/brisk_jog.gif) | A BRISK JOG wipes in on the top line while a jogger trots in place at the right edge, the ground ticking by under its feet. NOT A SPRINT* wipes in below and the asterisk blinks. Then the ground tears past, the jogger blurs and shoots off the right edge, and the footnote types in red, a letter a frame: *IT IS A SPRINT. 50 frames at 130ms. |
+| `brisk_meter` | ![brisk_meter](gifs/brisk_meter.gif) | A pace gauge: WALK, JOG, BRISK JOG and SPRINT zones in green, yellow, magenta and red, with the current zone named in big letters above. A white needle sets off, the label reads WALK, then JOG, then settles on BRISK JOG with a green tick. A cyan hand slides in along the gauge and shoves the needle on into SPRINT: the label flips to red SPRINT and a yellow label drops over it reading BRISK JOG. The hand keeps pushing until the needle bends against the end of the gauge and the SPRINT zone strobes white. Button: a second sticker lands over the SPRINT zone's own label, re-labelling it BRISK. 53 frames at 120ms. |
+| `brisk_treadmill` | ![brisk_treadmill](gifs/brisk_treadmill.gif) | A jogger trots on a treadmill belt while the console reads SPEED 3.0 over BRISK JOG. A hand comes down and taps the + button, and taps it again: 5.0, 8.0, 12.0, 16.0, 20.0. The legs blur, sweat flies, the belt tears past, the head goes red; the BRISK JOG line never changes. At 20 the jogger is flung off the back of the belt and tumbles out the left edge. Button: an empty, roaring belt, and the hand taps + once more: SPEED 25.0. 53 frames at 110ms. |
+| `brisk_marathon` | ![brisk_marathon](gifs/brisk_marathon.gif) | A BRISK JOG stands on the top line the whole way. Below it a jogger runs in place while the road scrolls past and mile markers come by on posts: MI 1, MI 13, MI 20. The jogger wilts a marker at a time: sweat, a red face, the tongue out, the shoulders dropped. A chequered FINISH banner goes past like everything else and the jogger keeps going, now a floating white ghost of itself, past MI 30 and MI 40. Button: the ghost jogs on as a red marker reading Q4 rolls into view. 53 frames at 120ms. |
+| `brisk_cart` | ![brisk_cart](gifs/brisk_cart.gif) | Three joggers in green, magenta and cyan shirts run in place while the ground scrolls under them. A white golf cart with a red chassis rolls in from the left, its driver holding a magenta megaphone, and a big yellow line appears above: BRISK JOG! The joggers' eyes follow it off the right edge, then they speed up, blur and start sweating. The cart comes round again, slower, with LOVE THE ENERGY in cyan, and the joggers go red in the face. Button: the joggers stop dead, bent double with hands on knees, and the cart pulls up beside them, megaphone wagging, with BRISK JOG! blinking overhead. 53 frames at 120ms. |
+
 ### Reworked, not created
 
 These existed before; Fable 5.1 changed them on 2026-09-09. The original
