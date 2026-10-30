@@ -37,10 +37,7 @@ export const CATEGORIES = [
     names: [
       'bat_boo',
       'candy_bowl',
-      'costume_contest',
-      'dead_tech_graveyard',
       'jack_o_lantern',
-      'ouija_hr',
       'skeleton_dance',
       'witch_flyby',
     ],

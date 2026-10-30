@@ -222,8 +222,8 @@ been tried on hardware.
 
 ### Halloween
 
-Made 2026-10-30 for the office Halloween party and costume contest: eight
-animations, the first four gags with an office twist. All are 53 frames
+Made 2026-10-30 for the office Halloween party: five animations, one of
+them (`candy_bowl`) a gag. All are 53 frames
 (30,528 bytes) except `skeleton_dance` at 48, so send with
 `--command-timeout 8`. Each was drafted by a helper agent and reviewed
 against frames rendered from the written file; none has been tried on
@@ -231,10 +231,7 @@ hardware. There is no orange in the palette, so the pumpkin is red.
 
 | Animation | Preview | Description |
 | --- | --- | --- |
-| `costume_contest` | ![costume_contest](gifs/costume_contest.gif) | Made for the office costume contest. COSTUME / CONTEST flashes over twinkling stars, then a stage with a blue spotlight cone and three judges behind a table. An entrant shuffles into the light in a lumpy white bedsheet with eye holes and red sneakers poking out, and the scorecards flip up 4, 3, 5 to a red BOO from the crowd. The sheet then lifts off by itself: underneath is a real, translucent blue ghost floating out of the now-empty sneakers. BOO!, the cards flip to green 10 10 10, the judges flee, and WINNER cycles through every colour. 53 frames at 130ms. |
 | `candy_bowl` | ![candy_bowl](gifs/candy_bowl.gif) | A night porch with a heaped bowl of candy and a sign: PLEASE / TAKE ONE. A little witch with a pumpkin bucket takes exactly one, and a heart floats up. A kid in a hoodie reads the sign (?), takes one, looks left, right, left, then pulls out a sack, tips the whole bowl in and leaves one sad green piece. On goes a burglar mask, a $ appears on the sack, and a red marker strikes ONE and writes ALL. The witch returns, sees PLEASE TAKE ALL, and, polite as ever, takes the last piece. 53 frames at 130ms. |
-| `ouija_hr` | ![ouija_hr](gifs/ouija_hr.gif) | A Ouija board in yellow 3x5 type, YES and A-M above, N-Z and NO below, with a readout on the right. A white planchette lens glides letter to letter, the letter under it showing through, and spells HI ITS / HR -- wobbling off and back for the double I. Someone at the table types PTO?; the planchette shoots to NO and rattles there flashing red, then slowly spells L, O, L. 53 frames at 130ms. |
-| `dead_tech_graveyard` | ![dead_tech_graveyard](gifs/dead_tech_graveyard.gif) | A moonlit graveyard of retired technology: four blue tombstones carved FAX, IE6, ZUNE and FLASH, cyan fog along the ground, RIP OLD TECH in the sky as two magenta bats flap past. The mound by the FAX grave trembles, and a green zombie hand bursts out holding up a sheet of paper. BEEP BOP BEEP, a flickering EEEE-KRRRR with static round the page, and the payoff: YOU'VE GOT FAX. 53 frames at 120ms. |
 | `jack_o_lantern` | ![jack_o_lantern](gifs/jack_o_lantern.gif) | A red pumpkin with magenta ribs and a curly green stem is carved in real time: a knife traces two triangle eyes, a nose and a jagged grin, each cut opening black. A match strikes in white sparks and dips into the grin; the mouth lights, then the eyes, and every carved pixel flickers yellow and white, guttering red. HAPPY / HALLOWEEN lights letter by letter beside it, flickering with the candle, and the pumpkin finishes with a slow wink. 53 frames at 120ms. |
 | `skeleton_dance` | ![skeleton_dance](gifs/skeleton_dance.gif) | Five white skeletons in a row, jaws chattering, dance one routine in step under a yellow crescent moon while coloured music notes rise beside it: arm pumps in a V with a squat on every other beat, a hip sway with hands on hips, then a chorus-line kick that ripples down the row one skeleton per frame. 48 frames at 130ms, the 24-frame routine twice. Seamless. |
 | `bat_boo` | ![bat_boo](gifs/bat_boo.gif) | A mini drone show. Forty-eight magenta bats stream out of a big yellow full moon -- black silhouettes while they cross its face -- in a wavy ribbon across the starry sky, then each peels off to its own spot and they lock into a huge BOO, 14 rows tall. It holds, flashes white, then bursts like a firework and every bat curves back into the moon. 53 frames at 100ms. Seamless. |
