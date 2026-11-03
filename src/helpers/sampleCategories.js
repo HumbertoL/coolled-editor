@@ -43,6 +43,17 @@ export const CATEGORIES = [
     ],
   },
   {
+    id: 'election',
+    label: 'Election Day',
+    names: [
+      'vote_ballot_box',
+      'vote_every_vote_counts',
+      'vote_fireworks',
+      'vote_i_voted',
+      'vote_polls_open',
+    ],
+  },
+  {
     id: 'office',
     label: 'Office & desk',
     names: [
