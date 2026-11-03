@@ -237,6 +237,23 @@ hardware. There is no orange in the palette, so the pumpkin is red.
 | `bat_boo` | ![bat_boo](gifs/bat_boo.gif) | A mini drone show. Forty-eight magenta bats stream out of a big yellow full moon -- black silhouettes while they cross its face -- in a wavy ribbon across the starry sky, then each peels off to its own spot and they lock into a huge BOO, 14 rows tall. It holds, flashes white, then bursts like a firework and every bat curves back into the moon. 53 frames at 100ms. Seamless. |
 | `witch_flyby` | ![witch_flyby](gifs/witch_flyby.gif) | A huge yellow full moon over a blue hill with a crooked haunted house, a bare clawing tree and a little graveyard. A witch in a magenta dress and bent hat flies in on a red broom with a blue cat riding behind, sparkles falling from the bristles, and turns to black silhouette against the moon -- only the cat's green eye still shows -- where she flies a full loop-the-loop before carrying on out to the right. 53 frames at 110ms. Seamless. |
 
+### Election Day
+
+Made 2026-11-03, on US Election Day, to encourage people to go vote: five
+options, all strictly nonpartisan -- no parties, candidates or poll closing
+times. Frame counts run 51 to 53, all under the 30,555-byte device maximum, so
+send with `--command-timeout 8`. Each was drafted by a helper agent and
+reviewed against frames rendered from the written file; none has been tried on
+hardware.
+
+| Animation | Preview | Description |
+| --- | --- | --- |
+| `vote_ballot_box` | ![vote_ballot_box](gifs/vote_ballot_box.gif) | A hand in a cyan sleeve holds up a white paper ballot with two blue choice boxes beside a blue ballot box marked VOTE, while GO VOTE! types out in white over a yellow TODAY. A yellow pencil ticks a black check into the first box stroke by stroke; the ballot folds twice and drops through the slot. The lid flashes yellow, a green check pops up and a magenta heart rises among sparkles as the text wipes over to YOUR VOTE / COUNTS!. 51 frames at 130ms. |
+| `vote_polls_open` | ![vote_polls_open](gifs/vote_polls_open.gif) | A dead blue neon POLLS OPEN sign buzzes on like a shop sign, its magenta letters stuttering and flashing white until it burns steady. A line waits at a booth with a striped blue-and-cyan curtain: a voter in green, a tall voter walking a white dog, a white-haired voter in cyan, and a parent pushing a red stroller. Each steps behind the twitching curtain, feet showing, and comes out with a tiny I VOTED sticker that flashes on the chest. The curtain draws back on an empty booth, and YOUR TURN / GO VOTE! appears in yellow and white. 53 frames at 140ms. |
+| `vote_i_voted` | ![vote_i_voted](gifs/vote_i_voted.gif) | A red-and-white striped flag with a blue canton of white star dots ripples on its pole across the left third, looping seamlessly. A white oval sticker with a red rim slaps on oversized, squashes, rebounds and settles to read I VOTED in blue; a cyan glint sweeps across it, then it blinks and asks DID YOU? in red. The sticker peels away and GO VOTE! stamps in one letter a frame in double-height white, with stars twinkling around it and a yellow shine running through the words. 52 frames at 120ms. |
+| `vote_fireworks` | ![vote_fireworks](gifs/vote_fireworks.gif) | In a night sky of twinkling stars, four rockets climb on yellow-and-red tails and burst in red, white and blue with crackling yellow sparks. The sparks curve inward and lock into a giant 14-row VOTE in red-and-white flag stripes, swept by a white-and-yellow highlight, then the blocks regroup into a big white TODAY!. The letters burst back into sparks that cool to blue embers before the next rockets launch. 53 frames at 110ms. |
+| `vote_every_vote_counts` | ![vote_every_vote_counts](gifs/vote_every_vote_counts.gif) | A scoreboard on an unnamed ballot measure reads a dead heat, YES 4,999 and NO 4,999, with TIE blinking yellow between them. A little voter in magenta walks in with a white ballot and drops it into a blue box marked VOTE; the box jolts and a green +1 pops up. YES rolls over to 5,000, TIE becomes +1, and confetti rains while the voter hops with arms in a V. Then EVERY VOTE / COUNTS wipes in, and BE THE ONE. / GO VOTE! holds with a blinking check mark. 53 frames at 130ms. |
+
 ## Claude Fable 5
 
 Created 2026-09-09. Sizes are 48 or 53 frames; the 53-frame entries land at
