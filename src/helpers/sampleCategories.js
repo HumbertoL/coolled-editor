@@ -61,6 +61,8 @@ export const CATEGORIES = [
       'blue_wave_ocean',
       'blue_wave_surf',
       'blue_wave_tide',
+      'great_wave',
+      'great_wave_crash',
     ],
   },
   {
