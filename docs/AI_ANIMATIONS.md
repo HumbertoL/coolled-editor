@@ -254,6 +254,22 @@ hardware.
 | `vote_fireworks` | ![vote_fireworks](gifs/vote_fireworks.gif) | In a night sky of twinkling stars, four rockets climb on yellow-and-red tails and burst in red, white and blue with crackling yellow sparks. The sparks curve inward and lock into a giant 14-row VOTE in red-and-white flag stripes, swept by a white-and-yellow highlight, then the blocks regroup into a big white TODAY!. The letters burst back into sparks that cool to blue embers before the next rockets launch. 53 frames at 110ms. |
 | `vote_every_vote_counts` | ![vote_every_vote_counts](gifs/vote_every_vote_counts.gif) | A scoreboard on an unnamed ballot measure reads a dead heat, YES 4,999 and NO 4,999, with TIE blinking yellow between them. A little voter in magenta walks in with a white ballot and drops it into a blue box marked VOTE; the box jolts and a green +1 pops up. YES rolls over to 5,000, TIE becomes +1, and confetti rains while the voter hops with arms in a V. Then EVERY VOTE / COUNTS wipes in, and BE THE ONE. / GO VOTE! holds with a blinking check mark. 53 frames at 130ms. |
 
+### Blue wave
+
+Made 2026-11-04 for a request for "blue wave" animations: four takes on
+literal ocean waves in the sign's blue, cyan and white, the three with text
+saying only BLUE WAVE. 48 to 53 frames, all under the 30,555-byte device
+maximum, so send with `--command-timeout 8`. Each was drafted by a helper
+agent and reviewed against frames rendered from the written file; none has
+been tried on hardware.
+
+| Animation | Preview | Description |
+| --- | --- | --- |
+| `blue_wave_surf` | ![blue_wave_surf](gifs/blue_wave_surf.gif) | A blue swell rolls in from the right over a calm cyan-rippled sea and rises into a wall nearly the height of the panel, with a cyan face and a white-foamed crest. A tiny surfer on a yellow board drops down the face as the lip curls over in a thick white-and-cyan arc, rides the black tube, and is spat out the end in a burst of spray. The wave folds into churning whitewater, BLUE WAVE erupts out of it in white with cyan ripples rolling through the letters, and a second surge washes the words off, back to the calm sea. 52 frames at 110ms. |
+| `blue_wave_tide` | ![blue_wave_tide](gifs/blue_wave_tide.gif) | A yellow sun over a low blue sea edged with drifting cyan ripples. Three swells roll in from the left with white foam caps, each leaving the water a few rows higher, until a huge wave with a curling white crest swallows the sun and floods the whole panel blue, cyan currents and bubbles streaking through. BLUE WAVE surfaces in white with a cyan shimmer and bobs letter by letter on the swell, then sinks as the water drains back to the calm start. 53 frames at 110ms. |
+| `blue_wave_ocean` | ![blue_wave_ocean](gifs/blue_wave_ocean.gif) | A calm night sea: a white moon among twinkling stars, and three parallax swells rolling across the dark water as thin outlines -- a slow blue far band, a cyan middle band, and a near band whose crests break into white foam. A cyan and white reflection streak shimmers under the moon, and a small white sailboat rises and falls on the middle swell. No text; one to leave running. 48 frames at 110ms. Seamless. |
+| `blue_wave_letters` | ![blue_wave_letters](gifs/blue_wave_letters.gif) | BLUE WAVE, spaced wide, does a stadium wave: a sine wave travels through the nine letters twice per loop, each coloured by its height -- white at the crest, cyan on the shoulders, blue in the trough -- with white spray arcing off every crest letter. A quarter of the way in, a blue sea rises from below with a cyan surface that follows the same wave, the letters surf on it, and it ebbs back off the bottom. 48 frames at 100ms. Seamless. |
+
 ## Claude Fable 5
 
 Created 2026-09-09. Sizes are 48 or 53 frames; the 53-frame entries land at
