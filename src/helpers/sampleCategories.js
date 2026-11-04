@@ -54,6 +54,16 @@ export const CATEGORIES = [
     ],
   },
   {
+    id: 'blue-wave',
+    label: 'Blue Wave',
+    names: [
+      'blue_wave_letters',
+      'blue_wave_ocean',
+      'blue_wave_surf',
+      'blue_wave_tide',
+    ],
+  },
+  {
     id: 'office',
     label: 'Office & desk',
     names: [
