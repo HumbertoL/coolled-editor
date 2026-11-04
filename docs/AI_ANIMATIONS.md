@@ -258,7 +258,8 @@ hardware.
 
 Made 2026-11-04 for a request for "blue wave" animations: four takes on
 literal ocean waves in the sign's blue, cyan and white, the three with text
-saying only BLUE WAVE. 48 to 53 frames, all under the 30,555-byte device
+saying only BLUE WAVE. `great_wave` and `great_wave_crash` followed the same
+day, asked for as takes on Hokusai's print. 48 to 53 frames, all under the 30,555-byte device
 maximum, so send with `--command-timeout 8`. Each was drafted by a helper
 agent and reviewed against frames rendered from the written file; none has
 been tried on hardware.
@@ -269,6 +270,8 @@ been tried on hardware.
 | `blue_wave_tide` | ![blue_wave_tide](gifs/blue_wave_tide.gif) | A yellow sun over a low blue sea edged with drifting cyan ripples. Three swells roll in from the left with white foam caps, each leaving the water a few rows higher, until a huge wave with a curling white crest swallows the sun and floods the whole panel blue, cyan currents and bubbles streaking through. BLUE WAVE surfaces in white with a cyan shimmer and bobs letter by letter on the swell, then sinks as the water drains back to the calm start. 53 frames at 110ms. |
 | `blue_wave_ocean` | ![blue_wave_ocean](gifs/blue_wave_ocean.gif) | A calm night sea: a white moon among twinkling stars, and three parallax swells rolling across the dark water as thin outlines -- a slow blue far band, a cyan middle band, and a near band whose crests break into white foam. A cyan and white reflection streak shimmers under the moon, and a small white sailboat rises and falls on the middle swell. No text; one to leave running. 48 frames at 110ms. Seamless. |
 | `blue_wave_letters` | ![blue_wave_letters](gifs/blue_wave_letters.gif) | BLUE WAVE, spaced wide, does a stadium wave: a sine wave travels through the nine letters twice per loop, each coloured by its height -- white at the crest, cyan on the shoulders, blue in the trough -- with white spray arcing off every crest letter. A quarter of the way in, a blue sea rises from below with a cyan surface that follows the same wave, the letters surf on it, and it ebbs back off the bottom. 48 frames at 100ms. Seamless. |
+| `great_wave` | ![great_wave](gifs/great_wave.gif) | A tribute to Hokusai's Great Wave off Kanagawa (1831, public domain), held at the instant before the crash. A deep blue wave towers on the left, its back swept with flowing cyan striations, its white-foamed crest throwing out to the right and hooking down, white foam claws flexing toward a yellow boat of hunched rowers while spray dots fly off the lip. Beyond, a small blue Mount Fuji with a white snowcap sits behind two more boats bobbing on foam-capped swells, with a little breaker echoing the big one. 48 frames at 120ms. Seamless. |
+| `great_wave_crash` | ![great_wave_crash](gifs/great_wave_crash.gif) | The Great Wave as a story. A calm sea with a small snowcapped Mount Fuji and two yellow boats with red rowers; a swell gathers on the left and rears into the towering wave, cyan striations following its curve, and its white lip splits into hooked talons over a black hollow with Fuji framed beneath. It holds the print's pose for about a second, then the claws close and the lip slams down in an explosion of white and cyan spray. The foam settles, the boats bob back up, and Fuji is still standing. 52 frames at 110ms. |
 
 ## Claude Fable 5
 
