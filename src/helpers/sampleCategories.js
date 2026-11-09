@@ -230,6 +230,7 @@ export const CATEGORIES = [
       'bowling',
       'dino_run',
       'missile_command',
+      'claw_machine',
     ],
   },
   {
@@ -276,6 +277,7 @@ export const CATEGORIES = [
       'prism',
       'doppler',
       'moon_phases',
+      'kaprekar',
     ],
   },
   {
@@ -381,6 +383,8 @@ export const CATEGORIES = [
       'crosswalk',
       'piano',
       'sky_lanterns',
+      'dandelion',
+      'whale',
     ],
   },
   {

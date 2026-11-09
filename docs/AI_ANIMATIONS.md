@@ -682,3 +682,14 @@ the written file; none has been tried on hardware.
 | `missile_command` | ![missile_command](gifs/missile_command.gif) | Missile Command: five red warheads fall toward six cities. For each, a magenta crosshair marks the aim point, a cyan interceptor climbs from the yellow battery and a fireball blooms white, yellow and red. Four are stopped; the fifth shot goes off late and wide, and the city on the far left is lost. 53 frames at 100ms. |
 | `sky_lanterns` | ![sky_lanterns](gifs/sky_lanterns.gif) | Paper lanterns rising off a lake at night in three sizes, yellow and magenta shades over red flames, each swaying on its own phase, with broken red reflections in the rippling blue water below the horizon and a few blinking stars. Every lantern climbs exactly one sky-height per loop. 53 frames at 110ms. Seamless. |
 | `once_upon_a_time` | ![once_upon_a_time](gifs/once_upon_a_time.gif) | Fifteen cells of blue and cyan random letters lock in left to right, each with a yellow flash, until the line reads ONCE UPON A TIME in white. A magenta flourish grows out from a yellow diamond beneath it and a glint crosses the words, then the letters fall back into noise from the right. 53 frames at 100ms. |
+
+### Four more
+
+Added the same day, reviewed the same way; none has been tried on hardware.
+
+| Animation | Preview | Description |
+| --- | --- | --- |
+| `kaprekar` | ![kaprekar](gifs/kaprekar.gif) | Kaprekar's constant. Starting from 3524, each step sorts the digits descending (yellow) and ascending (cyan), subtracts, and types the difference a digit at a time: 5432 - 2345 = 3087, 8730 - 0378 = 8352, 8532 - 2358 = 6174, then 7641 - 1467 = 6174 again, the fixed point every four-digit number falls into, flashing green. The arithmetic is computed and the script asserts the chain. 53 frames at 170ms. |
+| `dandelion` | ![dandelion](gifs/dandelion.gif) | A dandelion clock on a green stem taken apart by the wind: blue streaks of breeze arrive and the seeds let go from the downwind side first, each a white tuft over a yellow seed drifting right on its own wobble, until only the stem and its yellow receptacle are left. 53 frames at 100ms. Not seamless: the loop starts over with a full head. |
+| `claw_machine` | ![claw_machine](gifs/claw_machine.gif) | An arcade claw machine. The white claw trundles along its rail over a row of coloured prizes, drops onto the magenta one, closes and lifts it clear, then loses its grip halfway back and the prize falls into the one gap in the pile. The claw opens over the chute with nothing in it while SO CLOSE! blinks red. 53 frames at 110ms. |
+| `whale` | ![whale](gifs/whale.gif) | A blue whale with a cyan belly holding the middle of the panel while green and cyan plankton drifts past. Its depth follows one cosine per loop, so mid-loop its back breaks the cyan swell and a white spout goes up under the stars; the flukes beat four times a loop. 53 frames at 110ms. Seamless. |
