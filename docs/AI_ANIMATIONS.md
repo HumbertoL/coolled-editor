@@ -273,6 +273,29 @@ been tried on hardware.
 | `great_wave` | ![great_wave](gifs/great_wave.gif) | A tribute to Hokusai's Great Wave off Kanagawa (1831, public domain), held at the instant before the crash. A deep blue wave towers on the left, its back swept with flowing cyan striations, its white-foamed crest throwing out to the right and hooking down, white foam claws flexing toward a yellow boat of hunched rowers while spray dots fly off the lip. Beyond, a small blue Mount Fuji with a white snowcap sits behind two more boats bobbing on foam-capped swells, with a little breaker echoing the big one. 48 frames at 120ms. Seamless. |
 | `great_wave_crash` | ![great_wave_crash](gifs/great_wave_crash.gif) | The Great Wave as a story. A calm sea with a small snowcapped Mount Fuji and two yellow boats with red rowers; a swell gathers on the left and rears into the towering wave, cyan striations following its curve, and its white lip splits into hooked talons over a black hollow with Fuji framed beneath. It holds the print's pose for about a second, then the claws close and the lip slams down in an explosion of white and cyan spray. The foam settles, the boats bob back up, and Fuji is still standing. 52 frames at 110ms. |
 
+### The Legend of Zelda
+
+Made 2026-11-09 for a request for Zelda animations: six on the series as a
+whole and three (`oot_*`) on Ocarina of Time. All 53 frames at 30,528 bytes,
+just under the device maximum, so send with `--command-timeout 8`. The pixel
+art is drawn for the panel, not taken from the games; the hero, hearts and
+rupees are shared in `tools/animations/zelda_art.py`. The old `triforce` (Fable
+5.1) now sits in the same category. Each was reviewed against frames rendered
+from the written file and verified by round-trip; none has been tried on
+hardware.
+
+| Animation | Preview | Description |
+| --- | --- | --- |
+| `zelda_hearts` | ![zelda_hearts](gifs/zelda_hearts.gif) | The life meter. Under a red -LIFE- label, eight hearts take five hits, each flashing the meter white with an OW! and knocking off a heart or two in halves, until one is left blinking magenta beside LOW!. A white-rimmed heart container drops in from the right, bounces and is taken in a sparkle: a ninth slot opens, +1 HEART flashes, and the meter refills half a heart at a time before a shine runs along it. 53 frames at 110ms. |
+| `zelda_rupees` | ![zelda_rupees](gifs/zelda_rupees.gif) | The green-capped hero walks right across the panel and back while rupees drop just ahead of him, bounce once and are snatched up as he passes: green for 1, blue for 5, red for 20 and one purple 50, each with a sparkle and a floating +N. The wallet on the right rolls up a few at a time, like the games' counter, and ends on 100, blinking yellow. 53 frames at 100ms. |
+| `zelda_master_sword` | ![zelda_master_sword](gifs/zelda_master_sword.gif) | Shafts of cyan light fall on a stone pedestal holding a blue-hilted sword. The hero walks in, takes the grip, and the sword shudders and rises in a sparkle until the panel flashes white. Then the whole sword lies across the panel -- blue winged guard with a yellow gem, wrapped grip, a white-edged cyan blade -- while a yellow shine runs from hilt to tip and sparkles come and go. 53 frames at 100ms. |
+| `zelda_chest` | ![zelda_chest](gifs/zelda_chest.gif) | Item get. The hero walks up to a red, gold-banded chest; light leaks from under the lid, the chest shivers, and the lid swings up with yellow and white rays fanning out. A small gold key rises from the glow, the hero turns to face us and holds it overhead with both hands, and YOU GOT A / SMALL KEY! types out beside him while the key twinkles. 53 frames at 110ms. |
+| `zelda_dangerous` | ![zelda_dangerous](gifs/zelda_dangerous.gif) | The first game's cave: an old man in a red robe and white beard between two flickering fires, a sword at his feet. IT'S DANGEROUS / TO GO ALONE! types out a letter at a time, then TAKE THIS. The text clears, the hero walks in from the right, the sword leaves the floor and he holds it overhead in a twinkle as GOT IT! flashes. 53 frames at 110ms. |
+| `zelda_moon` | ![zelda_moon](gifs/zelda_moon.gif) | Majora's Mask: DAWN OF / THE FINAL DAY fades in on black, then -24 HOURS REMAIN-. Over a little town with a blue clock tower, a yellow moon with a grimacing mouth of teeth and red-eyed glare sinks out of a red-starred sky while a corner clock counts 6:00 down to 0:00, turning red in the last hour, and the town starts to shake. At zero a blue and cyan spiral winds time back and the panel flashes white. 53 frames at 120ms. |
+| `oot_ocarina` | ![oot_ocarina](gifs/oot_ocarina.gif) | Ocarina of Time: a blue ocarina puffs music notes while a five-line staff of red dots fills one note at a time, each dropping onto its line -- yellow arrows for the C buttons and a cyan disc for A. First Zelda's Lullaby (left, up, right, twice), then the Song of Time (right, A, down, twice); each finished song flashes white and its name, ZELDA'S LULLABY or SONG OF TIME, takes the staff's place. 53 frames at 120ms. |
+| `oot_navi` | ![oot_navi](gifs/oot_navi.gif) | Ocarina of Time: in a dark forest of little green trees, a fairy -- white core, pulsing cyan and blue glow, flickering wings -- swoops in on a looping path with a trail of fading sparkles. She stops by the left edge, her glow flashing yellow, and the panel shouts HEY! then LISTEN!, twice, before she zips off up and away to the right. 53 frames at 100ms. |
+| `oot_epona` | ![oot_epona](gifs/oot_epona.gif) | Ocarina of Time: a chestnut horse with a white mane, tail and socks gallops in a four-beat leg cycle with the green-capped hero on her back. Grass streaks by along the ground, blue hills roll slowly behind, a yellow sun hangs overhead, and twice a low wooden fence rushes in and she tucks her legs and leaps it. 53 frames at 90ms. |
+
 ## Claude Fable 5.2
 
 Created 2026-11-09 for a request for ten animations of free choice. All are
