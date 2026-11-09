@@ -1,13 +1,17 @@
 #!/usr/bin/env python3
 """
-Prism -- a pulse of white light split into the six colours the panel has.
+Prism -- a beam of white light split into its spectrum.
 
-A finite pulse enters from the left at 4 pixels a frame, climbs slightly to
-the glass, crosses it, and leaves as a fan: red on top, bending least, down
-through yellow, green, cyan and blue to magenta. Its tail follows 26 frames
-behind, so the light switches off the same way it switched on and the loop
-closes on a dark panel. While the fan is lit, white glints travel out along
-each band.
+The panel's palette is one bit per channel: besides black and white it has
+exactly six colours, and in order they are the spectrum -- red, yellow,
+green, cyan, blue, magenta. So this is the one picture the sign can draw
+with every colour it owns and none left over.
+
+The loop tells it as an event. A white pulse crosses from the left, climbs
+slightly to meet the glass, fans out inside it, and leaves the far face as
+six diverging bands that reach the edge of the panel. White glints run down
+the bands while the beam holds; then the tail of the pulse sweeps through
+and the panel is dark, with only the prism left, ready for the next one.
 """
 
 from __future__ import annotations
@@ -19,58 +23,67 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from jtkit import Animation, colors as C  # noqa: E402
 
-FRAMES = 52
+FRAMES = 53
 DELAY = 90
-SPEED = 4
-PULSE = 26  # frames between the head and the tail of the pulse
-
-APEX = (48, 1)
-BASE_Y = 14
-HALF_BASE = 9
-ENTRY = (43, 8)
-EXIT = (53, 7)
-BANDS = [C.RED, C.YELLOW, C.GREEN, C.CYAN, C.BLUE, C.MAGENTA]
+SPECTRUM = [C.RED, C.YELLOW, C.GREEN, C.CYAN, C.BLUE, C.MAGENTA]
+BEAM_SPEED = 4
+TAIL_START = 40           # frame the back of the pulse enters from the left
+TAIL_SPEED = 9
+ENTRY = (42, 9)           # where the beam meets the left face
+EXIT_X = 53
 
 
-def beam_pixels():
-    """Every lit pixel of the full beam as (path position, x, y, colour)."""
-    out = []
-    for x in range(ENTRY[0]):
-        out.append((x, x, round(12 - 4 * x / ENTRY[0]), C.WHITE))
-    for x in range(ENTRY[0], EXIT[0] + 1):
-        out.append((x, x, 8 if x < 49 else 7, C.WHITE))
-    for x in range(EXIT[0] + 1, 96):
-        t = (x - EXIT[0]) / (95 - EXIT[0])
-        top = 7 - 4.4 * t
-        bottom = 7.9 + 7.0 * t
-        for y in range(16):
-            if top <= y + 0.5 <= bottom + 0.6:
-                band = int((y + 0.5 - top) / (bottom + 0.6 - top) * len(BANDS))
-                out.append((x, x, y, BANDS[min(band, len(BANDS) - 1)]))
-    return out
+def left_face(y):
+    return 47 - 9 * y / 15
 
 
-def draw_prism(frame):
-    left = (APEX[0] - HALF_BASE, BASE_Y)
-    right = (APEX[0] + HALF_BASE, BASE_Y)
-    frame.line(*APEX, *left, C.CYAN)
-    frame.line(*APEX, *right, C.CYAN)
-    frame.line(*left, *right, C.CYAN)
+def right_face(y):
+    return 48 + 9 * y / 15
+
+
+def beam_y(x):
+    return round(12 - 3 * x / ENTRY[0])
+
+
+def light_at(x, y):
+    """What the fully lit scene shows at a pixel: a colour, or None for dark."""
+    if x < left_face(y) - 0.5:
+        return C.WHITE if x <= ENTRY[0] and y == beam_y(x) else None
+    if x <= right_face(y) + 0.5:
+        # Inside the glass: a fan opening from the entry point.
+        t = (x - ENTRY[0]) / (EXIT_X - ENTRY[0])
+        if 0 <= t and ENTRY[1] - 1.6 * t - 0.5 <= y <= ENTRY[1] + 1.2 * t + 0.5:
+            return C.WHITE
+        return None
+    t = (x - EXIT_X) / (95 - EXIT_X)
+    top = 7.0 - 6.0 * t
+    bottom = 10.6 + 4.4 * t
+    band = int((y + 0.5 - top) / (bottom - top) * 6)
+    if y + 0.5 < top or not 0 <= band < 6:
+        return None
+    return SPECTRUM[band]
 
 
 def build():
     anim = Animation(delay=DELAY)
-    beam = beam_pixels()
     for index in range(FRAMES):
         frame = anim.frame()
-        head = SPEED * index
-        tail = SPEED * (index - PULSE)
-        for position, x, y, colour in beam:
-            if tail <= position < head:
-                if x > EXIT[0] + 6 and (x - 3 * index) % 14 == 0:
-                    colour = C.WHITE
-                frame.pixel(x, y, colour)
-        draw_prism(frame)
+        head = BEAM_SPEED * (index + 1)
+        tail = TAIL_SPEED * (index - TAIL_START) if index >= TAIL_START else -1
+        for y in range(16):
+            for x in range(96):
+                color = light_at(x, y) if tail < x <= head else None
+                if color is None:
+                    continue
+                # Glints travel outward along the bands once the beam is established.
+                if x > right_face(y) + 1 and (x - 5 * index + 3 * y) % 24 < 2:
+                    color = C.WHITE
+                frame.pixel(x, y, color)
+        # The glass itself, drawn last so its edges stay crisp.
+        for y in range(16):
+            frame.pixel(round(left_face(y)), y, C.CYAN)
+            frame.pixel(round(right_face(y)), y, C.CYAN)
+        frame.hline(38, 15, 20, C.CYAN)
     return anim
 
 

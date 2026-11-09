@@ -1,131 +1,144 @@
 #!/usr/bin/env python3
 """
-Dino run -- the offline-page runner, on a loop that never ends in GAME OVER.
+Dino run -- the offline-page endless runner, played badly.
 
-The dinosaur stays put while the desert scrolls past at 3 pixels a frame.
-The world is 144 pixels long -- 48 frames' worth -- and holds a cactus, a
-low-flying pterodactyl and a pair of cacti. The dinosaur jumps the cacti on
-a nine-frame parabola and simply keeps its head down for the bird, which
-clears it by a row. Clouds drift at a third of the speed and the ground
-texture repeats with the world, so everything but the score is seamless.
-build() asserts that no obstacle pixel ever touches the dinosaur.
+A small T-rex sprints across the desert, clears a cactus, clears a pair, and
+then runs straight into the third. GAME OVER, and the loop is the restart.
+
+The jumps are not hand-timed. The script knows every sprite's pixels, so for
+each cactus it searches for a take-off frame on which no dino pixel ever
+touches a cactus pixel, and takes the latest one that works -- the dino
+leaves it as late as it dares. For the last cactus it simply does not jump,
+and the crash frame is whichever frame the sprites first overlap.
 """
 
 from __future__ import annotations
 
-import random
 import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from jtkit import Animation, Canvas, colors as C  # noqa: E402
+from jtkit import Animation, colors as C  # noqa: E402
 
-FRAMES = 48
-DELAY = 80
-SPEED = 3
-WORLD = FRAMES * SPEED
-DINO_X = 10
-FEET_Y = 14
+FRAMES = 53
+DELAY = 90
+SPEED = 4                 # ground pixels per frame
+DINO_X = 8
 GROUND_Y = 15
-JUMP_HALF = 4
-JUMP_HEIGHT = 6
+LIFT = [2, 4, 5, 5, 5, 4, 2]   # height above the ground through a jump
 
-DINO = [
-    "....####",
-    "....#.##",
-    "....####",
-    "....##..",
-    "#..####.",
-    "##.###.#",
-    ".#####..",
-    "..####..",
+BODY = [
+    "......####.",
+    ".....##.###",
+    ".....######",
+    ".....###...",
+    "#....#####.",
+    "#...####...",
+    "##.######..",
+    ".#######.#.",
+    "..#####....",
 ]
-LEGS = ["..#..#..", "..##.#..", "..#..##."]
-
+LEGS = {
+    "a": ["..##.##....", "..#........"],
+    "b": ["..##.##....", ".....#....."],
+    "jump": ["..#...#....", "..##..##..."],
+}
 CACTUS = [
     "..#..",
     "#.#.#",
-    "###.#",
-    "..###",
+    "#####",
     "..#..",
 ]
-BIRD = [
-    [
-        "..#.....",
-        ".###....",
-        "########",
-        "...###..",
-    ],
-    [
-        "........",
-        ".###....",
-        "########",
-        "..####..",
-    ],
+CLOUD = [
+    "..###..",
+    ".#####.",
+    "#######",
 ]
-
-# (kind, world x of the left edge). Cacti stand on the ground; the bird flies.
-OBSTACLES = [("cactus", 46), ("bird", 88), ("cactus", 124), ("cactus", 130)]
-JUMPS = [46 + 2, 127 + 2]  # world x the dinosaur's middle should be over at the peak
+# (world x of the left edge, how many cacti side by side)
+OBSTACLES = [(58, 1), (118, 2), (176, 1)]
 
 
-def stamp(canvas, rows, x, y, colour):
-    for row, line in enumerate(rows):
-        for col, cell in enumerate(line):
-            if cell == "#":
-                canvas.pixel(x + col, y + row, colour)
+def sprite_pixels(rows, x, y):
+    return {
+        (x + col, y + r)
+        for r, row in enumerate(rows)
+        for col, cell in enumerate(row)
+        if cell == "#"
+    }
 
 
-def jump_height(index):
-    """Pixels off the ground at this frame."""
-    middle = DINO_X + 4
-    best = 0
-    for peak_x in JUMPS:
-        # Frames from the peak, measured round the loop.
-        offset = (index * SPEED + middle - peak_x + WORLD / 2) % WORLD - WORLD / 2
-        k = offset / SPEED
-        if abs(k) < JUMP_HALF:
-            best = max(best, round(JUMP_HEIGHT * (1 - (k / JUMP_HALF) ** 2)))
-    return best
+def dino_pixels(lift, legs):
+    rows = BODY + LEGS[legs]
+    return sprite_pixels(rows, DINO_X, GROUND_Y - len(rows) - lift)
+
+
+def cactus_pixels(scroll):
+    pixels = set()
+    for world_x, count in OBSTACLES:
+        for k in range(count):
+            pixels |= sprite_pixels(CACTUS, world_x + 5 * k - scroll, GROUND_Y - len(CACTUS))
+    return pixels
+
+
+def plan():
+    """Lift for every frame, and the frame of the crash."""
+    lift = [0] * (FRAMES + len(LIFT))
+
+    def collisions():
+        return [
+            f
+            for f in range(FRAMES)
+            if dino_pixels(lift[f], "jump") & cactus_pixels(SPEED * f)
+        ]
+
+    for _obstacle in OBSTACLES[:-1]:
+        first = collisions()[0]
+        for takeoff in range(first, first - len(LIFT) - 1, -1):
+            trial = list(lift)
+            for k, height in enumerate(LIFT):
+                trial[takeoff + k] = height
+            saved, lift = lift, trial
+            hits = collisions()
+            if not hits or hits[0] > takeoff + len(LIFT):
+                break
+            lift = saved
+        else:
+            raise AssertionError("no take-off frame clears this cactus")
+    return lift, collisions()[0]
+
+
+def draw_sprite(frame, pixels, color):
+    for x, y in pixels:
+        frame.pixel(x, y, color)
 
 
 def build():
-    rng = random.Random(52)
-    pebbles = {rng.randrange(WORLD) for _ in range(34)}
+    lift, crash = plan()
     anim = Animation(delay=DELAY)
     for index in range(FRAMES):
-        scroll = index * SPEED
-
-        hazards = Canvas()
-        for kind, world_x in OBSTACLES:
-            for lap in (-WORLD, 0, WORLD):
-                x = world_x - scroll + lap
-                if kind == "cactus":
-                    stamp(hazards, CACTUS, x, FEET_Y - 4, C.GREEN)
-                else:
-                    stamp(hazards, BIRD[(index // 2) % 2], x, 1, C.MAGENTA)
-
-        height = jump_height(index)
-        dino = Canvas()
-        legs = LEGS[0] if height else LEGS[1 + (index // 2) % 2]
-        stamp(dino, DINO + [legs], DINO_X, FEET_Y - 8 - height, C.WHITE)
-        clash = set(dino.lit()) & set(hazards.lit())
-        assert not clash, f"frame {index}: dinosaur hits an obstacle at {sorted(clash)}"
-
         frame = anim.frame()
-        for base in (20, 68):  # clouds, a third of the ground speed
-            x = (base - scroll // 3) % 96
-            for dx, dy in [(1, 0), (2, 0), (0, 1), (1, 1), (2, 1), (3, 1), (4, 1)]:
-                frame.pixel((x + dx) % 96, 3 + dy + (base % 3), C.BLUE)
+        live = min(index, crash)          # the world freezes at the crash
+        dead = index >= crash
+        scroll = SPEED * live
+
+        for cloud_x, cloud_y in ((70, 1), (131, 3)):
+            draw_sprite(frame, sprite_pixels(CLOUD, cloud_x - live, cloud_y), C.BLUE)
         for x in range(96):
-            if (x + scroll) % WORLD not in pebbles:
+            world = x + scroll
+            if world % 17 not in (5, 6) and world % 29 != 11:
                 frame.pixel(x, GROUND_Y, C.YELLOW)
-        frame.blit(hazards)
-        frame.blit(dino)
-        # The score is opaque, so the bird flies in from behind it.
-        frame.rect(74, 0, 22, 6, C.BLACK, fill=True)
-        frame.small_text(f"{index * 7:05d}", 76, 0, C.CYAN)
+        draw_sprite(frame, cactus_pixels(scroll), C.GREEN)
+
+        legs = "jump" if lift[live] or dead else "ab"[live % 2]
+        draw_sprite(frame, dino_pixels(lift[live], legs), C.WHITE)
+        if dead:
+            eye_y = GROUND_Y - len(BODY) - 2 - lift[live] + 1
+            frame.pixel(DINO_X + 7, eye_y, C.RED)
+            frame.text("GAME OVER", "center", 2, C.RED)
+
+        score = f"{2 * live:05d}"
+        frame.small_text(score, 96 - frame.small_text_width(score), 0, C.WHITE)
     return anim
 
 
