@@ -638,3 +638,26 @@ none has been tried on hardware.
 | `jellyfish` | ![jellyfish](gifs/jellyfish.gif) | Two jellies, a large and a small, pulsing their magenta-rimmed bells and drifting on their own phases, each with four cyan tentacles that travel in waves. White bubbles climb a full panel per loop. 53 frames at 100ms. Seamless. |
 | `coin_flip` | ![coin_flip](gifs/coin_flip.gif) | A yellow coin tossed from the ground, spinning four times in the air with its width scaled by the cosine of its angle, then resting heads up as HEADS and 4 SPINS appear. The loop resets to the coin on the ground. 53 frames at 80ms. |
 | `tic_tac_toe` | ![tic_tac_toe](gifs/tic_tac_toe.gif) | A drawn game played out on the board: each move shows a yellow cursor on its cell for two frames, then places a red X or a cyan O. Once the board fills, DRAW blinks in the margin. 53 frames at 260ms. |
+
+## Claude, session of 2026-11-09
+
+Created 2026-11-09 for a request for ten animations of the model's own
+choosing. The model version is deliberately left out of this heading. Sizes
+run 48 to 53 frames (27,648 to 30,528 bytes), so send them with
+`--command-timeout 8`. Each was reviewed against contact sheets rendered from
+the written file; none has been tried on hardware.
+
+### Free choice
+
+| Animation | Preview | Description |
+| --- | --- | --- |
+| `tortoise_hare` | ![tortoise_hare](gifs/tortoise_hare.gif) | Aesop's race. A white hare bolts off the line, gets most of the way to the chequered flag, looks back and lies down under a drift of cyan Zs. The green tortoise never changes pace, 1.65 pixels a frame from start to finish, plods past, and the hare wakes with a red ! too late: SLOW & STEADY flashes as the tortoise stands at the flag. 53 frames at 110ms. |
+| `prism` | ![prism](gifs/prism.gif) | A pulse of white light climbs to a cyan glass prism, crosses it and leaves as a fan of the six colours the panel has, red on top bending least down to magenta, with white glints travelling out along the bands. The pulse is finite, so its tail follows 26 frames behind and the light switches off the way it came on. 52 frames at 90ms. Loops on a dark panel. |
+| `hanoi` | ![hanoi](gifs/hanoi.gif) | Tower of Hanoi: four discs in red, yellow, green and cyan moved from the left peg to the right in the minimum 15 moves, from the usual recursion. Each move is three frames, lift, carry, drop, and the finished tower flashes white. 53 frames at 140ms. |
+| `wireworld` | ![wireworld](gifs/wireworld.gif) | Brian Silverman's Wireworld automaton running a real circuit: two clock loops, 12 and 16 cells round, each tapped into one input of an OR gate whose output runs off along a meander to the right edge. Wire is blue, electron heads yellow, tails red. The circuit repeats every lcm(12, 16) = 48 generations, which is the frame count, and the script asserts it. 48 frames at 90ms. Seamless. |
+| `moon_phases` | ![moon_phases](gifs/moon_phases.gif) | Six moons in a row, each a sixth of a lunation ahead of the last, so the light sweeps along the panel. The lit part is bounded by the terminator, a half-ellipse whose width is the cosine of the phase angle; the dark limb shows as a blue rim of earthshine and the maria are picked out in yellow. 48 frames at 110ms. Seamless. |
+| `doppler` | ![doppler](gifs/doppler.gif) | The Doppler effect: a yellow source crosses the panel at 2.2 pixels a frame, emitting a circular wavefront every fourth frame that then grows at 3.2. Ahead of it the fronts pile up 4 pixels apart; behind they trail out to 21. Fronts cool from white through cyan to blue. 53 frames at 90ms. Seamless. |
+| `dino_run` | ![dino_run](gifs/dino_run.gif) | The offline-page dinosaur runner: a white dinosaur jumps a green cactus, keeps its head down under a magenta pterodactyl that clears it by a row, and jumps a pair of cacti, over a pebbled yellow desert floor with blue clouds at a third of the speed. The world is exactly one loop long and the script asserts the dinosaur never touches an obstacle, so it never ends in GAME OVER. 48 frames at 80ms. Seamless apart from the score. |
+| `missile_command` | ![missile_command](gifs/missile_command.gif) | Missile Command: five red warheads fall toward six cities. For each, a magenta crosshair marks the aim point, a cyan interceptor climbs from the yellow battery and a fireball blooms white, yellow and red. Four are stopped; the fifth shot goes off late and wide, and the city on the far left is lost. 53 frames at 100ms. |
+| `sky_lanterns` | ![sky_lanterns](gifs/sky_lanterns.gif) | Paper lanterns rising off a lake at night in three sizes, yellow and magenta shades over red flames, each swaying on its own phase, with broken red reflections in the rippling blue water below the horizon and a few blinking stars. Every lantern climbs exactly one sky-height per loop. 53 frames at 110ms. Seamless. |
+| `once_upon_a_time` | ![once_upon_a_time](gifs/once_upon_a_time.gif) | Fifteen cells of blue and cyan random letters lock in left to right, each with a yellow flash, until the line reads ONCE UPON A TIME in white. A magenta flourish grows out from a yellow diamond beneath it and a glint crosses the words, then the letters fall back into noise from the right. 53 frames at 100ms. |
