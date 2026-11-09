@@ -226,6 +226,7 @@ export const CATEGORIES = [
       'waldo',
       'wordle',
       'bowling',
+      'dino_run',
     ],
   },
   {
@@ -266,6 +267,10 @@ export const CATEGORIES = [
       'hilbert_curve',
       'fourier',
       'sieve',
+      'wireworld',
+      'three_body',
+      'black_hole',
+      'prism',
     ],
   },
   {
@@ -288,6 +293,9 @@ export const CATEGORIES = [
       'zipper',
       'elevator',
       'rube_goldberg',
+      'split_flap',
+      'metro_map',
+      'assembly_line',
     ],
   },
   {
@@ -321,6 +329,7 @@ export const CATEGORIES = [
       'wave',
       'waveform',
       'vinyl_record',
+      'voxel_flyover',
     ],
   },
   {
@@ -371,7 +380,7 @@ export const CATEGORIES = [
   {
     id: 'puzzles',
     label: 'Puzzles',
-    names: ['spot_the_difference', 'word_ladder'],
+    names: ['hanoi', 'spot_the_difference', 'word_ladder'],
   },
   {
     id: 'gags',
