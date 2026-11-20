@@ -15,6 +15,16 @@ Three sources, in the order the tabs appear:
 Everything not already in `src/sample` is vendored into `public/samples/` and
 fetched on demand, rather than bundled into the JS.
 
+The page never downloads a whole pack. At build time (and on the fly in dev)
+`scripts/vite-sample-meta.js` writes a split copy of every pack to
+`samples/split/<pack id>/`: an `index.json` with each entry's name, frame
+count and delay, and gzipped chunks of 24 entries' pixels
+(`0.json.gz`, `1.json.gz`, ...). A tab lists its cards from the index, and each
+card fetches its chunk only as it nears the viewport. The files in
+`public/samples/` are left exactly as fetched; `src/helpers/packFormat.test.js`
+checks that every entry of the split copy decodes to the same `.jt` as the
+original.
+
 # The bundled animation packs
 
 62 static images and 147 animations, from:

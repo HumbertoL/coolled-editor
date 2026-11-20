@@ -1,18 +1,36 @@
 /**
- * Vite plugin: `virtual:sample-meta`, a manifest of every sample in
- * src/sample, built from the files themselves.
+ * Vite plugin: everything the Samples page needs to list samples without
+ * downloading them.
  *
- * The Samples page used to fetch and parse all ~30MB of .jt files before it
- * could show a single card. With this it knows each sample's frame count,
- * delay and size up front, renders every card (and searches them) at once,
- * and fetches a sample's pixels only when its card nears the viewport.
+ * 1. `virtual:sample-meta`, a manifest of every sample in src/sample: frame
+ *    count, delay and size per file, read from the files themselves. Keyed by
+ *    filename, as src/helpers/samples.js keys its import.meta.glob.
  *
- * The manifest is keyed by filename, the same way src/helpers/samples.js
- * keys its import.meta.glob, so the two always describe the same files.
+ * 2. A split copy of every pack in public/samples -- the two vendor packs and
+ *    each material pack -- under samples/split/<pack id>/: an index.json
+ *    listing every entry's name, frame count and delay, and numbered chunks
+ *    of pixels (see src/helpers/packFormat.js). Emitted into the build, and
+ *    served from memory by the dev server. The packs themselves are left as
+ *    they are.
+ *
+ * Together these let the page render every card, and search them, at once,
+ * and fetch pixels only for cards that near the viewport. Before, it fetched
+ * every sample (~30MB for the repo's own) before showing anything.
  */
-import { readFileSync, readdirSync } from 'node:fs';
+import { readFileSync, readdirSync, existsSync } from 'node:fs';
 import { join, resolve } from 'node:path';
+import { gunzipSync, gzipSync } from 'node:zlib';
 import { readJtMeta } from '../src/helpers/jtMeta.js';
+import {
+  CHUNK_SIZE,
+  MATERIAL_DIR,
+  SPLIT_DIR,
+  VENDOR_PACKS,
+  cleanVendorName,
+  packChunkPath,
+  packIndexPath,
+  vendorEntryParts,
+} from '../src/helpers/packFormat.js';
 
 const VIRTUAL_ID = 'virtual:sample-meta';
 const RESOLVED_ID = `\0${VIRTUAL_ID}`;
@@ -36,13 +54,92 @@ export const buildSampleMeta = (dir) => {
   return meta;
 };
 
+const readJson = (path) => {
+  const bytes = readFileSync(path);
+  const isGzip = bytes[0] === 0x1f && bytes[1] === 0x8b;
+  return JSON.parse((isGzip ? gunzipSync(bytes) : bytes).toString('utf8'));
+};
+
+/**
+ * One pack's index and chunks, as { path: JSON text }. Each entry is
+ * { name, frameNum, delays, bytes, data }, `data` the packed pixel planes in
+ * base64 -- the material catalog's own encoding, now used for both.
+ */
+const splitPack = (id, label, entries) => {
+  const files = {};
+  files[packIndexPath(id)] = JSON.stringify({
+    id,
+    label,
+    count: entries.length,
+    chunkSize: CHUNK_SIZE,
+    items: entries.map(({ name, frameNum, delays, bytes }) => ({
+      name,
+      frameNum,
+      delays,
+      bytes,
+    })),
+  });
+  for (let start = 0; start < entries.length; start += CHUNK_SIZE) {
+    const chunk = entries.slice(start, start + CHUNK_SIZE).map((e) => e.data);
+    files[packChunkPath(id, start / CHUNK_SIZE)] = gzipSync(
+      JSON.stringify(chunk),
+    );
+  }
+  return files;
+};
+
+/** Split every pack under `publicDir`. Missing packs are skipped. */
+export const buildSplitPacks = (publicDir) => {
+  const files = {};
+
+  for (const pack of VENDOR_PACKS) {
+    const path = join(publicDir, 'samples', pack.file);
+    if (!existsSync(path)) continue;
+    const entries = (readJson(path).animationData ?? []).map((entry, i) => {
+      const { frameNum, delays, pixels } = vendorEntryParts(entry.sendData);
+      return {
+        name: cleanVendorName(entry.describe, i),
+        frameNum,
+        delays,
+        bytes: pixels.length,
+        data: Buffer.from(pixels).toString('base64'),
+      };
+    });
+    Object.assign(files, splitPack(pack.id, pack.label, entries));
+  }
+
+  // The material catalog is optional: it exists once fetch-material has run.
+  const indexPath = join(publicDir, MATERIAL_DIR, 'index.json');
+  if (existsSync(indexPath)) {
+    for (const pack of readJson(indexPath).packs ?? []) {
+      const path = join(publicDir, MATERIAL_DIR, pack.file);
+      if (!existsSync(path)) continue;
+      const body = readJson(path);
+      const entries = (body.items ?? []).map((item) => ({
+        name: `${body.label} ${item.name}`,
+        frameNum: item.frameNum,
+        delays: item.delays,
+        bytes: Buffer.from(item.data, 'base64').length,
+        data: item.data,
+      }));
+      Object.assign(files, splitPack(pack.id, body.label, entries));
+    }
+  }
+
+  return files;
+};
+
 export default function sampleMeta() {
-  let dir;
+  let sampleDir;
+  let publicDir;
+  let base = '/';
 
   return {
     name: 'sample-meta',
     configResolved(config) {
-      dir = resolve(config.root, 'src/sample');
+      sampleDir = resolve(config.root, 'src/sample');
+      publicDir = config.publicDir;
+      base = config.base;
     },
     resolveId(id) {
       return id === VIRTUAL_ID ? RESOLVED_ID : null;
@@ -51,23 +148,50 @@ export default function sampleMeta() {
       if (id !== RESOLVED_ID) {
         return null;
       }
-      return `export default ${JSON.stringify(buildSampleMeta(dir))};`;
+      return `export default ${JSON.stringify(buildSampleMeta(sampleDir))};`;
+    },
+    generateBundle() {
+      for (const [fileName, source] of Object.entries(
+        buildSplitPacks(publicDir),
+      )) {
+        this.emitFile({ type: 'asset', fileName, source });
+      }
     },
     configureServer(server) {
-      // A sample added, changed or removed in dev rebuilds the manifest.
-      const refresh = (file) => {
-        if (!file.startsWith(dir) || !SAMPLE_FILE.test(file)) {
-          return;
+      // Built on first request, and again after a pack changes.
+      let split = null;
+
+      server.middlewares.use((req, res, next) => {
+        const path = (req.url ?? '').split('?')[0];
+        if (!path.startsWith(`${base}${SPLIT_DIR}/`)) {
+          return next();
         }
-        const module = server.moduleGraph.getModuleById(RESOLVED_ID);
-        if (module) {
-          server.moduleGraph.invalidateModule(module);
-          server.ws.send({ type: 'full-reload' });
+        split ??= buildSplitPacks(publicDir);
+        const body = split[path.slice(base.length)];
+        if (body === undefined) {
+          return next();
         }
-      };
-      server.watcher.on('add', refresh);
-      server.watcher.on('change', refresh);
-      server.watcher.on('unlink', refresh);
+        res.setHeader(
+          'Content-Type',
+          path.endsWith('.gz') ? 'application/gzip' : 'application/json',
+        );
+        res.end(body);
+        return undefined;
+      });
+
+      server.watcher.on('all', (_event, file) => {
+        if (file.startsWith(join(publicDir, 'samples'))) {
+          split = null;
+        }
+        // A sample added, changed or removed rebuilds the manifest.
+        if (file.startsWith(sampleDir) && SAMPLE_FILE.test(file)) {
+          const module = server.moduleGraph.getModuleById(RESOLVED_ID);
+          if (module) {
+            server.moduleGraph.invalidateModule(module);
+            server.ws.send({ type: 'full-reload' });
+          }
+        }
+      });
     },
   };
 }

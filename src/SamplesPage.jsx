@@ -7,9 +7,8 @@ import {
   downloadJt,
   listBundledSamples,
   loadMaterialIndex,
-  loadMaterialPack,
+  loadPack,
   loadSampleJt,
-  loadVendorPack,
   readJt,
   sendCommandFor,
 } from './helpers/samples';
@@ -302,14 +301,16 @@ const Status = styled.p`
   padding: 24px 0;
 `;
 
-// How far ahead of the viewport a bundled sample's pixels are fetched. A
+// How far ahead of the viewport a sample's pixels are fetched. A
 // couple of rows' worth, so a card is usually ready by the time it is seen.
 const LOAD_AHEAD = '600px';
 
 /**
- * The parsed .jt behind a card. Vendor and material samples arrive with it;
- * bundled ones only list their metadata, and fetch the file the first time
- * the card comes near the viewport. Returns { jt, error }.
+ * The parsed .jt behind a card. Every tab lists its samples from metadata
+ * alone -- a build-time manifest for the repo's own, a split index for the
+ * vendor and material packs -- and a card fetches its pixels (its own file,
+ * or the chunk it sits in) the first time it comes near the viewport.
+ * Returns { jt, error }.
  */
 const useSampleJt = (sample, ref) => {
   const near = useNearViewport(ref, { margin: LOAD_AHEAD, once: true });
@@ -382,9 +383,13 @@ const SampleCard = ({ sample, onEdit }) => {
     }
   };
 
-  const handleDownload = () => {
-    downloadJt(sample);
-    setDownloaded(true);
+  const handleDownload = async () => {
+    try {
+      await downloadJt(sample);
+      setDownloaded(true);
+    } catch (error) {
+      console.warn(`Could not download ${sample.name}`, error);
+    }
   };
 
   // Edit can beat the scroll: fetch the file now if the card has not yet.
@@ -493,10 +498,9 @@ const SamplesPage = ({ onEdit }) => {
     let load;
     if (tab === 'bundled') {
       load = Promise.resolve(listBundledSamples());
-    } else if (vendorPack) {
-      load = loadVendorPack(vendorPack);
-    } else if (materialPack) {
-      load = loadMaterialPack(materialPack);
+    } else if (vendorPack || materialPack) {
+      // Just the pack's index: each card fetches its pixels as it nears.
+      load = loadPack(tab);
     } else {
       // A material tab selected before the index arrived; the effect reruns.
       return () => {

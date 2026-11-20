@@ -89,10 +89,13 @@ reads the data. So:
   The page does not fetch the samples up front: `scripts/vite-sample-meta.js`
   builds a manifest (`virtual:sample-meta`: frames, delay, size per file) at
   build time, and each card fetches its `.jt` only as it nears the viewport.
-  Anything that needs a bundled sample's pixels goes through `loadSampleJt`.
+  Anything that needs a sample's pixels goes through `loadSampleJt`.
 - `public/samples/` — the vendor packs and material catalog, fetched at
   runtime rather than bundled. Keeps a few MB out of the JS bundle.
-  Regenerate the catalog with `yarn fetch-material`.
+  Regenerate the catalog with `yarn fetch-material`. The page never fetches
+  these files whole: the same plugin emits a split copy (an index plus
+  gzipped 24-entry chunks, `samples/split/`) and cards load their chunk as
+  they near the viewport. Leave the originals as fetched.
 - `public/fonts/` — glyph pages for the text tool, extracted from the APK by
   `node scripts/extract-font.mjs`. Paged and gzipped, so setting Latin text
   fetches 6.7KB of the 720KB table. `src/helpers/font.js` reads them; the

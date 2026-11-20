@@ -2,6 +2,14 @@ import sampleMeta from 'virtual:sample-meta';
 import { GRID_HEIGHT, GRID_WIDTH } from './constants.js';
 import { inflateJson } from './gzip.js';
 import { BYTES_PER_FRAME, jtPixelData, readJtMeta } from './jtMeta.js';
+import {
+  MATERIAL_DIR,
+  VENDOR_PACKS,
+  framesInBytes,
+  packChunkPath,
+  packIndexPath,
+  vendorEntryParts,
+} from './packFormat.js';
 import { categoryOf, descriptionOf, keywordsOf } from './sampleCategories.js';
 
 // Where the driver lives, for the send commands shown next to each sample.
@@ -11,29 +19,7 @@ export const DOWNLOADS_PATH = '~/Downloads';
 
 export { BYTES_PER_FRAME };
 
-// A vendor payload is 24 zero bytes, a frame count, then a 16-bit speed,
-// before the pixel planes start. Same layout the driver builds.
-const VENDOR_HEADER_BYTES = 27;
-const VENDOR_FRAME_OFFSET = 24;
-const VENDOR_SPEED_OFFSET = 25;
-
-// Where fetch-material.mjs writes the vendored catalog.
-export const MATERIAL_DIR = 'samples/material';
-
-export const VENDOR_PACKS = [
-  {
-    id: 'static',
-    label: 'Vendor static',
-    file: 'data1696_static.json',
-    blurb: 'Single-frame graffiti from the CoolLED1248 app.',
-  },
-  {
-    id: 'dynamic',
-    label: 'Vendor animations',
-    file: 'data1696_dynamic.json',
-    blurb: 'Multi-frame animations. Larger download, loads on demand.',
-  },
-];
+export { MATERIAL_DIR, VENDOR_PACKS };
 
 /**
  * Read one bit out of the packed pixel data.
@@ -142,24 +128,24 @@ export const readJt = (jt) => ({
  * produces gives back the original bytes exactly.
  */
 export const vendorEntryToJt = (sendData) => {
-  const frameNum = sendData[VENDOR_FRAME_OFFSET];
-  const delays =
-    sendData[VENDOR_SPEED_OFFSET] * 256 + sendData[VENDOR_SPEED_OFFSET + 1];
-
-  return [
-    {
-      dataType: 0,
-      data: {
-        aniType: 1,
-        pixelHeight: GRID_HEIGHT,
-        pixelWidth: GRID_WIDTH,
-        frameNum,
-        delays,
-        aniData: sendData.slice(VENDOR_HEADER_BYTES),
-      },
-    },
-  ];
+  const { frameNum, delays, pixels } = vendorEntryParts(sendData);
+  return pixelsToJt(frameNum, delays, pixels);
 };
+
+/** A minimal one-animation .jt around already-packed pixel planes. */
+const pixelsToJt = (frameNum, delays, pixels) => [
+  {
+    dataType: 0,
+    data: {
+      aniType: 1,
+      pixelHeight: GRID_HEIGHT,
+      pixelWidth: GRID_WIDTH,
+      frameNum,
+      delays,
+      aniData: Array.from(pixels),
+    },
+  },
+];
 
 const base64ToBytes = (base64) => {
   const binary = atob(base64);
@@ -174,19 +160,8 @@ const base64ToBytes = (base64) => {
  * Build a .jt from a material pack entry. The pack already holds the packed
  * planes, converted from the vendor's GIF by scripts/fetch-material.mjs.
  */
-export const materialEntryToJt = (entry) => [
-  {
-    dataType: 0,
-    data: {
-      aniType: 1,
-      pixelHeight: GRID_HEIGHT,
-      pixelWidth: GRID_WIDTH,
-      frameNum: entry.frameNum,
-      delays: entry.delays,
-      aniData: Array.from(base64ToBytes(entry.data)),
-    },
-  },
-];
+export const materialEntryToJt = (entry) =>
+  pixelsToJt(entry.frameNum, entry.delays, base64ToBytes(entry.data));
 
 /** Which material packs have been vendored, and how big each one is. */
 export const loadMaterialIndex = async () => {
@@ -206,32 +181,65 @@ export const loadMaterialIndex = async () => {
   }
 };
 
-export const loadMaterialPack = async (pack) => {
-  const url = `${import.meta.env.BASE_URL}${MATERIAL_DIR}/${pack.file}`;
+// Chunks of a split pack, one request each for the life of the page.
+const chunkRequests = new Map();
+
+const fetchJson = async (url, what) => {
   const response = await fetch(url);
   if (!response.ok) {
-    throw new Error(`Could not load ${pack.file} (${response.status})`);
+    throw new Error(`Could not load ${what} (${response.status})`);
   }
-
-  const body = await inflateJson(response);
-
-  return (body.items ?? []).map((entry, index) => {
-    const name = `${body.label} ${entry.name}`;
-    return {
-      id: `${pack.id}:${index}`,
-      name,
-      source: pack.id,
-      localPath: null,
-      downloadName: safeFilename(name, `${pack.id}-${index + 1}`),
-      jt: materialEntryToJt(entry),
-    };
-  });
+  // Chunks are gzipped on disk; inflateJson passes plain JSON straight through.
+  return inflateJson(response);
 };
 
-/** Strip the numbering the vendor prefixes to each name ("152.圣诞礼物袜"). */
-const cleanVendorName = (describe, index) => {
-  const trimmed = (describe ?? '').replace(/^\d+\./, '').trim();
-  return trimmed || `Sample ${index + 1}`;
+/**
+ * List one vendor or material pack from its split index (written by
+ * scripts/vite-sample-meta.js): every entry's name, frame count and delay,
+ * but no pixels. Those come a chunk at a time through loadSampleJt.
+ */
+export const loadPack = async (packId) => {
+  const root = import.meta.env.BASE_URL;
+  const index = await fetchJson(
+    `${root}${packIndexPath(packId)}`,
+    `the ${packId} pack`,
+  );
+
+  return index.items.map((item, i) => ({
+    id: `${packId}:${i}`,
+    name: item.name,
+    source: packId,
+    localPath: null,
+    downloadName: safeFilename(item.name, `${packId}-${i + 1}`),
+    meta: {
+      isAnimation: true,
+      frameNum: framesInBytes(item.bytes),
+      delays: item.delays,
+      pixelWidth: GRID_WIDTH,
+      pixelHeight: GRID_HEIGHT,
+    },
+    chunk: {
+      url: `${root}${packChunkPath(packId, Math.floor(i / index.chunkSize))}`,
+      offset: i % index.chunkSize,
+      frameNum: item.frameNum,
+      delays: item.delays,
+    },
+    jt: null,
+  }));
+};
+
+const loadChunkJt = async ({ url, offset, frameNum, delays }) => {
+  if (!chunkRequests.has(url)) {
+    chunkRequests.set(
+      url,
+      fetchJson(url, 'a sample chunk').catch((error) => {
+        chunkRequests.delete(url);
+        throw error;
+      }),
+    );
+  }
+  const chunk = await chunkRequests.get(url);
+  return materialEntryToJt({ frameNum, delays, data: chunk[offset] });
 };
 
 /** A filename safe to hand to a shell without quoting. */
@@ -262,13 +270,16 @@ const BUNDLED_SAMPLE_URLS = import.meta.glob('../sample/*.{jt,json}', {
 const jtRequests = new Map();
 
 /**
- * The parsed .jt behind a sample: there already for vendor and material
- * samples, fetched on first use for bundled ones. A failed fetch is
+ * The parsed .jt behind a sample, fetched on first use: a bundled sample's
+ * own file, or the chunk of a split pack it sits in. A failed fetch is
  * forgotten, so asking again retries.
  */
 export const loadSampleJt = (sample) => {
   if (sample.jt) {
     return Promise.resolve(sample.jt);
+  }
+  if (sample.chunk) {
+    return loadChunkJt(sample.chunk);
   }
   if (!jtRequests.has(sample.url)) {
     const request = fetch(sample.url)
@@ -315,32 +326,9 @@ export const listBundledSamples = () =>
     })
     .sort((a, b) => a.name.localeCompare(b.name));
 
-/** Fetch and unpack one of the vendor packs from the README. */
-export const loadVendorPack = async (pack) => {
-  const url = `${import.meta.env.BASE_URL}samples/${pack.file}`;
-  const response = await fetch(url);
-  if (!response.ok) {
-    throw new Error(`Could not load ${pack.file} (${response.status})`);
-  }
-
-  const body = await response.json();
-  const entries = body.animationData ?? [];
-
-  return entries.map((entry, index) => {
-    const name = cleanVendorName(entry.describe, index);
-    return {
-      id: `${pack.id}:${index}`,
-      name,
-      source: pack.id,
-      localPath: null,
-      downloadName: safeFilename(name, `${pack.id}-${index + 1}`),
-      jt: vendorEntryToJt(entry.sendData),
-    };
-  });
-};
-
-export const downloadJt = (sample) => {
-  const blob = new Blob([JSON.stringify(sample.jt)], {
+export const downloadJt = async (sample) => {
+  const jt = await loadSampleJt(sample);
+  const blob = new Blob([JSON.stringify(jt)], {
     type: 'application/json',
   });
   const url = URL.createObjectURL(blob);
