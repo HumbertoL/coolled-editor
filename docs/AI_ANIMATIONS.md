@@ -296,6 +296,33 @@ hardware.
 | `oot_navi` | ![oot_navi](gifs/oot_navi.gif) | Ocarina of Time: in a dark forest of little green trees, a fairy -- white core, pulsing cyan and blue glow, flickering wings -- swoops in on a looping path with a trail of fading sparkles. She stops by the left edge, her glow flashing yellow, and the panel shouts HEY! then LISTEN!, twice, before she zips off up and away to the right. 53 frames at 100ms. |
 | `oot_epona` | ![oot_epona](gifs/oot_epona.gif) | Ocarina of Time: a chestnut horse with a white mane, tail and socks gallops in a four-beat leg cycle with the green-capped hero on her back. Grass streaks by along the ground, blue hills roll slowly behind, a yellow sun hangs overhead, and twice a low wooden fence rushes in and she tucks her legs and leaps it. 53 frames at 90ms. |
 
+### Grand Theft Auto VI
+
+Made 2026-11-20, the day after GTA VI launched, for a request for animations
+about the game drawn from research into its reviews, features and launch.
+The facts on the panel come from launch-week coverage: the 99 Metascore tying
+Ocarina of Time (Hollywood Reporter, Metacritic), Sensor Tower's $2.36B and
+24.6M-copy day-one estimate (Notebookcheck), and players' first-day finds --
+the jet-ski rescue dog and the cats that fight carjackers (Windows Central,
+Kotaku). Sales figures are third-party estimates, not Take-Two's. The art is
+drawn for the panel, not taken from the game; shared pieces live in
+`tools/animations/gta6_art.py`. Seven are 53 frames at 30,528 bytes and two
+(`gta6_vice_sunset`, `gta6_road_trip`) are 48, so send with
+`--command-timeout 8`. Each was reviewed against frames rendered from the
+written file and verified by round-trip; none has been tried on hardware.
+
+| Animation | Preview | Description |
+| --- | --- | --- |
+| `gta6_vice_sunset` | ![gta6_vice_sunset](gifs/gta6_vice_sunset.gif) | Vice City at dusk: a striped retro sun on the horizon, its bands sliding down into the sea, under a blue, magenta and red sky. Black palm silhouettes sway at both edges, the water carries a shimmering yellow and red reflection, and VICE / CITY in white catches a travelling yellow glint. 48 frames at 110ms. Seamless. |
+| `gta6_thirteen_years` | ![gta6_thirteen_years](gifs/gta6_thirteen_years.gif) | The wait from GTA V to GTA VI. A fan with a controller watches the year tick up from 2013 under STILL WAITING... while a loading bar creeps to 99% and sticks, and his white beard grows a pixel at a time. DELAYED: FALL 2025 is struck through in red, then MAY 2026. NOV 19 2026 lands in green, IT'S OUT! flashes yellow and white, confetti falls, and the fan, beard to his knees, jumps with his arms up. 53 frames at 120ms. |
+| `gta6_wanted` | ![gta6_wanted](gifs/gta6_wanted.gif) | Five stars and the oldest trick in the series. A magenta car speeds down the road as the wanted meter fills star by star and white cruisers with flashing red and blue light bars pull in behind. A SPRAY shop rolls in; the car ducks inside, a red and yellow shutter drops, PSST and paint mist leak out while the stars blink. The shutter rises on a green car, the stars are gone, the cops' lights go dark under three yellow question marks and LOST 'EM. 53 frames at 100ms. |
+| `gta6_jetski_dog` | ![gta6_jetski_dog](gifs/gta6_jetski_dog.gif) | A launch-day discovery: the dog who rescues swimmers by jet ski. A swimmer flails under HELP!; a golden dog in a black band of shades roars in on a red jet ski throwing white spray, pulls up and the swimmer is hoisted onto the back seat. WOOF, the shades glint, the tail wags, and they accelerate off as GOOD BOY lights up in yellow beside a heart. 53 frames at 100ms. |
+| `gta6_cat_carjack` | ![gta6_cat_carjack](gifs/gta6_cat_carjack.gif) | Players found that a cat left in a parked car fights back. A crook in a magenta hoodie strolls up to a red car with a ginger cat in the window and reaches for the handle; the cat's ears flatten, its eyes go red, HSSS. A flurry of paws and yellow scratch stars, the crook staggers, scratched, then flees with his arms up yelling AAA!. The cat licks a paw and blinks under NOPE. 53 frames at 110ms. |
+| `gta6_metascore` | ![gta6_metascore](gifs/gta6_metascore.gif) | The launch Metascore. A score box counts up from 0, red, then yellow past 50 and green past 75, and lands on 99 in a white flash; a shine sweeps it from then on. Beside it METASCORE / 158 CRITICS, then TIES OCARINA / OF TIME 1998 with a little blue ocarina puffing notes, then 100% OF CRITICS / RECOMMEND. 53 frames at 110ms. |
+| `gta6_day_one` | ![gta6_day_one](gifs/gta6_day_one.gif) | Day-one sales by Sensor Tower's estimate. A yellow counter races from $0.00B to $2.36B and flashes, while green banknotes flutter down on the right, flipping edge-on as they fall, and slump into a growing mound flecked with gold. Underneath, DAY ONE gives way to 24.6M COPIES and then 2X GTA V. 53 frames at 100ms. |
+| `gta6_pool_gator` | ![gta6_pool_gator](gifs/gta6_pool_gator.gif) | Leonida's Florida-man streak. A magenta flamingo floatie bobs in a backyard pool between green palms. Two eyes and a snout glide in from the left with a cyan wake and sink; bubbles, a pause, then jaws burst up beneath the floatie: CHOMP, POP!, magenta scraps fly. A beat later the gator surfaces belly up, legs waving, lounging with the flamingo's head on its own like a hat, under ONLY IN / LEONIDA. 53 frames at 110ms. |
+| `gta6_road_trip` | ![gta6_road_trip](gifs/gta6_road_trip.gif) | Jason and Lucia, the game's two leads, cruising the highway at night in a pink convertible as blue palms, stars and yellow lane dashes stream past. A label over the driver reads JASON; the car flashes white like the character switch and the label jumps to LUCIA, her long hair whipping in the wind. Then little red hearts float up between them under RIDE OR DIE. 48 frames at 110ms. Seamless. |
+
 ## Claude Fable 5.2
 
 Created 2026-11-09 for a request for ten animations of free choice. All are
