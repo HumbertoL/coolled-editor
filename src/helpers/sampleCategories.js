@@ -43,6 +43,20 @@ export const CATEGORIES = [
     ],
   },
   {
+    id: 'thanksgiving',
+    label: 'Thanksgiving',
+    names: [
+      'autumn_leaves',
+      'food_coma',
+      'hand_turkey',
+      'parade_balloon',
+      'pumpkin_pie',
+      'turkey_escape',
+      'turkey_strut',
+      'wishbone',
+    ],
+  },
+  {
     id: 'election',
     label: 'Election Day',
     names: [
