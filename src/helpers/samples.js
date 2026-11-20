@@ -1,5 +1,7 @@
+import sampleMeta from 'virtual:sample-meta';
 import { GRID_HEIGHT, GRID_WIDTH } from './constants.js';
 import { inflateJson } from './gzip.js';
+import { BYTES_PER_FRAME, jtPixelData, readJtMeta } from './jtMeta.js';
 import { categoryOf, descriptionOf, keywordsOf } from './sampleCategories.js';
 
 // Where the driver lives, for the send commands shown next to each sample.
@@ -7,8 +9,7 @@ export const DRIVER_PATH = '~/workspace/coolledx-driver';
 export const EDITOR_PATH = '~/workspace/coolled-editor';
 export const DOWNLOADS_PATH = '~/Downloads';
 
-// Bytes of pixel data for one frame: 3 bits per pixel, packed into 3 planes.
-export const BYTES_PER_FRAME = (GRID_WIDTH * GRID_HEIGHT * 3) / 8;
+export { BYTES_PER_FRAME };
 
 // A vendor payload is 24 zero bytes, a frame count, then a 16-bit speed,
 // before the pixel planes start. Same layout the driver builds.
@@ -130,30 +131,10 @@ export const firstLitFrame = (pixelBytes, frameNum) => {
 };
 
 /** Pull the pixel data and metadata out of a parsed .jt structure. */
-export const readJt = (jt) => {
-  const data = Array.isArray(jt) ? jt[0]?.data : jt?.data;
-  if (!data) {
-    throw new Error('Not a .jt structure');
-  }
-
-  const pixelData = data.aniData ?? data.graffitiData;
-  if (!pixelData) {
-    throw new Error('No aniData or graffitiData');
-  }
-
-  const pixelBytes = Uint8Array.from(pixelData);
-  const isAnimation = Boolean(data.aniType);
-
-  return {
-    pixelBytes,
-    isAnimation,
-    // Trust the byte count over frameNum; some vendor files disagree.
-    frameNum: Math.max(1, Math.round(pixelBytes.length / BYTES_PER_FRAME)),
-    delays: data.delays ?? 300,
-    pixelWidth: data.pixelWidth ?? GRID_WIDTH,
-    pixelHeight: data.pixelHeight ?? GRID_HEIGHT,
-  };
-};
+export const readJt = (jt) => ({
+  ...readJtMeta(jt),
+  pixelBytes: Uint8Array.from(jtPixelData(jt).pixelData),
+});
 
 /**
  * Convert a vendor `sendData` payload into a .jt file. Verified against all
@@ -268,7 +249,7 @@ export const safeFilename = (name, fallback) => {
  * The .jt and .json samples committed alongside the editor. The glob is
  * resolved at build time, so dropping a file into src/sample is enough --
  * but it must stay a literal, since Vite rewrites it statically. Every
- * match comes back as a URL and is fetched and parsed the same way.
+ * match comes back as a URL, fetched only when it is needed.
  */
 const BUNDLED_SAMPLE_URLS = import.meta.glob('../sample/*.{jt,json}', {
   query: '?url',
@@ -276,14 +257,46 @@ const BUNDLED_SAMPLE_URLS = import.meta.glob('../sample/*.{jt,json}', {
   eager: true,
 });
 
-export const loadBundledSamples = async () => {
-  const samples = await Promise.all(
-    Object.entries(BUNDLED_SAMPLE_URLS).map(async ([key, url]) => {
+// One fetch per sample for the life of the page, however many cards (or
+// re-renders, or an Edit click racing the scroll) ask for it.
+const jtRequests = new Map();
+
+/**
+ * The parsed .jt behind a sample: there already for vendor and material
+ * samples, fetched on first use for bundled ones. A failed fetch is
+ * forgotten, so asking again retries.
+ */
+export const loadSampleJt = (sample) => {
+  if (sample.jt) {
+    return Promise.resolve(sample.jt);
+  }
+  if (!jtRequests.has(sample.url)) {
+    const request = fetch(sample.url)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Could not load ${sample.name} (${response.status})`);
+        }
+        return response.text();
+      })
+      .then((text) => JSON.parse(text))
+      .catch((error) => {
+        jtRequests.delete(sample.url);
+        throw error;
+      });
+    jtRequests.set(sample.url, request);
+  }
+  return jtRequests.get(sample.url);
+};
+
+/**
+ * Every bundled sample, without its pixels. Names, categories, descriptions
+ * and search all work from this; `meta` comes from the build-time manifest
+ * (virtual:sample-meta), and the .jt itself waits for loadSampleJt.
+ */
+export const listBundledSamples = () =>
+  Object.entries(BUNDLED_SAMPLE_URLS)
+    .map(([key, url]) => {
       const name = key.replace(/^.*\//, '');
-
-      const response = await fetch(url);
-      const jt = JSON.parse(await response.text());
-
       const base = name.replace(/\.(jt|json)$/, '');
       return {
         id: `bundled:${name}`,
@@ -295,13 +308,12 @@ export const loadBundledSamples = async () => {
         // Already on disk, so the command can point straight at the repo.
         localPath: `${EDITOR_PATH}/src/sample/${name}`,
         downloadName: name.endsWith('.jt') ? name : `${name}.jt`,
-        jt,
+        url,
+        meta: sampleMeta[name] ?? null,
+        jt: null,
       };
-    }),
-  );
-
-  return samples.filter(Boolean).sort((a, b) => a.name.localeCompare(b.name));
-};
+    })
+    .sort((a, b) => a.name.localeCompare(b.name));
 
 /** Fetch and unpack one of the vendor packs from the README. */
 export const loadVendorPack = async (pack) => {

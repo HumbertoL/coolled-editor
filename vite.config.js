@@ -1,8 +1,9 @@
 import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
+import sampleMeta from './scripts/vite-sample-meta.js';
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), sampleMeta()],
   // .jt files are hand-written JSON with a non-standard extension; treat them
   // as static assets so `?url` glob imports resolve to a fetchable URL.
   assetsInclude: ['**/*.jt'],

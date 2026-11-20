@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { GRID_HEIGHT, GRID_WIDTH } from './helpers/constants';
 import { drawFrame, firstLitFrame } from './helpers/samples';
 import { subscribe } from './helpers/previewTicker';
+import useNearViewport from './helpers/useNearViewport';
 
 const Canvas = styled.canvas`
   display: block;
@@ -42,51 +43,27 @@ const useReducedMotion = () => {
 };
 
 /**
- * Whether this preview is close enough to the viewport to be worth animating.
- *
- * The samples page does not paginate -- one material pack is over 500 cards --
- * so without this every card on the page would animate, whether or not anyone
- * could see it. Only a dozen or so are ever actually on screen.
- */
-const useNearViewport = (ref) => {
-  const [near, setNear] = useState(false);
-
-  useEffect(() => {
-    const element = ref.current;
-    if (!element) {
-      return undefined;
-    }
-    if (typeof IntersectionObserver === 'undefined') {
-      // No way to tell; assume visible rather than never animating.
-      setNear(true);
-      return undefined;
-    }
-    const observer = new IntersectionObserver(
-      ([entry]) => setNear(entry.isIntersecting),
-      { rootMargin: NEAR_VIEWPORT },
-    );
-    observer.observe(element);
-    return () => observer.disconnect();
-  }, [ref]);
-
-  return near;
-};
-
-/**
  * A 96x16 preview of one sample.
  *
  * Multi-frame samples play on their own once scrolled into view. Hovering
  * still forces playback, which is what someone who has asked for reduced
  * motion gets instead of autoplay.
+ *
+ * Without `pixelBytes` (a sample whose data has not arrived yet) it is an
+ * empty panel of the same size, so the card does not jump when it loads.
+ *
+ * Playback is limited to cards near the viewport: the samples page does not
+ * paginate -- one material pack is over 500 cards -- and only a dozen or so
+ * are ever actually on screen.
  */
 const SamplePreview = ({ pixelBytes, frameNum, delays, isHovered }) => {
   const canvasRef = useRef(null);
-  const near = useNearViewport(canvasRef);
+  const near = useNearViewport(canvasRef, { margin: NEAR_VIEWPORT });
   const reducedMotion = useReducedMotion();
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas) {
+    if (!canvas || !pixelBytes) {
       return undefined;
     }
     const ctx = canvas.getContext('2d');

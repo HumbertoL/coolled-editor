@@ -86,6 +86,10 @@ reads the data. So:
   sample shows under **Other** until its name is added to a category in
   `src/helpers/sampleCategories.js`; its search text is its row in
   `docs/AI_ANIMATIONS.md`, read at build time.
+  The page does not fetch the samples up front: `scripts/vite-sample-meta.js`
+  builds a manifest (`virtual:sample-meta`: frames, delay, size per file) at
+  build time, and each card fetches its `.jt` only as it nears the viewport.
+  Anything that needs a bundled sample's pixels goes through `loadSampleJt`.
 - `public/samples/` — the vendor packs and material catalog, fetched at
   runtime rather than bundled. Keeps a few MB out of the JS bundle.
   Regenerate the catalog with `yarn fetch-material`.

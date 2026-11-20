@@ -1,17 +1,19 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import styled from 'styled-components';
 import SamplePreview from './SamplePreview';
 import {
   DRIVER_PATH,
   VENDOR_PACKS,
   downloadJt,
-  loadBundledSamples,
+  listBundledSamples,
   loadMaterialIndex,
   loadMaterialPack,
+  loadSampleJt,
   loadVendorPack,
   readJt,
   sendCommandFor,
 } from './helpers/samples';
+import useNearViewport from './helpers/useNearViewport';
 import {
   CATEGORIES,
   OTHER_CATEGORY,
@@ -300,24 +302,70 @@ const Status = styled.p`
   padding: 24px 0;
 `;
 
+// How far ahead of the viewport a bundled sample's pixels are fetched. A
+// couple of rows' worth, so a card is usually ready by the time it is seen.
+const LOAD_AHEAD = '600px';
+
+/**
+ * The parsed .jt behind a card. Vendor and material samples arrive with it;
+ * bundled ones only list their metadata, and fetch the file the first time
+ * the card comes near the viewport. Returns { jt, error }.
+ */
+const useSampleJt = (sample, ref) => {
+  const near = useNearViewport(ref, { margin: LOAD_AHEAD, once: true });
+  const [result, setResult] = useState(null);
+
+  useEffect(() => {
+    if (!near || sample.jt) {
+      return undefined;
+    }
+    let cancelled = false;
+    loadSampleJt(sample)
+      .then((jt) => {
+        if (!cancelled) setResult({ id: sample.id, jt, error: null });
+      })
+      .catch((error) => {
+        if (!cancelled) setResult({ id: sample.id, jt: null, error });
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [near, sample]);
+
+  if (sample.jt) {
+    return { jt: sample.jt, error: null };
+  }
+  return result?.id === sample.id ? result : { jt: null, error: null };
+};
+
 const SampleCard = ({ sample, onEdit }) => {
+  const cardRef = useRef(null);
   const [hovered, setHovered] = useState(false);
   const [copied, setCopied] = useState(false);
   const [downloaded, setDownloaded] = useState(false);
+  const { jt, error: loadError } = useSampleJt(sample, cardRef);
 
   const decoded = useMemo(() => {
+    if (!jt) {
+      return null;
+    }
     try {
-      return readJt(sample.jt);
+      return readJt(jt);
     } catch {
       return null;
     }
-  }, [sample]);
+  }, [jt]);
 
-  if (!decoded) {
+  // Until the pixels arrive, the build-time manifest describes the sample.
+  const meta = decoded ?? sample.meta;
+
+  if (loadError || (jt && !decoded)) {
     return (
-      <Card>
+      <Card ref={cardRef}>
         <CardName>{sample.name}</CardName>
-        <Meta>Could not be decoded</Meta>
+        <Meta>
+          {loadError ? 'Could not be loaded' : 'Could not be decoded'}
+        </Meta>
       </Card>
     );
   }
@@ -339,25 +387,41 @@ const SampleCard = ({ sample, onEdit }) => {
     setDownloaded(true);
   };
 
+  // Edit can beat the scroll: fetch the file now if the card has not yet.
+  const handleEdit = async () => {
+    try {
+      onEdit({ ...sample, jt: await loadSampleJt(sample) });
+    } catch (error) {
+      console.warn(`Could not load ${sample.name}`, error);
+    }
+  };
+
   return (
     <Card
+      ref={cardRef}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
       <SamplePreview
-        pixelBytes={decoded.pixelBytes}
-        frameNum={decoded.frameNum}
-        delays={decoded.delays}
+        pixelBytes={decoded?.pixelBytes ?? null}
+        frameNum={meta?.frameNum ?? 1}
+        delays={meta?.delays ?? 300}
         isHovered={hovered}
       />
 
       <CardName>
         <span>{sample.name}</span>
-        {decoded.frameNum > 1 && <Badge>{decoded.frameNum} frames</Badge>}
+        {meta?.frameNum > 1 && <Badge>{meta.frameNum} frames</Badge>}
       </CardName>
       <Meta>
-        {decoded.pixelWidth}×{decoded.pixelHeight}
-        {decoded.frameNum > 1 && ` · ${decoded.delays}ms per frame`}
+        {meta ? (
+          <>
+            {meta.pixelWidth}×{meta.pixelHeight}
+            {meta.frameNum > 1 && ` · ${meta.delays}ms per frame`}
+          </>
+        ) : (
+          'Loading…'
+        )}
         {sample.localPath && ' · already in the repo'}
       </Meta>
       {sample.description && (
@@ -367,7 +431,7 @@ const SampleCard = ({ sample, onEdit }) => {
       )}
 
       <CardActions>
-        <SmallButton $primary onClick={() => onEdit(sample)}>
+        <SmallButton $primary onClick={handleEdit}>
           Edit
         </SmallButton>
         {!sample.localPath && (
@@ -389,8 +453,12 @@ const SamplesPage = ({ onEdit }) => {
   const [tab, setTab] = useState('bundled');
   const [query, setQuery] = useState('');
   const [category, setCategory] = useState('all');
-  const [cache, setCache] = useState({});
-  const [status, setStatus] = useState('loading');
+  // The repo's own samples are listed from build-time metadata, so that tab
+  // is ready immediately; each card fetches its pixels as it scrolls near.
+  const [cache, setCache] = useState(() => ({
+    bundled: listBundledSamples(),
+  }));
+  const [status, setStatus] = useState('ready');
   const [error, setError] = useState(null);
   const [materialPacks, setMaterialPacks] = useState([]);
 
@@ -424,7 +492,7 @@ const SamplesPage = ({ onEdit }) => {
 
     let load;
     if (tab === 'bundled') {
-      load = loadBundledSamples();
+      load = Promise.resolve(listBundledSamples());
     } else if (vendorPack) {
       load = loadVendorPack(vendorPack);
     } else if (materialPack) {
