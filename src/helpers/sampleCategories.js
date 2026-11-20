@@ -47,13 +47,7 @@ export const CATEGORIES = [
     label: 'Thanksgiving',
     names: [
       'autumn_leaves',
-      'food_coma',
-      'hand_turkey',
-      'parade_balloon',
-      'pumpkin_pie',
-      'turkey_escape',
       'turkey_strut',
-      'wishbone',
     ],
   },
   {

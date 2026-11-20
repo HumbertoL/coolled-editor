@@ -326,24 +326,18 @@ written file and verified by round-trip; none has been tried on hardware.
 ### Thanksgiving
 
 Made 2026-11-20, the week before Thanksgiving, for a request for 5-10
-animations about the holiday: eight, three of them gags (`turkey_escape`,
-`pumpkin_pie`, `food_coma`). Six are 53 frames (30,528 bytes) and two
-(`autumn_leaves`, `parade_balloon`) are 48, so send with
-`--command-timeout 8`. Each was drafted by a helper agent and reviewed
-against frames rendered from the written file; all pass `--verify`, and none
-has been tried on hardware. There is no orange or brown in the palette, so
-turkeys are red and pumpkin filling is red.
+animations about the holiday. Eight were made; the user kept these two, and
+the other six were removed (they remain in history at `b634591`).
+`turkey_strut` is 53 frames (30,528 bytes) and `autumn_leaves` 48, so send
+with `--command-timeout 8`. Each was drafted by a helper agent and reviewed
+against frames rendered from the written file; both pass `--verify`, and
+neither has been tried on hardware. There is no orange or brown in the
+palette, so the turkey is red.
 
 | Animation | Preview | Description |
 | --- | --- | --- |
 | `turkey_strut` | ![turkey_strut](gifs/turkey_strut.gif) | A turkey with a red body, magenta wing, cyan head, yellow beak and legs and a swinging red wattle struts in from the left with its tail folded, stops mid-panel and opens it a feather a frame into a full fan, banded yellow, green, magenta and red with white tips. Twice it thrusts its head forward, beak open, and GOBBLE lands on the right in white, top line then bottom, flashing on the beat while the fan rattles. Then it struts off right, straight across its own words. 53 frames at 110ms. |
-| `hand_turkey` | ![hand_turkey](gifs/hand_turkey.gif) | The classic kid's hand turkey. A white crayon traces round a spread hand, four fingers up and the thumb out to the left, then scribbles each finger in as a tail feather, red, yellow, green and magenta, its tip changing colour to match. The thumb becomes a blue head with a white eye, a yellow beak and a red wattle, and two yellow stick legs go on underneath. The crayon writes HAPPY / THANKSGIVING a letter a frame, each a different colour; the turkey opens its beak, blinks, and the letters take turns jumping. 53 frames at 110ms. |
-| `turkey_escape` | ![turkey_escape](gifs/turkey_escape.gif) | A red turkey with a yellow, magenta and green tail fan pecks at grain as a chef in a tall white hat marches in, cyan cleaver raised. A red ! and the turkey vanishes in a puff of white and cyan smoke; when it clears, a yellow-framed sign reads EAT MORE / HAM! beside a "different" bird in cyan glasses and a blue moustache. The chef reads the sign under a blinking yellow ?, the bird breaks into a cyan sweat, the chef shrugs twice and walks off. The turkey wipes its brow and hops in victory as PHEW! lights letter by letter. 53 frames at 120ms. |
-| `pumpkin_pie` | ![pumpkin_pie](gifs/pumpkin_pie.gif) | A pumpkin pie from above in a blue tin, yellow crust ring, red filling and a white dollop of cream, steam curling over it under PIE / TIME!. A knife cuts it into eight while CUT IT / FAIR... waits, then a fork takes the slices one at a time, each with a fresh excuse: JUST A / SLIVER, FOR / GRANDMA, FOR ME / AGAIN, ONE MORE / SLICE..., OK LAST / ONE, REALLY / LAST ONE, WHO'S / COUNTING, WELL / NOW.... A fork scrapes the empty, crumb-flecked tin while MORE / PIE? blinks. 53 frames at 120ms. |
-| `food_coma` | ![food_coma](gifs/food_coma.gif) | A diner in a cyan shirt on a magenta chair at a red-clothed table, fork in hand, under DIG / IN!. Four courses land on the plate in turn, each named with a 1/4 to 4/4 tally: a yellow drumstick, white mash with butter, green peas, and a magenta gravy boat pouring over more mash. Each is shovelled down and the belly bulges further. SECONDS? SURE! brings a heap nearly to the top of the panel; the belt strains and the yellow buckle shoots off onto the plate with a white PING!. The diner slumps back asleep as Zs drift up and FOOD / COMA blinks magenta and white. 53 frames at 120ms. |
-| `wishbone` | ![wishbone](gifs/wishbone.gif) | A white wishbone lies knob-up at the bottom of the panel. Two yellow fists slide in, one in a red sleeve and one in a green, and grip its ends under MAKE A WISH with a white twinkle sweeping across it. PULL! flashes red, the fists shake and draw apart, the arms bow and cyan strain marks flicker. SNAP! cuts out of an all-white frame and sparks fly. The green hand has the knob and shakes it under I WIN! as stars burst; the red hand sinks under a small blue AW. Then WISH GRANTED spreads out from the middle as confetti rains down. 53 frames at 110ms. |
 | `autumn_leaves` | ![autumn_leaves](gifs/autumn_leaves.gif) | GIVE THANKS in white across the middle while twenty red, yellow and magenta leaves tumble down over it, each spinning from full face to edge-on and back as it sways on its own phase, some passing in front of the letters and some behind. Mid-loop a gust of cyan and blue wind streaks sweeps every leaf a full panel-width to the right before it dies back to a drift. 48 frames at 110ms. Seamless. |
-| `parade_balloon` | ![parade_balloon](gifs/parade_balloon.gif) | A Thanksgiving parade seen from the curb, the camera walking alongside. A giant turkey balloon, red body, magenta wing, a striped yellow, magenta and green fan tail and a white head with a yellow beak, bobs on white tethers held by four tiny blue handlers. Ahead a marching band in red coats keeps step under rising notes; behind, two carriers hold a magenta-framed THANKS banner. A blue skyline with lit windows slides past, yellow lane dashes stream along the street and confetti drifts down. 48 frames at 110ms. Seamless. |
 
 ## Claude Fable 5.2
 
