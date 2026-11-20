@@ -239,38 +239,30 @@ hardware. There is no orange in the palette, so the pumpkin is red.
 
 ### Election Day
 
-Made 2026-11-03, on US Election Day, to encourage people to go vote: five
-options, all strictly nonpartisan -- no parties, candidates or poll closing
-times. Frame counts run 51 to 53, all under the 30,555-byte device maximum, so
+Made 2026-11-03, on US Election Day, to encourage people to go vote, all
+strictly nonpartisan -- no parties, candidates or poll closing times. Five were
+made; the user kept these two, and the other three were removed (they remain in
+history at `3adfb02`). 52 and 53 frames, under the 30,555-byte device maximum, so
 send with `--command-timeout 8`. Each was drafted by a helper agent and
 reviewed against frames rendered from the written file; none has been tried on
 hardware.
 
 | Animation | Preview | Description |
 | --- | --- | --- |
-| `vote_ballot_box` | ![vote_ballot_box](gifs/vote_ballot_box.gif) | A hand in a cyan sleeve holds up a white paper ballot with two blue choice boxes beside a blue ballot box marked VOTE, while GO VOTE! types out in white over a yellow TODAY. A yellow pencil ticks a black check into the first box stroke by stroke; the ballot folds twice and drops through the slot. The lid flashes yellow, a green check pops up and a magenta heart rises among sparkles as the text wipes over to YOUR VOTE / COUNTS!. 51 frames at 130ms. |
-| `vote_polls_open` | ![vote_polls_open](gifs/vote_polls_open.gif) | A dead blue neon POLLS OPEN sign buzzes on like a shop sign, its magenta letters stuttering and flashing white until it burns steady. A line waits at a booth with a striped blue-and-cyan curtain: a voter in green, a tall voter walking a white dog, a white-haired voter in cyan, and a parent pushing a red stroller. Each steps behind the twitching curtain, feet showing, and comes out with a tiny I VOTED sticker that flashes on the chest. The curtain draws back on an empty booth, and YOUR TURN / GO VOTE! appears in yellow and white. 53 frames at 140ms. |
 | `vote_i_voted` | ![vote_i_voted](gifs/vote_i_voted.gif) | A red-and-white striped flag with a blue canton of white star dots ripples on its pole across the left third, looping seamlessly. A white oval sticker with a red rim slaps on oversized, squashes, rebounds and settles to read I VOTED in blue; a cyan glint sweeps across it, then it blinks and asks DID YOU? in red. The sticker peels away and GO VOTE! stamps in one letter a frame in double-height white, with stars twinkling around it and a yellow shine running through the words. 52 frames at 120ms. |
 | `vote_fireworks` | ![vote_fireworks](gifs/vote_fireworks.gif) | In a night sky of twinkling stars, four rockets climb on yellow-and-red tails and burst in red, white and blue with crackling yellow sparks. The sparks curve inward and lock into a giant 14-row VOTE in red-and-white flag stripes, swept by a white-and-yellow highlight, then the blocks regroup into a big white TODAY!. The letters burst back into sparks that cool to blue embers before the next rockets launch. 53 frames at 110ms. |
-| `vote_every_vote_counts` | ![vote_every_vote_counts](gifs/vote_every_vote_counts.gif) | A scoreboard on an unnamed ballot measure reads a dead heat, YES 4,999 and NO 4,999, with TIE blinking yellow between them. A little voter in magenta walks in with a white ballot and drops it into a blue box marked VOTE; the box jolts and a green +1 pops up. YES rolls over to 5,000, TIE becomes +1, and confetti rains while the voter hops with arms in a V. Then EVERY VOTE / COUNTS wipes in, and BE THE ONE. / GO VOTE! holds with a blinking check mark. 53 frames at 130ms. |
 
 ### Blue wave
 
 Made 2026-11-04 for a request for "blue wave" animations: four takes on
-literal ocean waves in the sign's blue, cyan and white, the three with text
-saying only BLUE WAVE. `great_wave` and `great_wave_crash` followed the same
-day, asked for as takes on Hokusai's print. 48 to 53 frames, all under the 30,555-byte device
-maximum, so send with `--command-timeout 8`. Each was drafted by a helper
-agent and reviewed against frames rendered from the written file; none has
-been tried on hardware.
+literal ocean waves, then two on Hokusai's Great Wave off Kanagawa. The user
+kept this one, and the other five were removed (they remain in history at
+`3adfb02`). 52 frames, under the 30,555-byte device maximum, so send with
+`--command-timeout 8`. Drafted by a helper agent and reviewed against frames
+rendered from the written file; not tried on hardware.
 
 | Animation | Preview | Description |
 | --- | --- | --- |
-| `blue_wave_surf` | ![blue_wave_surf](gifs/blue_wave_surf.gif) | A blue swell rolls in from the right over a calm cyan-rippled sea and rises into a wall nearly the height of the panel, with a cyan face and a white-foamed crest. A tiny surfer on a yellow board drops down the face as the lip curls over in a thick white-and-cyan arc, rides the black tube, and is spat out the end in a burst of spray. The wave folds into churning whitewater, BLUE WAVE erupts out of it in white with cyan ripples rolling through the letters, and a second surge washes the words off, back to the calm sea. 52 frames at 110ms. |
-| `blue_wave_tide` | ![blue_wave_tide](gifs/blue_wave_tide.gif) | A yellow sun over a low blue sea edged with drifting cyan ripples. Three swells roll in from the left with white foam caps, each leaving the water a few rows higher, until a huge wave with a curling white crest swallows the sun and floods the whole panel blue, cyan currents and bubbles streaking through. BLUE WAVE surfaces in white with a cyan shimmer and bobs letter by letter on the swell, then sinks as the water drains back to the calm start. 53 frames at 110ms. |
-| `blue_wave_ocean` | ![blue_wave_ocean](gifs/blue_wave_ocean.gif) | A calm night sea: a white moon among twinkling stars, and three parallax swells rolling across the dark water as thin outlines -- a slow blue far band, a cyan middle band, and a near band whose crests break into white foam. A cyan and white reflection streak shimmers under the moon, and a small white sailboat rises and falls on the middle swell. No text; one to leave running. 48 frames at 110ms. Seamless. |
-| `blue_wave_letters` | ![blue_wave_letters](gifs/blue_wave_letters.gif) | BLUE WAVE, spaced wide, does a stadium wave: a sine wave travels through the nine letters twice per loop, each coloured by its height -- white at the crest, cyan on the shoulders, blue in the trough -- with white spray arcing off every crest letter. A quarter of the way in, a blue sea rises from below with a cyan surface that follows the same wave, the letters surf on it, and it ebbs back off the bottom. 48 frames at 100ms. Seamless. |
-| `great_wave` | ![great_wave](gifs/great_wave.gif) | A tribute to Hokusai's Great Wave off Kanagawa (1831, public domain), held at the instant before the crash. A deep blue wave towers on the left, its back swept with flowing cyan striations, its white-foamed crest throwing out to the right and hooking down, white foam claws flexing toward a yellow boat of hunched rowers while spray dots fly off the lip. Beyond, a small blue Mount Fuji with a white snowcap sits behind two more boats bobbing on foam-capped swells, with a little breaker echoing the big one. 48 frames at 120ms. Seamless. |
 | `great_wave_crash` | ![great_wave_crash](gifs/great_wave_crash.gif) | The Great Wave as a story. A calm sea with a small snowcapped Mount Fuji and two yellow boats with red rowers; a swell gathers on the left and rears into the towering wave, cyan striations following its curve, and its white lip splits into hooked talons over a black hollow with Fuji framed beneath. It holds the print's pose for about a second, then the claws close and the lip slams down in an explosion of white and cyan spray. The foam settles, the boats bob back up, and Fuji is still standing. 52 frames at 110ms. |
 
 ### The Legend of Zelda

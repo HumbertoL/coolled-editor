@@ -54,22 +54,14 @@ export const CATEGORIES = [
     id: 'election',
     label: 'Election Day',
     names: [
-      'vote_ballot_box',
-      'vote_every_vote_counts',
       'vote_fireworks',
       'vote_i_voted',
-      'vote_polls_open',
     ],
   },
   {
     id: 'blue-wave',
     label: 'Blue Wave',
     names: [
-      'blue_wave_letters',
-      'blue_wave_ocean',
-      'blue_wave_surf',
-      'blue_wave_tide',
-      'great_wave',
       'great_wave_crash',
     ],
   },
