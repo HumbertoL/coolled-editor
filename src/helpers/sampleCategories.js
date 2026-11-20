@@ -260,15 +260,7 @@ export const CATEGORIES = [
     id: 'gta6',
     label: 'Grand Theft Auto VI',
     names: [
-      'gta6_cat_carjack',
-      'gta6_day_one',
-      'gta6_jetski_dog',
-      'gta6_metascore',
-      'gta6_pool_gator',
-      'gta6_road_trip',
-      'gta6_thirteen_years',
       'gta6_vice_sunset',
-      'gta6_wanted',
     ],
   },
   {

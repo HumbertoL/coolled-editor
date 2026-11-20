@@ -1,5 +1,5 @@
 """
-Shared pieces for the gta6_* animations: a sprite stamper, two cars and a palm.
+Shared pieces for the gta6_* animations: a sprite stamper and a palm.
 
 All the art is drawn for the 96x16 panel, not taken from the game.
 """
@@ -33,26 +33,6 @@ def stamp(frame, rows, x, y, palette=None, flip=False):
         for dx, cell in enumerate(line):
             if cell != ".":
                 frame.pixel(x + dx, y + dy, colours[cell])
-
-
-# A sedan facing right, 13x5. 'B' is the body colour, 'L' a light bar slot.
-SEDAN = [
-    "...BBBBB.....",
-    "..BcBBcB.....",
-    "BBBBBBBBBBBBy",
-    "rBBBBBBBBBBBB",
-    ".ww......ww..",
-]
-
-
-def sedan(frame, x, y, body, lights=None):
-    """The sedan with its roof at row y. ``lights`` is a pair for a light bar."""
-    stamp(frame, SEDAN, x, y, {"B": body})
-    if lights:
-        frame.pixel(x + 4, y - 1, lights[0])
-        frame.pixel(x + 5, y - 1, lights[0])
-        frame.pixel(x + 6, y - 1, lights[1])
-        frame.pixel(x + 7, y - 1, lights[1])
 
 
 def palm(frame, x, base, height, colour, sway=0.0, frond=None):
